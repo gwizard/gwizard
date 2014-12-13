@@ -6,12 +6,15 @@ import org.glassfish.jersey.server.ResourceConfig;
 import javax.inject.Inject;
 
 /**
- * The jersey/jaxrs resource config. We also give the user a hook to register packages, resources, etc.
+ * Our basic jersey/jaxrs resource config. If you want to alter behavior, subclass it,
+ * add extra logic to the constructor, and bind WebResourceConfig.class to the subclass:
+ *
+ * <code>bind(WebResourceConfig.class).to(YourSubclass.class);</code>
  */
 public class WebResourceConfig extends ResourceConfig {
 
 	@Inject
-	public WebResourceConfig(ObjectMapperContextResolver objectMapperContextResolver, ConfigureJersey configureJersey) {
+	public WebResourceConfig(ObjectMapperContextResolver objectMapperContextResolver) {
 		property(CommonProperties.METAINF_SERVICES_LOOKUP_DISABLE, true);
 		property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true);
 		property(CommonProperties.JSON_PROCESSING_FEATURE_DISABLE, true);
@@ -21,7 +24,5 @@ public class WebResourceConfig extends ResourceConfig {
 
 		register(objectMapperContextResolver);
 		register(JacksonFeature.class);
-
-		configureJersey.configure(this);
 	}
 }
