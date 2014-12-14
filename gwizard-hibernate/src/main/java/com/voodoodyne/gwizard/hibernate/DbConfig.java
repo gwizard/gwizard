@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Configuration properties related to the database
+ * Configuration properties related to the database. The default values are inadequate to bootstrap
+ * a real database; you must provide an initialized version of this in your own module.
  */
 @Data
 public class DbConfig {
