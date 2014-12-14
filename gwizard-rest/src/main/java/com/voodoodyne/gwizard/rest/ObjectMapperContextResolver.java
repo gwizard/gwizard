@@ -1,4 +1,4 @@
-package com.voodoodyne.gwizard.web;
+package com.voodoodyne.gwizard.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
