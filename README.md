@@ -83,7 +83,7 @@ module for details on how to install and use them.
 
 ### gwizard-config
 
-The `ConfigModule` loads and binds a configuration object from a file, using Dropwizard's nifty system
+The `ConfigModule` loads and binds a configuration object from a YAML file, using Dropwizard's nifty system
 property override mechanism. You almost certainly want this.
 
 [README for gwizard-config](gwizard-config/README.md)
@@ -120,6 +120,9 @@ provider) without a lot of boilerplate.
 ## Mini-FAQ
 We will try to cover some design questions.
 
+### Another framework?
+It really isn't. GWizard is just a tiny bit of glue holding together
+
 ### What's wrong with Dropwizard? Isn't there a Guice module for DW?
 We like DW; as opinionated developers, it's a pleasure to find an opinionated framework
 which shares most of our opinions. We just wish it had _one more_ opinion - dependency injection (of
@@ -128,23 +131,23 @@ any flavor) would have cut out a lot of of the boilerplate in Dropwizard.
 Aside from that:
 
 * Jersey2 does not play nicely with Guice (see below).
-* The dropwizard-guice bundle is hobbled by the fact that very little of the framework was instantiated by Guice.
-* Dropwizard relies on Jersey for AOP like the HibernateBundle's UnitOfWork transaction management. This means you
+* The dropwizard-guice bundle is hobbled by the fact that very little of the framework is instantiated by Guice.
+* Dropwizard relies on Jersey for AOP (eg, HibernateBundle's UnitOfWork transaction management). This means you
 can't touch your database except through the web container (!); all other tests must mock the DB/DAO.
 This is not compatible with our testing philosophy.
 
-Dropwizard is a *vastly* more mature framework, with *many* more features, and *lovely* documentation.
-There's really no comparison!
-
-GWizard came about because as we progressively Guice-ified an application, we removed more and more of Dropwizard.
+GWizard came about because as we progressively Guice-ified a Dropwizard application, we replaced more and more of DW.
 This is the logical conclusion of that process. We try to preserve the spirit of Dropwizard, and leverage DW's
 code as dependency jars where reasonable.
+
+However, Dropwizard is a *vastly* more mature framework, with *many* more features, and *lovely* documentation.
+There's really no comparison!
 
 ### Why did you pick RESTEasy over Jersey?
 We didn't, originally, which is how we discovered what a trainwreck Jersey2 has become.
 
-Jersey1 worked great with Guice. In Jersey2, the team wrote their own DI framework from scratch
-(HK2) and littered it with global state, text files in META-INF/service,
+Jersey1 worked great with Guice. For Jersey2, the team wrote their own DI framework from scratch
+(HK2) and littered it with global state, config files in META-INF/service,
 and other JavaEE-isms that make my skin crawl. In the year and a half that Jersey2 has been
 released, nobody has managed to make it play 100% nicely with Guice. The
 [most valiant attempt](https://github.com/Squarespace/jersey2-guice) uses reflection to punch
