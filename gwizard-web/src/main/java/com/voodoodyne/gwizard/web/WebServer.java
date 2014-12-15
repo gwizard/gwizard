@@ -1,5 +1,6 @@
 package com.voodoodyne.gwizard.web;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
 import com.voodoodyne.gwizard.web.EventListenerScanner.Visitor;
 import org.eclipse.jetty.server.Server;
@@ -9,21 +10,32 @@ import javax.inject.Inject;
 import java.util.EventListener;
 
 /**
+ * Simple Jetty-based embedded web server which configures itself from a bound WebConfig and serves the
+ * GuiceFilter so you can manage web content with Guice ServletModules. Also clever enough to add any
+ * EventListener objects found in the injector bindings.
  */
 public class WebServer {
 
-	private final WebConfig httpConfig;
+	private final WebConfig webConfig;
 	private final EventListenerScanner eventListenerScanner;
 
+	private Server server;
+
 	@Inject
-	public WebServer(WebConfig httpConfig, EventListenerScanner eventListenerScanner) {
-		this.httpConfig = httpConfig;
+	public WebServer(WebConfig webConfig, EventListenerScanner eventListenerScanner) {
+		this.webConfig = webConfig;
 		this.eventListenerScanner = eventListenerScanner;
 	}
 
-	public void start() {
+	/**
+	 * Start the web server. Does not block.
+	 * @see Server#start()
+	 */
+	public void start() throws Exception {
+		Preconditions.checkState(server == null, "Server already started");
+
 		// Create the server.
-		final Server server = new Server(httpConfig.getPort());
+		server = createServer(webConfig);
 
 		// Create a servlet context and add the jersey servlet.
 		final ServletContextHandler sch = new ServletContextHandler(server, "/");
@@ -45,14 +57,33 @@ public class WebServer {
 		});
 
 		// Start the server
-		try {
-			server.start();
-			server.join();
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		server.start();
+	}
+
+	/**
+	 * Join the thread. Blocks.
+	 * @see Server@join()
+	 */
+	public void join() throws InterruptedException {
+		Preconditions.checkState(server != null, "Server not started");
+		server.join();
+	}
+
+	/**
+	 * start() and join() combined.
+	 */
+	public void startJoin() throws Exception {
+		start();
+		join();
+	}
+
+	/**
+	 * Overrideable method to create the initial jetty Server. We need to draw a lot more configuration parameters
+	 * into WebConfig, but for now this gives users a hook to satisfy their needs. Bind a subclass to WebConfig,
+	 * subclass this WebServer, and change behavior to whatever you want.
+	 */
+	protected Server createServer(WebConfig webConfig) {
+		return new Server(webConfig.getPort());
 	}
 
 }
