@@ -15,9 +15,9 @@ system properties.
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard.config/example/ConfigModuleExample.java)
+[A self-contained example](src/test/java/com/voodoodyne/gwizard/config/example/ConfigModuleExample.java)
 
-Instantiate the `ConfigModule` by passing it a config File (typically args[0]) and a simple POJO class to read.
+Instantiate the `ConfigModule` by passing it a config File (typically `args[0]`) and a simple POJO class to read.
 
 ```java
 File configFile = new File("somefile.yml");
@@ -39,14 +39,22 @@ applies. This is the relevant section, adapted for GWizard's default prefix of "
 
 > You can override configuration settings by passing special Java system properties when starting your application. Overrides must start with prefix `gw.`, followed by the path to the configuration value being overridden.
 > For example, to override the 'level' property inside a 'logging' property, you could start your application like this:
+>
 > `java -Dgw.logging.level=DEBUG`
+>
 > This will work even if the configuration setting in question does not exist in your config file, in which case it will get added.
 > You can override configuration settings in arrays of objects like this:
+>
 > `java -Dgw.server.applicationConnectors[0].port=9090`
+>
 > You can override configuration settings in maps like this:
+>
 > `java -Dgw.database.properties.hibernate.hbm2ddl.auto=none`
+>
 > You can also override a configuration setting that is an array of strings by using the ‘,’ character as an array element separator. For example, to override a configuration setting myapp.myserver.hosts that is an array of strings in the configuration, you could start your service like this:
+>
 > `java -Dgw.myapp.myserver.hosts=server1,server2,server3`
+>
 > If you need to use the ‘,’ character in one of the values, you can escape it by using ‘,’ instead.
 > The array override facility only handles configuration elements that are arrays of simple strings. Also, the setting in question must already exist in your configuration file as an array; this mechanism will not work if the configuration key being overridden does not exist in your configuration file. If it does not exist or is not an array setting, it will get added as a simple string setting, including the ‘,’ characters as part of the string.
 
