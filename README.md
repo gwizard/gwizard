@@ -41,7 +41,7 @@ public static void main(String[] args) throws Exception {
 
 ## Yeah Yeah, Show Me Some Code
 
-Here's a complete JAX-RS REST service:
+Here's a complete JAX-RS REST service which you can run from the command line:
 
 ```java
 import com.google.inject.AbstractModule;
@@ -121,13 +121,14 @@ provider) without a lot of boilerplate.
 We will try to cover some design questions.
 
 ### Another framework?
-It really isn't. GWizard is just a tiny bit of glue holding together
+It really isn't. GWizard is just a tiny bit of glue holding together excellent components written by other people.
+There are fewer lines of actual code in this project than there are lines of text in the README files.
 
 ### What's wrong with Dropwizard? Isn't there a Guice module for DW?
 We like DW; as opinionated developers, it's a pleasure to find an opinionated framework
 which shares most of our opinions. We just wish it had _one more_ opinion - dependency injection (of
-any flavor) would have cut out a lot of of the boilerplate in Dropwizard.
-"Bag" objects like Environment and Bootstrap could disappear from the API footprint entirely.
+any flavor) would have cut out most of the boilerplate in Dropwizard;
+"bag" objects like Environment and Bootstrap could disappear from the API footprint entirely.
 Aside from that:
 
 * Jersey2 does not play nicely with Guice (see below).

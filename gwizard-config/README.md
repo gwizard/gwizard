@@ -100,6 +100,6 @@ public class MyModule extends AbstractModule {
 }
 ```
 
-You have one single config file and you have bound the `WebConfig` and `DbConfig` sections so that components
+You have one single config file and you have bound the `WebConfig` and `DbConfig` objects so that components
 in modules which depend on these bindings can find them.
 
