@@ -17,7 +17,7 @@ this is your huckleberry.
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/web/WebModuleExample.java)
+[A self-contained example](src/test/java/com/voodoodyne/gwizard/web/example/WebModuleExample.java)
 
 ```java
 public class WebModuleExample {
