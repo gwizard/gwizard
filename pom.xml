@@ -46,6 +46,11 @@
 			<name>Jeff Schnitzer</name>
 			<email>jeff@infohazard.org</email>
 		</developer>
+		<developer>
+			<id>jon</id>
+			<name>Jon Stevens</name>
+			<email>latchkey@gmail.com</email>
+		</developer>
 	</developers>
 
 	<distributionManagement>
