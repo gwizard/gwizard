@@ -60,7 +60,7 @@ Better yet, with a static import:
 em().persist(new Thing(...));
 ```
 
-gwizard-hibernate provides this static method which always returns the request-scoped `EntityManager`. Of course you
+gwizard-hibernate provides this static method which always returns the correct `EntityManager`. Of course you
 are free to ignore this and @Inject your EntityManagers like a heathen.
 
 	[1]: If you're thinking screaming into your monitor "don't put data access code in your entity classes!", then you
