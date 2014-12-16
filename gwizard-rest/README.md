@@ -18,7 +18,7 @@ or specify the gwizard-web maven dependency.
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/rest/RestModuleExample.java)
+[A self-contained example](src/test/java/com/voodoodyne/gwizard/rest/example/RestModuleExample.java)
 
 ```java
 public class RestModuleExample {
@@ -46,7 +46,8 @@ public class RestModuleExample {
 ```
 
 This module just adds some very useful behavior to the `WebModule`. There's a ton of information online about
-how to use JAX-RS ([RESTEasy's documentation](http://resteasy.jboss.org/docs.html) is better than Jersey's) so
+how to use JAX-RS ([RESTEasy's documentation](http://resteasy.jboss.org/docs.html) is better than
+[Jersey's](https://jersey.java.net/documentation/latest/user-guide.html)) so
 we'll just assume you know how to make a Resource class. The key to keep in mind is that you "advertise"
 resource classes (and providers) to RESTEasy by binding them in Guice.
 

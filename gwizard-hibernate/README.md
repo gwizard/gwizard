@@ -16,7 +16,7 @@ All we do is help manage the configuration; Guice Persist (and of course Hiberna
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/hibernate/HibernateModuleExample.java)
+[A self-contained example](src/test/java/com/voodoodyne/gwizard/hibernate/example/HibernateModuleExample.java)
 
 Hibernate does not fit easily into a pasted code snippet. Look at the self-contained example above, or
 better yet the [full GWizard example](https://github.com/stickfigure/gwizard-example).
@@ -50,7 +50,7 @@ install that like any other filter if you are using the `WebModule` or `RestModu
 You are free to @Inject the `EntityManager` all over your code if you want to, but I personally think this sucks.
 It's especially painful when you want to access the database from within entity POJO classes[1] or other places
 where injection is not convenient. I find that aspects like transaction state and identity are best modeled as thread
-locals, and so you get a convenient little helper method (which you are of course free to ignore):
+locals, and so you get a convenient little helper method:
 
 ```java
 EM.em().persist(new Thing(...));
@@ -60,7 +60,8 @@ Better yet, with a static import:
 em().persist(new Thing(...));
 ```
 
-This static method always returns the request-scoped `EntityManager`.
+gwizard-hibernate provides this static method which always returns the request-scoped `EntityManager`. Of course you
+are free to ignore this and @Inject your EntityManagers like a heathen.
 
 	[1]: If you're thinking screaming into your monitor "don't put data access code in your entity classes!", then you
 	have never used polymorphic entity objects in any sophisticated capacity. You're just wrong about this. Sorry.
