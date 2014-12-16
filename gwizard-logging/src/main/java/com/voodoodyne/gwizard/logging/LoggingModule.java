@@ -16,6 +16,7 @@ public class LoggingModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bind(Configurator.class).asEagerSingleton();
 	}
 
 	private void hijackJDKLogging() {
