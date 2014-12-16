@@ -1,13 +1,14 @@
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
 			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-
 	<!--
-	Although we pass in all configuration parameters programmatically, this file must exist
-	in the same JAR that holds your entity classes and this file must specify the Hibernate
-	<provider>.
+	Although all database and hibernate configuration parameters are drawn from Guice, this
+	file is required by JPA (blah), and it must exist in the same JAR that has your @Entity classes.
+	However, this file need contain nothing more than what you see here.
+	
+	The name "gw-persistence-unit" is a default; if you wish to change it, you must pass in your
+	alternative name to the HibernateModule constructor.
 	-->
-
 	<persistence-unit name="gw-persistence-unit" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 	</persistence-unit>
