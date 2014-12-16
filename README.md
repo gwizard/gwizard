@@ -124,7 +124,7 @@ We will try to cover some design questions.
 
 ### Another framework??
 It really isn't. GWizard is just a tiny bit of glue holding together excellent components written by other people.
-GWizard really is "just a library", with fewer lines of actual code than there are lines of text
+GWizard is "just a library" with fewer lines of actual code than there are lines of text
 in the README files.
 
 ### What's wrong with Dropwizard? Isn't there a Guice module for DW?
@@ -171,3 +171,8 @@ classes the same either way.
 Dagger2 looks neato! We'll consider migrating (or creating DWizard) just as soon as it supports AOP.
 Aspects are just too useful for managing transaction state, identity, etc. AOP doesn't appear to
 be on the Dagger2 roadmap yet, and in the mean time, Guice works great.
+
+### What's missing?
+LOTS. Metrics, health checks, web views, more configuration options for Jetty, instructions on how to build a fat jar
+(you can just follow [Dropwizard's example](http://dropwizard.io/getting-started.html#building-fat-jars)), probably some sort of
+*very* simple authentication/authorization framework (AOP is grand). Maybe a little bit of glue for MongoDB.
