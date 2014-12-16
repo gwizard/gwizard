@@ -52,8 +52,11 @@ Logback's configuration code understands XML, not YAML. So for now, the easiest 
 is to store a big chunk of XML in your YAML config. Because of YAML's text blocks, this is surprisingly elegant:
 
 ```yaml
-# this is your example.yml
+# example.yml
 logging:
+  loggers:
+  	"com.example.whatever": WARN	# override anything in xml
+
   xml: |
     <configuration>
         <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -100,21 +103,8 @@ public class Main {
 
 ```
 
-If GWizard finds some content in the `logging.xml` property, it will use this to configure Logback. Otherwise
-it leaves the default Logback bootstrap configuration intact.
-
-As with the default logback.xml bootstrap, you can override logging levels in your config file:
-
-```yaml
-logging:
-  loggers:
-  	"com.example.whatever": WARN
-
-  xml: |
-    <configuration>
-    	<!-- etc -->
-    </configuration>
-```
+If GWizard finds some content in the `xml` property, it will use this to configure Logback. Otherwise
+it leaves the default Logback bootstrap configuration intact. Overrides from the `loggers` apply either way.
 
 ## Contract
 
