@@ -11,10 +11,12 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * We need to make the JAXRS classes available. Resteasy provides a RequestScopeModule
+ * <p>We need to make the JAXRS classes available. Resteasy provides a RequestScopeModule
  * but that conflicts with Guice's servlet modules (and uses its own @RequestScoped),
  * so we have to duplicate the relevant parts here. I have no idea what the Resteasy
- * team is thinking, but that's not very Guicy.
+ * team is thinking, but that's not very Guicy.</p>
+ *
+ * <p>This is automatically installed by the RestModule.</p>
  */
 public class JaxrsModule extends ServletModule
 {

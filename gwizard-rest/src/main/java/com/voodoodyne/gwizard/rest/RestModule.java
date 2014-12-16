@@ -17,6 +17,9 @@ public class RestModule extends ServletModule {
 		// Binding this will cause it to be picked up by gwizard-web
 		bind(GuiceResteasyBootstrapServletContextListener.class);
 
+		// Make sure RESTEasy picks this up so we get our ObjectMapper from guice
+		bind(ObjectMapperContextResolver.class);
+
 		bind(HttpServletDispatcher.class).in(Singleton.class);
 		serve("/*").with(HttpServletDispatcher.class);
 	}

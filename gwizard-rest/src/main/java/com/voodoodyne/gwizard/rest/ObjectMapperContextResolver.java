@@ -3,15 +3,17 @@ package com.voodoodyne.gwizard.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import javax.ws.rs.ext.ContextResolver;
+import javax.ws.rs.ext.Provider;
 
 /**
- * A little wiring that lets us give the guice ObjectMapper to jersey.
+ * A little wiring that lets us give the guice ObjectMapper to JAXRS frameworks like RESTEasy.
  */
-class ObjectMapperContextResolver implements ContextResolver<ObjectMapper> {
+@Provider   // Not the guice provider annotation...
+public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper> {
     private final ObjectMapper objectMapper;
 
     @Inject
-    ObjectMapperContextResolver(ObjectMapper objectMapper) {
+    public ObjectMapperContextResolver(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
