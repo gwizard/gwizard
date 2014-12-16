@@ -11,7 +11,7 @@ import javax.inject.Inject;
 /**
  * <p>This module provides a little bit of glue between guice-persist and the rest of gwizard.
  * The main benefit is the ability to configure JPA through a guice-friendly config mechanism.
- * Just provide a DbConfig object.</p>
+ * Just provide a DatabaseConfig object.</p>
  *
  * <p>Unfortunately there is no way around requiring your app to have a META-INF/persistence.xml
  * file in the same jar that has your entity classes. However, this can be a minimal skeleton

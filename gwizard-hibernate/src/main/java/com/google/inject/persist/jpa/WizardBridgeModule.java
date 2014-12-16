@@ -2,7 +2,7 @@ package com.google.inject.persist.jpa;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.voodoodyne.gwizard.hibernate.DbConfig;
+import com.voodoodyne.gwizard.hibernate.DatabaseConfig;
 import java.util.Properties;
 
 /**
@@ -18,18 +18,18 @@ public class WizardBridgeModule extends AbstractModule {
 	}
 
 	/**
-	 * Generate properties out of the db config. The DbConfig must be provided by a user's configuration.
+	 * Generate properties out of the database config. The DatabaseConfig must be provided by a user's configuration.
 	 */
 	@Provides
 	@Jpa
-	public Properties properties(DbConfig dbConfig) {
+	public Properties properties(DatabaseConfig cfg) {
 		Properties props = new Properties();
-		props.setProperty("hibernate.connection.driver_class", dbConfig.getDriverClass());
-		props.setProperty("hibernate.connection.url", dbConfig.getUrl());
-		props.setProperty("hibernate.connection.username", dbConfig.getUser());
-		props.setProperty("hibernate.connection.password", dbConfig.getPassword());
+		props.setProperty("hibernate.connection.driver_class", cfg.getDriverClass());
+		props.setProperty("hibernate.connection.url", cfg.getUrl());
+		props.setProperty("hibernate.connection.username", cfg.getUser());
+		props.setProperty("hibernate.connection.password", cfg.getPassword());
 
-		props.putAll(dbConfig.getProperties());
+		props.putAll(cfg.getProperties());
 
 		return props;
 	}

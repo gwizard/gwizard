@@ -72,13 +72,13 @@ which have no knowledge of each other need to somehow share space in your config
 provider methods in your Guice module(s).
 
 For example, let's say you wish to use the `WebModule` (which looks for a bound `WebConfig`) and the `HibernateModule`
-(which looks for a bound `DbConfig`):
+(which looks for a bound `DatabaseConfig`):
 
 ```java
 @Data
 public class MyConfig {
 	private WebConfig web;
-	private DbConfig db;
+	private DatabaseConfig database;
 	private String myOtherConfigProperty;
 }
 ```
@@ -94,12 +94,12 @@ public class MyModule extends AbstractModule {
 	}
 
 	@Provides
-	public DbConfig dbConfig(MyConfig cfg) {
-		return cfg.getDb();
+	public DatabaseConfig databaseConfig(MyConfig cfg) {
+		return cfg.getDatabase();
 	}
 }
 ```
 
-You have one single config file and you have bound the `WebConfig` and `DbConfig` objects so that components
+You have one single config file and you have bound the `WebConfig` and `DatabaseConfig` objects so that components
 in modules which depend on these bindings can find them.
 

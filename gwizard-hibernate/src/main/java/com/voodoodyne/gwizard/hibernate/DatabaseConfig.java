@@ -10,7 +10,7 @@ import java.util.Map;
  * a real database; you must provide an initialized version of this in your own module.
  */
 @Data
-public class DbConfig {
+public class DatabaseConfig {
 
 	@NotNull
 	private String driverClass;
