@@ -63,5 +63,5 @@ em().persist(new Thing(...));
 gwizard-hibernate provides this static method which always returns the correct `EntityManager`. Of course you
 are free to ignore this and @Inject your EntityManagers like a heathen.
 
-	[1]: If you're thinking screaming into your monitor "don't put data access code in your entity classes!", then you
+	[1]: If you're screaming into your monitor "don't put data access code in your entity classes!", then you
 	have never used polymorphic entity objects in any sophisticated capacity. You're just wrong about this. Sorry.
