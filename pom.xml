@@ -32,7 +32,7 @@
 
 	<scm>
 		<url>scm:git:https://github.com/stickfigure/gwizard.git</url>
-		<developerConnection>scm:git:git://github.com/stickfigure/gwizard.git</developerConnection>
+		<developerConnection>scm:git:https://github.com/stickfigure/gwizard.git</developerConnection>
 	</scm>
 	<licenses>
 		<license>
