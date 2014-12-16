@@ -134,3 +134,9 @@ logging:
 It's not clear that this is a significant improvement, especially with the necessary mental arithmetic to translate
 into XML. If you'd like to see a different solution to this problem,
 open up a discussion on the [google group](https://groups.google.com/forum/#!forum/gwizard).
+
+## Contract
+
+* The `LoggingModule` does its hijack of java.util.logging when you *construct* the module itself.
+* On app start, looks at a bound `LoggingConfig`; if there is xml present, configures Logback accordingly.
+  * The default just-in-time bound `LoggingConfig` does nothing (has no xml).
