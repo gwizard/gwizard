@@ -33,6 +33,7 @@
 
 	<scm>
 		<url>scm:git:https://github.com/stickfigure/gwizard.git</url>
+		<developerConnection>scm:git:git://github.com/stickfigure/gwizard.git</developerConnection>
 	</scm>
 	<licenses>
 		<license>
@@ -139,6 +140,14 @@
 					<includes>
 						<include>**/*Test*.java</include>
 					</includes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
 			</plugin>
 			<plugin>
