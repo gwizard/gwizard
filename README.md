@@ -28,15 +28,16 @@ The remaining decisions are guided by this philosophy:
 
 * Provide modules, not a container. You write the main() method, you create the Injector.
 * Guice creates the web server (or any other kind of server), not the other way 'round.
-* Minimize code that exists outside of Guice. A one-line main() is reasonable:
+* Minimize code that exists outside of Guice's cozy embrace. A one-line main() is reasonable:
 ```java
 public static void main(String[] args) throws Exception {
 	Guice.createInjector(...some modules...).getInstance(WebServer.class).startJoin();
 }
 ```
 * As much as possible, you should be able to take modules a la carte.
-* Components discover components in other modules by binding/injecting types.
-* Components are configured by binding/inject config objects.
+* Components advertise services by binding types.
+* Components discover services by injecting types.
+* Components are configured by binding/injecting config objects.
 * Encourage a single config file which includes configuration across all modules.
 
 ## Yeah Yeah, Show Me Some Code
@@ -69,7 +70,9 @@ public class Main {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Guice.createInjector(new MyModule(), new RestModule()).getInstance(WebServer.class).startJoin();
+		Guice.createInjector(new MyModule(), new RestModule())
+			.getInstance(WebServer.class)
+				.startJoin();
 	}
 }
 ```
@@ -78,20 +81,19 @@ public class Main {
 
 Note: GWizard is ready to use today, but this project is young and the contracts may change in the future.
 
-These modules are currently present in GWizard. This is just a broad overview; see the README for each
-module for details on how to install and use them.
+These are the modules currently present in GWizard. See their individual README files for detailed information.
 
 ### gwizard-config
 
 The `ConfigModule` loads and binds a configuration object from a YAML file, using Dropwizard's nifty system
-property override mechanism. You almost certainly want this.
+property override mechanism.
 
 [README for gwizard-config](gwizard-config/README.md)
 
 ### gwizard-logging
 
-The `LoggingModule` sets up logback and routes all the 'other' logging frameworks into it - jakarta commons logging,
-log4j, and java.util.logging (using the LevelChangePropagator). GWizard applications should simply log via SLF4J.
+The `LoggingModule` sets up Logback and routes all the 'other' logging frameworks into it so you get a single
+seamless log. GWizard applications should simply log via SLF4J.
 
 [README for gwizard-logging](gwizard-logging/README.md)
 
@@ -120,9 +122,10 @@ provider) without a lot of boilerplate.
 ## Mini-FAQ
 We will try to cover some design questions.
 
-### Another framework?
+### Another framework??
 It really isn't. GWizard is just a tiny bit of glue holding together excellent components written by other people.
-There are fewer lines of actual code in this project than there are lines of text in the README files.
+GWizard really is "just a library", with fewer lines of actual code than there are lines of text
+in the README files.
 
 ### What's wrong with Dropwizard? Isn't there a Guice module for DW?
 We like DW; as opinionated developers, it's a pleasure to find an opinionated framework
@@ -141,8 +144,8 @@ GWizard came about because as we progressively Guice-ified a Dropwizard applicat
 This is the logical conclusion of that process. We try to preserve the spirit of Dropwizard, and leverage DW's
 code as dependency jars where reasonable.
 
-However, Dropwizard is a *vastly* more mature framework, with *many* more features, and *lovely* documentation.
-There's really no comparison!
+However, Dropwizard is *vastly* more mature, with *many* more features, and *lovely* documentation.
+If you like it, use it!
 
 ### Why did you pick RESTEasy over Jersey?
 We didn't, originally, which is how we discovered what a trainwreck Jersey2 has become.
@@ -165,6 +168,6 @@ The truth is it doesn't really matter which JAX-RS framework you use. You write 
 classes the same either way.
 
 ### What about Dagger instead of Guice?
-Dagger2 looks great! We'll consider migrating (or creating DWizard) just as soon as it supports AOP.
+Dagger2 looks neato! We'll consider migrating (or creating DWizard) just as soon as it supports AOP.
 Aspects are just too useful for managing transaction state, identity, etc. AOP doesn't appear to
 be on the Dagger2 roadmap yet, and in the mean time, Guice works great.
