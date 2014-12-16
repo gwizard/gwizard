@@ -35,7 +35,6 @@ public class LoggingModuleExample2 {
 		@Provides
 		@Singleton
 		public LoggingConfig loggingConfig() {
-			// Normally you would pull this from a larger config object
 			return new LoggingConfig(LOGBACK_CONFIG_XML);
 		}
 	}

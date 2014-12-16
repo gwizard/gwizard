@@ -1,21 +1,36 @@
 package com.voodoodyne.gwizard.logging;
 
-import lombok.AllArgsConstructor;
+import ch.qos.logback.classic.Level;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- * <p>At the moment, we allow only one possible property, 'xml'. That is the raw XML
- * of the logback config file to be fed directly to logback. This is not super elegant
- * but it works pretty well in a YAML file and lets us set aside the question of
- * how to translate between YAML and XML.</p>
+ * <p>Logging configuration is drawn from three sources, in three steps:</p>
+ * <ol>
+ *     <li>Logging configuraton starts with the standard Logback boostrap process (ie, logback.xml).</li>
+ *     <li>If the 'xml' attribute has any content here, the configuration is replaced wholesale.</li>
+ *     <li>Any 'loggers' mapped here have their levels overriden appropriately.</li>
+ * </ol>
  *
- * <p>If the xml value is null or empty, we fall back to the standard logback configuration
- * bootstrap routine.</p>
+ * <p>The optional 'xml' property should be the raw XML of the logback config file. It will
+ * be fed directly to logback. This actually works pretty well in a YAML file because of the
+ * nifty block text syntax.</p>
+ *
+ * <p>If the xml value is null or empty, we leave the standard Logback boostrap config alone.</p>
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class LoggingConfig {
+	/** Optional raw xml content for logback config that will replace any preexisting configuration */
 	private String xml;
+
+	/** Override any logging levels specified in either the xml or in the logback bootstrap */
+	private Map<String, Level> loggers = new LinkedHashMap<>();
+
+	/** Sometimes convenient */
+	public LoggingConfig(String xml) {
+		this.xml = xml;
+	}
 }
