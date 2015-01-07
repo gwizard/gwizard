@@ -3,7 +3,7 @@
 
 	<groupId>com.voodoodyne.gwizard</groupId>
 	<artifactId>gwizard-parent</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.3</version>
 	<packaging>pom</packaging>
 
 	<name>GWizard</name>
@@ -34,7 +34,7 @@
 	<scm>
 		<url>scm:git:https://github.com/stickfigure/gwizard.git</url>
 		<developerConnection>scm:git:https://github.com/stickfigure/gwizard.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>0.3</tag>
   </scm>
 	<licenses>
 		<license>
