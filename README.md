@@ -112,6 +112,18 @@ in your modules into REST endpoints. Installing this module automatically instal
 
 [README for gwizard-rest](gwizard-rest/README.md)
 
+### gwizard-jersey
+
+The `JerseyModule` is an alternative to `gwizard-rest`, based on Jersey instead of RESTEasy. Jersey v2 does not play
+nicely with Guice, and the [jersey2-guice adapter](https://github.com/Squarespace/jersey2-guice) (used by this module)
+may break with future Jersey point releases. This module is here for the poor souls that are forced to use Jersey for
+one reason or another; since you write your JAX-RS classes the same either way, most developers should never notice the
+difference between Jersey and RESTEasy.
+
+As with gwizard-rest, you do not need to explicitly install the `WebModule`.
+
+[README for gwizard-jersey](gwizard-jersey/README.md)
+
 ### gwizard-hibernate
 
 The `HibernateModule` provides a little bit of glue around guice-persist to give you Hibernate (as a JPA
@@ -155,17 +167,16 @@ Jersey1 worked great with Guice. For Jersey2, the team wrote their own DI framew
 and other JavaEE-isms that make my skin crawl. In the year and a half that Jersey2 has been
 released, nobody has managed to make it play 100% nicely with Guice. The
 [most valiant attempt](https://github.com/Squarespace/jersey2-guice) uses reflection to punch
-values into private final fields in HK2's static globals, and it still
-[isn't seamless](https://github.com/Squarespace/jersey2-guice/issues/17).
+values into private final fields in HK2's static globals. It will likely break in future point
+releases of Jersey.
 
-If I sound bitter writing this, it's because I wasted a day and a half struggling to make it to work.
-Which it mostly does; you can dig that code out of a branch if you want it. By comparison, RESTEasy
-comes pre-baked with Guice integration that worked almost immediately.
+If I sound bitter writing this, it's because I wasted a stupid amount of time getting it to work.
+By comparison, RESTEasy comes pre-baked with Guice integration that worked almost immediately.
 
 I'm sorry I doubted you, Team JBoss.
 
 The truth is it doesn't really matter which JAX-RS framework you use. You write your resource
-classes the same either way.
+classes the same either way. If you need Jersey, use `gwizard-jersey`. Otherwise stick with `gwizard-rest`.
 
 ### What about Dagger instead of Guice?
 Dagger2 looks neato! We'll consider migrating (or creating DWizard) just as soon as it supports AOP.

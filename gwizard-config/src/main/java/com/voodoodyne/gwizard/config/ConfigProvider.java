@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Module which sets up the config file reader. The config class might actually be a custom user subtype.
+ * Module which sets up the config file reader. The config class is dynamic.
  */
 @RequiredArgsConstructor
 @Slf4j

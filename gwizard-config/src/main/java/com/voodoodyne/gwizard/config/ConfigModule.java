@@ -26,6 +26,7 @@ public class ConfigModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		// Binding a dynamic class is surprisingly complicated
 		bind((Class<Object>)configClass).toProvider(new TypeLiteral<ConfigProvider<Object>>(){}).in(Singleton.class);
 	}
 
