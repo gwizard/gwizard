@@ -85,5 +85,14 @@ public class WebServer {
 	protected Server createServer(WebConfig webConfig) {
 		return new Server(webConfig.getPort());
 	}
+        
+        /**
+         * signal the web server to stop
+         * @throws Exception 
+         */
+        public void stop() throws Exception {
+            if (server != null) 
+                server.stop();
+        }
 
 }
