@@ -17,6 +17,7 @@
 		<module>gwizard-rest</module>
 		<module>gwizard-hibernate</module>
 		<module>gwizard-jersey</module>
+		<module>gwizard-services</module>
 	</modules>
 
 	<properties>
@@ -29,6 +30,8 @@
 		<guice.version>4.0-beta5</guice.version>
 		<slf4j.version>1.7.7</slf4j.version>
 		<logback.version>1.1.2</logback.version>
+                <gwizard.version>0.4-SNAPSHOT</gwizard.version>
+                <guava.version>16.0.1</guava.version> <!-- guice's dependency is on 16.0.1, can we upgrade? -->
 	</properties>
 
 	<scm>
