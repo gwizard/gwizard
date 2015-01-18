@@ -137,6 +137,8 @@ The `ServicesModule` provides a Guava ServiceManager. Modules can multibind impl
 Services into Set<Service>. The ServiceManager will handle the lifecycle of these services -- allowing
 each to define application startup/shutdown actions or implement periodic services.
 
+[README for gwizard-services](gwizard-services/README.md)
+
 ## Mini-FAQ
 We will try to cover some design questions.
 
