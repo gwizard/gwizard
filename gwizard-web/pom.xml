@@ -23,5 +23,19 @@
 			<artifactId>jetty-webapp</artifactId>
 			<version>${jetty.version}</version>
 		</dependency>
+
+        <dependency>
+            <!-- you _could_ make the following test-scope only, but then
+            you'd need to add dependencies on Guava and Guice-multibindings -->
+            <groupId>com.voodoodyne.gwizard</groupId>
+            <artifactId>gwizard-services</artifactId>
+            <version>${gwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.voodoodyne.gwizard</groupId>
+            <artifactId>gwizard-logging</artifactId>
+            <version>${gwizard.version}</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>

@@ -22,5 +22,8 @@ public class ServicesModule extends AbstractModule {
         
         bind(ServiceManager.class)
                 .toProvider(ServiceManagerProvider.class).in(Singleton.class);
+
+        //
+        bind(AppShutdownHandler.class).asEagerSingleton();
     }
 }

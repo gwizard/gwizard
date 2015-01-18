@@ -1,14 +1,15 @@
 package com.voodoodyne.gwizard.services;
 
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.ServiceManager;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import java.util.Set;
-import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Set;
 
 /**
  * Guice Provider to create the ServiceManager. It is injected with multibound
@@ -38,14 +39,14 @@ class ServiceManagerProvider implements Provider<ServiceManager> {
         // for each service, bind any injected services listeners to it
         for (Service s: services) {
             for (Service.Listener l : svcListeners) {
-                s.addListener(l, Executors.newSingleThreadExecutor());
+                s.addListener(l, MoreExecutors.directExecutor());
             }
             
             addLoggingListenerToService(s);
         }
         
         for (ServiceManager.Listener l : mgrListeners) {
-            serviceMgr.addListener(l, Executors.newSingleThreadExecutor());
+            serviceMgr.addListener(l, MoreExecutors.directExecutor());
         }
         
         return serviceMgr;
@@ -66,24 +67,24 @@ class ServiceManagerProvider implements Provider<ServiceManager> {
             
             @Override
             public void terminated(Service.State from) {
-                serviceLogger.trace("terminated (from: {})", from);
+                serviceLogger.debug("terminated (from: {})", from);
             }
             
             @Override
             public void stopping(Service.State from) {
-                serviceLogger.trace("stopping (from: {})", from);
+                serviceLogger.debug("stopping (from: {})", from);
             }
             
             @Override
             public void running() {
-                serviceLogger.trace("running");
+                serviceLogger.debug("running");
             }
             
             @Override
             public void starting() {
-                serviceLogger.trace("starting");
+                serviceLogger.debug("starting");
             }
-        }, Executors.newSingleThreadExecutor());
+        }, MoreExecutors.directExecutor());
     }
     
 }
