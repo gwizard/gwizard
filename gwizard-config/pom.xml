@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-configuration</artifactId>
-			<version>0.7.1</version>
+			<version>${dropwizard.version}</version>
             <exclusions>
                 <!-- use a more recent guava -->
                 <exclusion>
