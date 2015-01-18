@@ -131,6 +131,12 @@ provider) without a lot of boilerplate.
 
 [README for gwizard-hibernate](gwizard-hibernate/README.md)
 
+### gwizard-services
+
+The `ServicesModule` provides a Guava ServiceManager. Modules can multibind implementations of Guava
+Services into Set<Service>. The ServiceManager will handle the lifecycle of these services -- allowing
+each to define application startup/shutdown actions or implement periodic services.
+
 ## Mini-FAQ
 We will try to cover some design questions.
 
