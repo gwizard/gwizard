@@ -139,6 +139,14 @@ each to define application startup/shutdown actions or implement periodic servic
 
 [README for gwizard-services](gwizard-services/README.md)
 
+### gwizard-metrics
+
+The `MetricsModule` glues in the Metrics library. At the moment, it only adds
+a JMX Reporter to report metrics. It also uses metrics-guice to scan Guice-instantiated
+classes for @Timed, @Meterec and other annotations.
+
+[README for gwizard-metrics](gwizard-metrics/README.md)
+
 ## Mini-FAQ
 We will try to cover some design questions.
 
