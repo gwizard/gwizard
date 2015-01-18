@@ -2,6 +2,9 @@
 
 Dynamically loads Guava Services and starts them with Guava Service Manager.
 
+This allows each module to implement Services which handle their own application
+startup/shutdown processing.
+
 See https://code.google.com/p/guava-libraries/wiki/ServiceExplained 
 
 ## Maven
@@ -58,13 +61,16 @@ injector and wait for services to start at application start.
                     new ServicesModule()
                     );
 
-    // you may or may not want to wait for all services to startup before continuing
-    injector.getInstance(ServiceManager.class).startAsync().awaitHealthy(5, TimeUnit.SECONDS);
+
+    // start services
+    injector.getInstance(ServiceManager.class).startAsync().awaitHealthy();
 ```
 
-and, to shutdown the services:
+and, to shutdown the services and exit:
 
 ```java
-
-    injector.getInstance(ServiceManager.class).stopAsync().awaitStopped(DEFAULT_STOP_TIMEOUT, TimeUnit.SECONDS);
+    injector.getInstance(ServiceManager.class).stopAsync().awaitStopped(5, TimeUnit.SECONDS);
+    System.exit(0);
 ```
+
+

@@ -17,6 +17,13 @@
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-configuration</artifactId>
 			<version>0.7.1</version>
+            <exclusions>
+                <!-- use a more recent guava -->
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 	</dependencies>
 </project>

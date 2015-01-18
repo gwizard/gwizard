@@ -30,8 +30,8 @@
 		<guice.version>4.0-beta5</guice.version>
 		<slf4j.version>1.7.7</slf4j.version>
 		<logback.version>1.1.2</logback.version>
-                <gwizard.version>0.4-SNAPSHOT</gwizard.version>
-                <guava.version>16.0.1</guava.version> <!-- guice's dependency is on 16.0.1, can we upgrade? -->
+        <gwizard.version>0.4-SNAPSHOT</gwizard.version>
+        <guava.version>18.0</guava.version>
 	</properties>
 
 	<scm>
@@ -189,7 +189,14 @@
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>${guice.version}</version>
-		</dependency>
+            <exclusions>
+                <!-- use a more recent guava -->
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 		<!-- Everything logs via SLF4j, but if you want standard gwizard logging output, use the LoggingModule -->
 		<dependency>

@@ -91,8 +91,8 @@ public class WebServer {
          * @throws Exception 
          */
         public void stop() throws Exception {
-            if (server != null) 
-                server.stop();
+            Preconditions.checkState(server != null, "Server not started");
+            server.stop();
         }
 
 }
