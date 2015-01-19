@@ -18,34 +18,33 @@ import java.util.concurrent.CountDownLatch;
  */
 @Slf4j
 public class MetricsService extends AbstractExecutionThreadService {
-    private final CountDownLatch doneSignal = new CountDownLatch(1);
-    private final JmxReporter jmxReporter;
-    private final MetricRegistry metricRegistry;
+	private final CountDownLatch doneSignal = new CountDownLatch(1);
+	private final JmxReporter jmxReporter;
+	private final MetricRegistry metricRegistry;
 
 
-    @Inject
-    public MetricsService(MetricRegistry metricRegistry) {
-        this.metricRegistry = metricRegistry;
-        jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
-    }
+	@Inject
+	public MetricsService(MetricRegistry metricRegistry) {
+		this.metricRegistry = metricRegistry;
+		jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
+	}
 
-    @Override
-    protected void run() throws Exception {
-        jmxReporter.start();
+	@Override
+	protected void run() throws Exception {
+		jmxReporter.start();
 
-        metricRegistry.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory
-                .getPlatformMBeanServer()));
-        metricRegistry.register("jvm.gc", new GarbageCollectorMetricSet());
-        metricRegistry.register("jvm.memory", new MemoryUsageGaugeSet());
-        metricRegistry.register("jvm.threads", new ThreadStatesGaugeSet());
+		metricRegistry.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+		metricRegistry.register("jvm.gc", new GarbageCollectorMetricSet());
+		metricRegistry.register("jvm.memory", new MemoryUsageGaugeSet());
+		metricRegistry.register("jvm.threads", new ThreadStatesGaugeSet());
 
-        doneSignal.await();
+		doneSignal.await();
 
-        jmxReporter.stop();
-    }
+		jmxReporter.stop();
+	}
 
-    @Override
-    protected void triggerShutdown() {
-        doneSignal.countDown();
-    }
+	@Override
+	protected void triggerShutdown() {
+		doneSignal.countDown();
+	}
 }

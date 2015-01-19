@@ -22,12 +22,6 @@
 			<artifactId>guice-multibindings</artifactId>
 			<version>${guice.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.voodoodyne.gwizard</groupId>
-			<artifactId>gwizard-logging</artifactId>
-			<version>${gwizard.version}</version>
-            <scope>test</scope>
-		</dependency>
 
 		<!-- This is just for running tests -->
 		<dependency>

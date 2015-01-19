@@ -29,13 +29,7 @@
             you'd need to add dependencies on Guava and Guice-multibindings -->
             <groupId>com.voodoodyne.gwizard</groupId>
             <artifactId>gwizard-services</artifactId>
-            <version>${gwizard.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.voodoodyne.gwizard</groupId>
-            <artifactId>gwizard-logging</artifactId>
-            <version>${gwizard.version}</version>
-            <scope>test</scope>
+            <version>${project.version}</version>
         </dependency>
 	</dependencies>
 </project>

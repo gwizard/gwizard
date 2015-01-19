@@ -7,19 +7,19 @@ import com.google.inject.multibindings.Multibinder;
 import com.palominolabs.metrics.guice.MetricsInstrumentationModule;
 
 /**
- * add the metrics-guice MetricsInstrumentationModule to scan for metrics annotations
+ * Add the metrics-guice MetricsInstrumentationModule to scan for metrics annotations
  */
 public class MetricsModule extends AbstractModule {
-    private final MetricRegistry metricRegistry = new MetricRegistry();
+	private final MetricRegistry metricRegistry = new MetricRegistry();
 
-    @Override
-    protected void configure() {
+	@Override
+	protected void configure() {
 
-        bind(MetricRegistry.class).toInstance(metricRegistry);
+		bind(MetricRegistry.class).toInstance(metricRegistry);
 
-        install(new MetricsInstrumentationModule(metricRegistry));
+		install(new MetricsInstrumentationModule(metricRegistry));
 
-        Multibinder.newSetBinder(binder(), Service.class)
-                .addBinding().to(MetricsService.class);
-    }
+		Multibinder.newSetBinder(binder(), Service.class)
+				.addBinding().to(MetricsService.class);
+	}
 }
