@@ -34,14 +34,16 @@
 	<scm>
 		<url>scm:git:https://github.com/stickfigure/gwizard.git</url>
 		<developerConnection>scm:git:https://github.com/stickfigure/gwizard.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
+
 	<licenses>
 		<license>
 			<name>MIT License</name>
 			<url>http://www.opensource.org/licenses/mit-license.php</url>
 		</license>
 	</licenses>
+
 	<developers>
 		<developer>
 			<id>jeff</id>
