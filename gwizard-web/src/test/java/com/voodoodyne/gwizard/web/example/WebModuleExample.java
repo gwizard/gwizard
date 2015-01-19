@@ -1,12 +1,15 @@
 package com.voodoodyne.gwizard.web.example;
 
+import com.google.common.util.concurrent.ServiceManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.servlet.ServletModule;
+import com.voodoodyne.gwizard.logging.LoggingModule;
+import com.voodoodyne.gwizard.services.ServicesModule;
 import com.voodoodyne.gwizard.web.WebConfig;
 import com.voodoodyne.gwizard.web.WebModule;
-import com.voodoodyne.gwizard.web.WebServer;
+
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,7 +45,12 @@ public class WebModuleExample {
 	}
 
 	public static void main(String[] args) throws Exception {
-		final Injector injector = Guice.createInjector(new MyModule(), new WebModule());
-		injector.getInstance(WebServer.class).startJoin();
+		final Injector injector = Guice.createInjector(
+                        new LoggingModule(),
+                        new MyModule(),
+                        new WebModule(),
+                        new ServicesModule());
+		injector.getInstance(ServiceManager.class).startAsync().awaitHealthy();
+
 	}
 }

@@ -1,5 +1,7 @@
 package com.voodoodyne.gwizard.web;
 
+import com.google.common.util.concurrent.Service;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.servlet.ServletModule;
 
 /**
@@ -10,5 +12,7 @@ import com.google.inject.servlet.ServletModule;
 public class WebModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
+            Multibinder.newSetBinder(binder(), Service.class)
+                    .addBinding().to(WebServerLaunchingService.class);
 	}
 }
