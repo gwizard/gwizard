@@ -38,7 +38,7 @@ public class WebModuleExample {
 
 	public static void main(String[] args) throws Exception {
 		final Injector injector = Guice.createInjector(new MyModule(), new WebModule());
-		injector.getInstance(WebServer.class).startJoin();
+		injector.getInstance(Run.class).start();
 	}
 ```
 
@@ -49,14 +49,18 @@ example.
 
 If you look closely you'll note that `WebConfig` is rather thin on configuration options - that's because this
 framework is very new. If you need to fine-tune Jetty and you can't wait for us to make a new release, subclass
-`WebServer` and override `createServer()`. Then instantiate your own class:
+`WebServer` and override `createServer()`. Then bind it:
 
 ```java
-injector.getInstance(YourWebServer.class).startJoin();
+// In your module's configure()
+bind(WebServer.class).to(YourWebServer.class);
 ```
+
 Ain't Guice grand?
 
 Don't forget to tell us about all the things we need to add to `WebConfig`!
+
+Note: This module uses the ServicesModule. You do not need to explicitly configure the ServicesModule as well.
 
 ## Contract
 

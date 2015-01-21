@@ -1,9 +1,10 @@
 # GWizard Services
 
-Dynamically loads Guava Services and starts them with Guava Service Manager.
+Dynamically loads Guava Services and starts them with Guava ServiceManager.
 
-This allows each module to implement Services which handle their own application
-startup/shutdown processing.
+This allows you to implement Services which handle their own application
+startup/shutdown processing. In addition, other GWizard modules use this
+facility to run web servers, metrics servers, etc.
 
 See https://code.google.com/p/guava-libraries/wiki/ServiceExplained 
 
@@ -19,8 +20,12 @@ See https://code.google.com/p/guava-libraries/wiki/ServiceExplained
 
 ## Usage
 
-This module binds a Provider for Guava's Service Manager. Your code 
-implements Guava Services, and binds them into a Guice multibound set.
+If you are simply using the other GWizard modules that depend on this module, you
+can ignore gwizard-services. Those other modules configure ServicesModule.
+
+If you want to explicitly configure services, you can register them like this:
+
+[A self-contained example](src/test/java/com/voodoodyne/gwizard/services/example/ServicesModuleExample.java)
 
 Example service:
 
@@ -28,6 +33,11 @@ Example service:
 	@Singleton
 	@Slf4j
 	public class ExampleService extends AbstractIdleService {
+		@Inject
+		public ExampleService(Services services) {
+			services.add(this);
+		}
+
 		@Override
 		protected void startUp() throws Exception {
 			log.info("This is where my service does something at startup");
@@ -40,20 +50,11 @@ Example service:
 	}
 ```
 
-Here's how that would be bound
+Adding a service to the injected Services object registers it. You can also add
+`Service.Listener` and `ServiceManager.Listener` objects.
 
-```java
-	public static class ExampleModule extends AbstractModule {
-		@Override
-		protected void configure() {
-			Multibinder.newSetBinder(binder(), Service.class)
-					.addBinding().to(ExampleService.class);
-		}
-	}
-```
-
-Here's the application code to retrieve the ServiceManager from the 
-injector and wait for services to start at application start.
+You can obtain a guava `ServiceManager` directly from the injector and start it,
+or you can use the convenient `Run` object:
 
 ```java
 	Injector injector = Guice.createInjector(
@@ -61,16 +62,14 @@ injector and wait for services to start at application start.
 					new ServicesModule()
 					);
 
-
-	// start services
-	injector.getInstance(ServiceManager.class).startAsync().awaitHealthy();
+	injector.getInstance(Run.class).start();
 ```
 
-and, to shutdown the services and exit:
+`injector.getInstance(Run.class).start();` is effectively the same as `injector.getInstance(ServiceManager.class).startAsync().awaitHealthy();`
+
+To shutdown all services:
 
 ```java
-	injector.getInstance(ServiceManager.class).stopAsync().awaitStopped(5, TimeUnit.SECONDS);
-	System.exit(0);
+	injector.getInstance(Run.class).stop();
 ```
-
 

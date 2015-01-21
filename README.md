@@ -31,7 +31,7 @@ The remaining decisions are guided by this philosophy:
 * Minimize code that exists outside of Guice's cozy embrace. A one-line main() is reasonable:
 ```java
 public static void main(String[] args) throws Exception {
-	Guice.createInjector(...some modules...).getInstance(WebServer.class).startJoin();
+	Guice.createInjector(...some modules...).getInstance(Run.class).start();
 }
 ```
 * As much as possible, you should be able to take modules a la carte.
@@ -48,7 +48,7 @@ Here's a complete JAX-RS REST service which you can run from the command line:
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.voodoodyne.gwizard.rest.RestModule;
-import com.voodoodyne.gwizard.web.WebServer;
+import com.voodoodyne.gwizard.services.Run;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
@@ -71,8 +71,8 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		Guice.createInjector(new MyModule(), new RestModule())
-			.getInstance(WebServer.class)
-				.startJoin();
+			.getInstance(Run.class)
+				.start();
 	}
 }
 ```
@@ -133,9 +133,11 @@ provider) without a lot of boilerplate.
 
 ### gwizard-services
 
-The `ServicesModule` provides a Guava ServiceManager. Modules can multibind implementations of Guava
-Services into Set<Service>. The ServiceManager will handle the lifecycle of these services -- allowing
-each to define application startup/shutdown actions or implement periodic services.
+The `ServicesModule` provides [Guava Services](https://code.google.com/p/guava-libraries/wiki/ServiceExplained),
+allowing multiple services to start up and run in parallel. This module is used by gwizard-web and gwizard-metrics
+but you can also use it to manage your own services.
+
+If you're already using gwizard-web or gwizard-metrics, you don't need to explicitly include this module.
 
 [README for gwizard-services](gwizard-services/README.md)
 
@@ -143,7 +145,7 @@ each to define application startup/shutdown actions or implement periodic servic
 
 The `MetricsModule` glues in the Metrics library. At the moment, it only adds
 a JMX Reporter to report metrics. It also uses metrics-guice to scan Guice-instantiated
-classes for @Timed, @Meterec and other annotations.
+classes for @Timed, @Metered and other annotations.
 
 [README for gwizard-metrics](gwizard-metrics/README.md)
 
@@ -200,6 +202,6 @@ Aspects are just too useful for managing transaction state, identity, etc. AOP d
 be on the Dagger2 roadmap yet, and in the mean time, Guice works great.
 
 ### What's missing?
-LOTS. Metrics, health checks, web views, more configuration options for Jetty, instructions on how to build a fat jar
+LOTS. Health checks, web views, more configuration options for Jetty, instructions on how to build a fat jar
 (you can just follow [Dropwizard's example](http://dropwizard.io/getting-started.html#building-fat-jars)), probably some sort of
 *very* simple authentication/authorization framework (AOP is grand). Maybe a little bit of glue for MongoDB.
