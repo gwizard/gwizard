@@ -2,9 +2,11 @@ package com.voodoodyne.gwizard.web;
 
 import com.google.inject.servlet.ServletModule;
 import com.voodoodyne.gwizard.services.ServicesModule;
+import lombok.EqualsAndHashCode;
 
 /**
  */
+@EqualsAndHashCode(of={})	// makes installation of this module idempotent
 public class WebModule extends ServletModule {
 	@Override
 	protected void configureServlets() {

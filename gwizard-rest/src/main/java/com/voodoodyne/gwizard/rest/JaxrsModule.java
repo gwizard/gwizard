@@ -2,6 +2,7 @@ package com.voodoodyne.gwizard.rest;
 
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import javax.inject.Provider;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * <p>This is automatically installed by the RestModule.</p>
  */
+@EqualsAndHashCode(of={})	// makes installation of this module idempotent
 public class JaxrsModule extends ServletModule
 {
 	@Override

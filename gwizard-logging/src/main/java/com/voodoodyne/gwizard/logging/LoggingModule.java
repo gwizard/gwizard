@@ -3,11 +3,13 @@ package com.voodoodyne.gwizard.logging;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.jul.LevelChangePropagator;
 import com.google.inject.AbstractModule;
+import lombok.EqualsAndHashCode;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  */
+@EqualsAndHashCode(of={})	// makes installation of this module idempotent
 public class LoggingModule extends AbstractModule {
 
 	public LoggingModule() {

@@ -3,6 +3,7 @@ package com.voodoodyne.gwizard.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import javax.inject.Singleton;
@@ -15,6 +16,7 @@ import java.io.File;
  */
 @RequiredArgsConstructor
 @Slf4j
+@EqualsAndHashCode(of={})	// makes installation of this module idempotent
 public class ConfigModule extends AbstractModule {
 	private final File configFile;
 	private final Class<?> configClass;

@@ -5,6 +5,7 @@ import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.persist.jpa.WizardBridgeModule;
 import com.google.inject.util.Modules;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import javax.inject.Inject;
 
@@ -19,6 +20,7 @@ import javax.inject.Inject;
  * See the gwizard-example application for a demonstration.</p>
  */
 @RequiredArgsConstructor
+@EqualsAndHashCode(of={})	// makes installation of this module idempotent
 public class HibernateModule extends AbstractModule {
 
 	private final String persistenceUnitName;
