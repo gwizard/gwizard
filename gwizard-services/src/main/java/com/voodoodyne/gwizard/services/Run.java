@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeoutException;
 public class Run {
 
 	/** */
-	private final ServiceManager serviceManager;
+	private final Provider<ServiceManager> serviceManager;
 
 	/**
 	 * Amount of time to wait for services to finish when a stop happens. Default is 5s.
@@ -28,15 +29,22 @@ public class Run {
 
 	/** */
 	@Inject
-	public Run(ServiceManager serviceManager) {
+	public Run(Provider<ServiceManager> serviceManager) {
 		this.serviceManager = serviceManager;
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				Run.this.stop();
+			}
+		});
 	}
 
 	/**
 	 * Start all services. This is shorthand for {@code serviceManager.startAsync().awaitHealthy();}
 	 */
 	public void start() {
-		serviceManager.startAsync().awaitHealthy();
+		serviceManager.get().startAsync().awaitHealthy();
 	}
 
 	/**
@@ -47,7 +55,7 @@ public class Run {
 		try {
 			log.debug("Shutting down services...");
 			// Give the services no more than 5 seconds to stop
-			serviceManager.stopAsync().awaitStopped(stopTimeoutSeconds, TimeUnit.SECONDS);
+			serviceManager.get().stopAsync().awaitStopped(stopTimeoutSeconds, TimeUnit.SECONDS);
 		} catch (TimeoutException ex) {
 			log.error("Timeout waiting for service shutdown", ex);
 		}
