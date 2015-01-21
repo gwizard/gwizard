@@ -2,11 +2,11 @@ package com.voodoodyne.gwizard.services.example;
 
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.common.util.concurrent.Service;
-import com.google.common.util.concurrent.ServiceManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import com.voodoodyne.gwizard.services.Run;
 import com.voodoodyne.gwizard.services.Services;
 import com.voodoodyne.gwizard.services.ServicesModule;
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +75,8 @@ public class ServicesModuleExample {
 		}
 	}
 
+	/**
+	 */
 	public static class ExampleModule extends AbstractModule {
 		@Override
 		protected void configure() {
@@ -83,17 +85,17 @@ public class ServicesModuleExample {
 		}
 	}
 
+	/**
+	 */
 	public static void main(String[] args) throws Exception {
 		final Injector injector = Guice.createInjector(
 				new ServicesModule(),
 				new ExampleModule());
 
-		// start services
-		injector.getInstance(ServiceManager.class).startAsync().awaitHealthy();
-
+		injector.getInstance(Run.class).start();
 
 		// here's how you'd stop services
-		// injector.getInstance(ServiceManager.class).stopAsync().awaitStopped(5, TimeUnit.SECONDS);
+		//injector.getInstance(Run.class).stop();
 
 		// or, you can just exit, and the services will get a shutdown signal
 		//System.exit(0);
