@@ -1,10 +1,12 @@
 # GWizard Services
 
-Dynamically loads Guava Services and starts them with Guava ServiceManager.
+Put simply, a "service" is some program logic that starts up in a separate thread. Because of
+this, services are started and stopped in parallel.
 
-This allows you to implement Services which handle their own application
-startup/shutdown processing. In addition, other GWizard modules use this
-facility to run web servers, metrics servers, etc.
+GWizard Services dynamically loads Guava Services and starts them with Guava ServiceManager.
+Other GWizard modules use this facility to run web servers, metrics servers, etc but you can
+also use it directly to implement Services which handle their own startup/shutdown processing and execution
+strategies.
 
 See https://code.google.com/p/guava-libraries/wiki/ServiceExplained 
 
