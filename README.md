@@ -12,13 +12,15 @@ The best place for help is the gwizard Google Group: https://groups.google.com/f
 
 https://github.com/stickfigure/gwizard
 
-Commit messages are sent here: https://groups.google.com/forum/#!forum/gwizard-commits
-
 ## Example Project
 
 The best way to understand GWizard is to fork a simple example project:
 
 https://github.com/stickfigure/gwizard-example
+
+## Requirements
+
+GWizard requires a minimum of Java 7.
 
 ## Overview
 
