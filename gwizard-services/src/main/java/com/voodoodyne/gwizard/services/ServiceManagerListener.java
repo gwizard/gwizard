@@ -14,17 +14,17 @@ import lombok.extern.slf4j.Slf4j;
 class ServiceManagerListener extends ServiceManager.Listener {
 	@Override
 	public void failure(Service service) {
-		log.error("service failure: {}", service.toString(), service.failureCause());
+		log.error("Service failure: {}", service.toString(), service.failureCause());
 		System.exit(1);
 	}
 
 	@Override
 	public void stopped() {
-		log.debug("all services stopped");
+		log.info("All services stopped");
 	}
 
 	@Override
 	public void healthy() {
-		log.debug("all services healthy");
+		log.info("All services healthy");
 	}
 }

@@ -1,6 +1,5 @@
 package com.voodoodyne.gwizard.services.example;
 
-import com.google.common.util.concurrent.AbstractExecutionThreadService;
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.ServiceManager;
@@ -8,10 +7,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
-import com.google.inject.multibindings.Multibinder;
+import com.voodoodyne.gwizard.services.Services;
 import com.voodoodyne.gwizard.services.ServicesModule;
 import lombok.extern.slf4j.Slf4j;
-import java.util.concurrent.CountDownLatch;
+import javax.inject.Inject;
 
 /**
  * Self-contained example of using the ServicesModule by itself.
@@ -22,6 +21,10 @@ public class ServicesModuleExample {
 	@Singleton
 	@Slf4j
 	public static class ExampleServiceListener extends Service.Listener {
+		@Inject
+		public ExampleServiceListener(Services services) {
+			services.add(this);
+		}
 
 		@Override
 		public void failed(Service.State from, Throwable failure) {
@@ -56,6 +59,11 @@ public class ServicesModuleExample {
 	@Singleton
 	@Slf4j
 	public static class ExampleService extends AbstractIdleService {
+		@Inject
+		public ExampleService(Services services) {
+			services.add(this);
+		}
+
 		@Override
 		protected void startUp() throws Exception {
 			log.info("This is where my service does something at startup");
@@ -64,62 +72,21 @@ public class ServicesModuleExample {
 		@Override
 		protected void shutDown() throws Exception {
 			log.info("This is where my service does something at shutdown");
-		}
-	}
-
-	/**
-	 * an example for how you might create a service for a module who has
-	 * non-trivial startup costs (e.g. any I/O)
-	 */
-	@Singleton
-	@Slf4j
-	public static class ExampleLongStartupService extends AbstractExecutionThreadService {
-		private final CountDownLatch doneSignal = new CountDownLatch(1);
-
-		@Override
-		protected void startUp() throws Exception {
-			log.info("This is where my service does something at startup");
-		}
-
-		@Override
-		protected void run() throws Exception {
-			log.info("Here's where my service would do some heavy lifting");
-
-			// wait until signaled to shutdown
-			doneSignal.await();
-
-			log.info("Finally done! whew! what a relief");
-		}
-
-		@Override
-		protected void shutDown() throws Exception {
-			log.info("This is where my service does something at shutdown");
-		}
-
-		@Override
-		protected void triggerShutdown() {
-			doneSignal.countDown();
 		}
 	}
 
 	public static class ExampleModule extends AbstractModule {
 		@Override
 		protected void configure() {
-			Multibinder.newSetBinder(binder(), Service.class)
-					.addBinding().to(ExampleService.class);
-			Multibinder.newSetBinder(binder(), Service.class)
-					.addBinding().to(ExampleLongStartupService.class);
-
-			Multibinder.newSetBinder(binder(), Service.Listener.class)
-					.addBinding().to(ExampleServiceListener.class);
+			bind(ExampleService.class).asEagerSingleton();
+			bind(ExampleServiceListener.class).asEagerSingleton();
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
 		final Injector injector = Guice.createInjector(
 				new ServicesModule(),
-				new ExampleModule()
-		);
+				new ExampleModule());
 
 		// start services
 		injector.getInstance(ServiceManager.class).startAsync().awaitHealthy();

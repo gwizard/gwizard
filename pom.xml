@@ -13,11 +13,11 @@
 	<modules>
 		<module>gwizard-config</module>
 		<module>gwizard-logging</module>
+		<module>gwizard-services</module>
 		<module>gwizard-web</module>
 		<module>gwizard-rest</module>
-		<module>gwizard-hibernate</module>
 		<module>gwizard-jersey</module>
-		<module>gwizard-services</module>
+		<module>gwizard-hibernate</module>
 		<module>gwizard-metrics</module>
 	</modules>
 

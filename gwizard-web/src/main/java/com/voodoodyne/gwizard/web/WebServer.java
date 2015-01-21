@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.EventListener;
 
 /**
@@ -14,6 +15,7 @@ import java.util.EventListener;
  * GuiceFilter so you can manage web content with Guice ServletModules. Also clever enough to add any
  * EventListener objects found in the injector bindings.
  */
+@Singleton
 public class WebServer {
 
 	private final WebConfig webConfig;
@@ -61,23 +63,6 @@ public class WebServer {
 	}
 
 	/**
-	 * Join the thread. Blocks.
-	 * @see Server@join()
-	 */
-	public void join() throws InterruptedException {
-		Preconditions.checkState(server != null, "Server not started");
-		server.join();
-	}
-
-	/**
-	 * start() and join() combined.
-	 */
-	public void startJoin() throws Exception {
-		start();
-		join();
-	}
-
-	/**
 	 * Overrideable method to create the initial jetty Server. We need to draw a lot more configuration parameters
 	 * into WebConfig, but for now this gives users a hook to satisfy their needs. Bind a subclass to WebConfig,
 	 * subclass this WebServer, and change behavior to whatever you want.
@@ -86,13 +71,11 @@ public class WebServer {
 		return new Server(webConfig.getPort());
 	}
         
-        /**
-         * signal the web server to stop
-         * @throws Exception 
-         */
-        public void stop() throws Exception {
-            Preconditions.checkState(server != null, "Server not started");
-            server.stop();
-        }
-
+	/**
+	 * signal the web server to stop
+	 */
+	public void stop() throws Exception {
+		Preconditions.checkState(server != null, "Server not started");
+		server.stop();
+	}
 }

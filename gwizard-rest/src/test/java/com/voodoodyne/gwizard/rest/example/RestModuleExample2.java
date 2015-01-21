@@ -6,7 +6,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Provides;
 import com.voodoodyne.gwizard.rest.RestModule;
-import com.voodoodyne.gwizard.web.WebServer;
+import com.voodoodyne.gwizard.services.Run;
 import lombok.Data;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
@@ -53,6 +53,6 @@ public class RestModuleExample2 {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Guice.createInjector(new MyModule(), new RestModule()).getInstance(WebServer.class).startJoin();
+		Guice.createInjector(new MyModule(), new RestModule()).getInstance(Run.class).start();
 	}
 }
