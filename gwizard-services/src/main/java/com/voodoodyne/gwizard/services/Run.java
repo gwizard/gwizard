@@ -11,8 +11,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * A prettier interface to the Guava ServiceManager, with simple start() and stop() methods. You can
- * use the ServiceManager as well if you prefer it.
+ * <p>A prettier interface to the Guava ServiceManager, with simple start() and stop() methods. Registers
+ * a Runtime shutdown hook to stop all services.</p>
+ *
+ * <p>You can use the ServiceManager directly instead, but you'll have to register your own shutdown hook.</p>
  */
 @Singleton
 @Slf4j
