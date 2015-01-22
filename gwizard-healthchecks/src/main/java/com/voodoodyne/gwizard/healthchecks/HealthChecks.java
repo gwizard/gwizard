@@ -33,14 +33,9 @@ public class HealthChecks {
 		// TODO: use version of runHealthChecks which runs checks in parallel?
 		for (Map.Entry<String, HealthCheck.Result> entry : healthCheckRegistry.runHealthChecks().entrySet()) {
 			if (entry.getValue().isHealthy()) {
-				log.trace("{} : OK {}",
-						entry.getKey(),
-						Strings.nullToEmpty(entry.getValue().getMessage()));
+				log.trace("{} : OK {}", entry.getKey(), Strings.nullToEmpty(entry.getValue().getMessage()));
 			} else {
-				log.warn("{} : FAIL - {}",
-						entry.getKey(),
-						Strings.nullToEmpty(entry.getValue().getMessage()),
-						entry.getValue().getError());
+				log.warn("{} : FAIL - {}", entry.getKey(), Strings.nullToEmpty(entry.getValue().getMessage()), entry.getValue().getError());
 			}
 		}
 	}

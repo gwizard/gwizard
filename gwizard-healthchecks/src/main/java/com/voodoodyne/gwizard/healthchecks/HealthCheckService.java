@@ -12,9 +12,7 @@ public class HealthCheckService extends AbstractScheduledService {
 	private final HealthCheckConfig config;
 
 	@Inject
-	public HealthCheckService(Services services,
-							  HealthCheckConfig config,
-							  HealthChecks healthChecks) {
+	public HealthCheckService(Services services, HealthCheckConfig config, HealthChecks healthChecks) {
 		services.add(this);
 		this.config = config;
 		this.healthChecks = healthChecks;
@@ -27,7 +25,6 @@ public class HealthCheckService extends AbstractScheduledService {
 
 	@Override
 	protected Scheduler scheduler() {
-		return Scheduler.newFixedRateSchedule(0, // run immediately
-				config.getInterval().getSeconds(), TimeUnit.SECONDS); // and every <config> seconds
+		return Scheduler.newFixedRateSchedule(0, config.getInterval().getSeconds(), TimeUnit.SECONDS);
 	}
 }

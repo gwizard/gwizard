@@ -64,8 +64,7 @@ public class HealthCheckModuleExample {
 	 */
 	public static class DeadlockHcWrapper {
 		@Inject
-		public DeadlockHcWrapper(HealthChecks healthChecks,
-								 ThreadDeadlockHealthCheck healthCheck) {
+		public DeadlockHcWrapper(HealthChecks healthChecks, ThreadDeadlockHealthCheck healthCheck) {
 			healthChecks.register("deadlocks", healthCheck);
 		}
 	}
