@@ -151,7 +151,11 @@ The `MetricsModule` glues in the Metrics library. At the moment, it only adds
 a JMX Reporter to report metrics. It also uses metrics-guice to scan Guice-instantiated
 classes for @Timed, @Metered and other annotations.
 
-[README for gwizard-metrics](gwizard-metrics/README.md)
+### gwizard-healthchecks
+
+The `HealthCheckModule` glues in the metrics-healthchecks library.
+
+[README for gwizard-healthchecks](gwizard-healthchecks/README.md)
 
 ## Mini-FAQ
 We will try to cover some design questions.

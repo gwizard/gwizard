@@ -19,3 +19,5 @@ adds metrics-guice's AOP scanning for @Timed, @Metered, etc annotations.
 
 ## Usage
 
+
+[A self-contained example](src/test/java/com/voodoodyne/gwizard/metrics/example/MetricsModuleExample.java)
