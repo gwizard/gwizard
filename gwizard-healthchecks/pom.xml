@@ -30,6 +30,12 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>io.dropwizard</groupId>
+			<artifactId>dropwizard-util</artifactId>
+			<version>${dropwizard.version}</version>
+		</dependency>
+
 		<!-- Test deps -->
 
 		<!-- only used during tests to show a health check that's also exposed as a metric -->

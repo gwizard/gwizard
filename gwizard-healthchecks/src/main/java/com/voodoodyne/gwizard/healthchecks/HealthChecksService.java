@@ -25,6 +25,6 @@ public class HealthChecksService extends AbstractScheduledService {
 
 	@Override
 	protected Scheduler scheduler() {
-		return Scheduler.newFixedRateSchedule(0, config.getInterval().getSeconds(), TimeUnit.SECONDS);
+		return Scheduler.newFixedRateSchedule(0, config.getInterval().toSeconds(), TimeUnit.SECONDS);
 	}
 }

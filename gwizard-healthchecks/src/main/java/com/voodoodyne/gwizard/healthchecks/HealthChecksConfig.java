@@ -1,13 +1,13 @@
 package com.voodoodyne.gwizard.healthchecks;
 
+import io.dropwizard.util.Duration;
 import lombok.Data;
-
-import java.time.Duration;
 
 @Data
 public class HealthChecksConfig {
 	/**
-	 * run health checks periodically at this interval
+	 * Run health checks periodically at this interval. Failing health checks will be logged at level WARN.
+	 * This accepts a flexible format like "10 minutes" or "30s"
 	 */
-	private Duration interval = Duration.ofSeconds(10);
+	private Duration interval = Duration.minutes(10);
 }
