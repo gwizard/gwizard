@@ -3,7 +3,7 @@ package com.voodoodyne.gwizard.jersey.example;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.voodoodyne.gwizard.jersey.JerseyModule;
-import com.voodoodyne.gwizard.web.WebServer;
+import com.voodoodyne.gwizard.services.Run;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
@@ -29,6 +29,6 @@ public class JerseyModuleExample {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Guice.createInjector(new MyModule(), new JerseyModule()).getInstance(WebServer.class).startJoin();
+		Guice.createInjector(new MyModule(), new JerseyModule()).getInstance(Run.class).start();
 	}
 }

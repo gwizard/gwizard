@@ -1,25 +1,26 @@
 package com.voodoodyne.gwizard.metrics;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.Multibinder;
 import com.palominolabs.metrics.guice.MetricsInstrumentationModule;
+import com.voodoodyne.gwizard.services.ServicesModule;
+import lombok.EqualsAndHashCode;
 
 /**
- * add the metrics-guice MetricsInstrumentationModule to scan for metrics annotations
+ * Add the metrics-guice MetricsInstrumentationModule to scan for metrics annotations.
  */
+@EqualsAndHashCode(of={})	// makes installation of this module idempotent
 public class MetricsModule extends AbstractModule {
-    private final MetricRegistry metricRegistry = new MetricRegistry();
+	private final MetricRegistry metricRegistry = new MetricRegistry();
 
-    @Override
-    protected void configure() {
+	@Override
+	protected void configure() {
+		install(new ServicesModule());
 
-        bind(MetricRegistry.class).toInstance(metricRegistry);
+		bind(MetricRegistry.class).toInstance(metricRegistry);
 
-        install(new MetricsInstrumentationModule(metricRegistry));
+		install(new MetricsInstrumentationModule(metricRegistry));
 
-        Multibinder.newSetBinder(binder(), Service.class)
-                .addBinding().to(MetricsService.class);
-    }
+		bind(MetricsService.class).asEagerSingleton();
+	}
 }

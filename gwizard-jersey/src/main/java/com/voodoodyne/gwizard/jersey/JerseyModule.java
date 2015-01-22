@@ -7,6 +7,7 @@ import com.google.inject.servlet.ServletModule;
 import com.squarespace.jersey2.guice.BootstrapModule;
 import com.squarespace.jersey2.guice.BootstrapUtils;
 import com.voodoodyne.gwizard.web.WebModule;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -19,6 +20,7 @@ import java.lang.reflect.Type;
 /**
  */
 @Slf4j
+@EqualsAndHashCode(of={})	// makes installation of this module idempotent
 public class JerseyModule extends ServletModule {
 
 	@Override

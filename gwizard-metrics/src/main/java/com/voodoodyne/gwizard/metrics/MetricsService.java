@@ -6,46 +6,41 @@ import com.codahale.metrics.jvm.BufferPoolMetricSet;
 import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
 import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
-import com.google.common.util.concurrent.AbstractExecutionThreadService;
+import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.inject.Inject;
+import com.voodoodyne.gwizard.services.Services;
 import lombok.extern.slf4j.Slf4j;
-
 import java.lang.management.ManagementFactory;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * a Service that starts Metrics JmxReporter
  */
 @Slf4j
-public class MetricsService extends AbstractExecutionThreadService {
-    private final CountDownLatch doneSignal = new CountDownLatch(1);
-    private final JmxReporter jmxReporter;
-    private final MetricRegistry metricRegistry;
+public class MetricsService extends AbstractIdleService {
+	private final MetricRegistry metricRegistry;
 
+	private JmxReporter jmxReporter;
 
-    @Inject
-    public MetricsService(MetricRegistry metricRegistry) {
-        this.metricRegistry = metricRegistry;
-        jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
-    }
+	@Inject
+	public MetricsService(Services services, MetricRegistry metricRegistry) {
+		this.metricRegistry = metricRegistry;
 
-    @Override
-    protected void run() throws Exception {
-        jmxReporter.start();
+		metricRegistry.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+		metricRegistry.register("jvm.gc", new GarbageCollectorMetricSet());
+		metricRegistry.register("jvm.memory", new MemoryUsageGaugeSet());
+		metricRegistry.register("jvm.threads", new ThreadStatesGaugeSet());
 
-        metricRegistry.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory
-                .getPlatformMBeanServer()));
-        metricRegistry.register("jvm.gc", new GarbageCollectorMetricSet());
-        metricRegistry.register("jvm.memory", new MemoryUsageGaugeSet());
-        metricRegistry.register("jvm.threads", new ThreadStatesGaugeSet());
+		services.add(this);
+	}
 
-        doneSignal.await();
+	@Override
+	protected void startUp() throws Exception {
+		jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
+		jmxReporter.start();
+	}
 
-        jmxReporter.stop();
-    }
-
-    @Override
-    protected void triggerShutdown() {
-        doneSignal.countDown();
-    }
+	@Override
+	protected void shutDown() throws Exception {
+		jmxReporter.stop();
+	}
 }

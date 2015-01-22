@@ -2,12 +2,14 @@ package com.voodoodyne.gwizard.rest;
 
 import com.google.inject.servlet.ServletModule;
 import com.voodoodyne.gwizard.web.WebModule;
+import lombok.EqualsAndHashCode;
 import org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import javax.inject.Singleton;
 
 /**
  */
+@EqualsAndHashCode(of={})	// makes installation of this module idempotent
 public class RestModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
