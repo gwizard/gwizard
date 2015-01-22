@@ -17,7 +17,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @Slf4j
-public class ServiceModuleTests {
+public class ServicesModuleTests {
 
 	public static class NoOpService extends AbstractIdleService {
 		@Override
