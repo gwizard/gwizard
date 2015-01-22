@@ -18,14 +18,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- only used during tests to show a health check that's also exposed as a metric -->
-		<dependency>
-			<groupId>com.voodoodyne.gwizard</groupId>
-			<artifactId>gwizard-metrics</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>io.dropwizard.metrics</groupId>
 			<artifactId>metrics-healthchecks</artifactId>
@@ -38,7 +30,16 @@
 			</exclusions>
 		</dependency>
 
-		<!-- This is just for running tests -->
+		<!-- Test deps -->
+
+		<!-- only used during tests to show a health check that's also exposed as a metric -->
+		<dependency>
+			<groupId>com.voodoodyne.gwizard</groupId>
+			<artifactId>gwizard-metrics</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>

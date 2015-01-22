@@ -10,25 +10,37 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 
 /**
+ * Register health checks here. Bind your health checks as eager singletons; @Inject this class in the constructor
+ * and add(this).
  */
 @Slf4j
 @Singleton
 public class HealthChecks {
 	private final HealthCheckRegistry healthCheckRegistry;
 
+	/** */
 	@Inject
 	public HealthChecks(HealthCheckRegistry healthCheckRegistry) {
 		this.healthCheckRegistry = healthCheckRegistry;
 	}
 
-	public void register(String name, HealthCheck healthCheck) {
+	/**
+	 * Registers a health check with the HealthCheckRegistry.
+	 */
+	public void add(String name, HealthCheck healthCheck) {
 		healthCheckRegistry.register(name, healthCheck);
 	}
 
-	public void unregister(String name) {
+	/**
+	 * Unregisters a health check with the HealthCheckRegistry.
+	 */
+	public void remove(String name) {
 		healthCheckRegistry.unregister(name);
 	}
 
+	/**
+	 * Runs all of the healthchecks once.
+	 */
 	public void run() {
 		// TODO: use version of runHealthChecks which runs checks in parallel?
 		for (Map.Entry<String, HealthCheck.Result> entry : healthCheckRegistry.runHealthChecks().entrySet()) {

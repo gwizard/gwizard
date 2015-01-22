@@ -8,18 +8,18 @@ import com.voodoodyne.gwizard.services.ServicesModule;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(of={})	// makes installation of this module idempotent
-public class HealthCheckModule extends AbstractModule {
+public class HealthChecksModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
 		install(new ServicesModule());
 
-		bind(HealthCheckService.class).asEagerSingleton();
+		bind(HealthChecksService.class).asEagerSingleton();
 	}
 
 	@Provides
 	@Singleton
-	public HealthCheckRegistry getHealthCheckRegister() {
+	public HealthCheckRegistry healthCheckRegistry() {
 		return new HealthCheckRegistry();
 	}
 }

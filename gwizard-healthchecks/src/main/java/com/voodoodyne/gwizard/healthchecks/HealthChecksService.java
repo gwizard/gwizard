@@ -6,13 +6,13 @@ import com.voodoodyne.gwizard.services.Services;
 
 import java.util.concurrent.TimeUnit;
 
-public class HealthCheckService extends AbstractScheduledService {
+public class HealthChecksService extends AbstractScheduledService {
 
 	private final HealthChecks healthChecks;
-	private final HealthCheckConfig config;
+	private final HealthChecksConfig config;
 
 	@Inject
-	public HealthCheckService(Services services, HealthCheckConfig config, HealthChecks healthChecks) {
+	public HealthChecksService(Services services, HealthChecksConfig config, HealthChecks healthChecks) {
 		services.add(this);
 		this.config = config;
 		this.healthChecks = healthChecks;

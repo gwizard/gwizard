@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.Duration;
 
 @Data
-public class HealthCheckConfig {
+public class HealthChecksConfig {
 	/**
 	 * run health checks periodically at this interval
 	 */

@@ -10,7 +10,7 @@ import com.google.inject.Injector;
 import com.voodoodyne.gwizard.metrics.MetricsModule;
 import com.voodoodyne.gwizard.services.Run;
 
-public class HealthCheckModuleExample {
+public class HealthChecksModuleExample {
 
 	/**
 	 * dumb example that's always unhealthy
@@ -18,7 +18,7 @@ public class HealthCheckModuleExample {
 	public static class ChronicallyUnhealthy extends HealthCheck {
 		@Inject
 		public ChronicallyUnhealthy(HealthChecks healthChecks) {
-			healthChecks.register("chronicfailure", this);
+			healthChecks.add("chronicfailure", this);
 		}
 
 		@Override
@@ -33,7 +33,7 @@ public class HealthCheckModuleExample {
 	public static class HealthCheckInJmxToo extends  HealthCheck {
 		@Inject
 		public HealthCheckInJmxToo(HealthChecks healthChecks) {
-			healthChecks.register("example", this);
+			healthChecks.add("example", this);
 		}
 
 		/**
@@ -65,7 +65,7 @@ public class HealthCheckModuleExample {
 	public static class DeadlockHcWrapper {
 		@Inject
 		public DeadlockHcWrapper(HealthChecks healthChecks, ThreadDeadlockHealthCheck healthCheck) {
-			healthChecks.register("deadlocks", healthCheck);
+			healthChecks.add("deadlocks", healthCheck);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class HealthCheckModuleExample {
 		final Injector injector = Guice.createInjector(
 				new ExampleModule(),
 				new MetricsModule(), // to show checks also exposed as metrics via JMX
-				new HealthCheckModule()
+				new HealthChecksModule()
 		);
 
 		// start services
