@@ -17,7 +17,8 @@
 		<module>gwizard-web</module>
 		<module>gwizard-rest</module>
 		<module>gwizard-jersey</module>
-		<module>gwizard-hibernate</module>
+        <module>gwizard-hibernate</module>
+        <module>gwizard-healthchecks</module>
 		<module>gwizard-metrics</module>
 	</modules>
 
