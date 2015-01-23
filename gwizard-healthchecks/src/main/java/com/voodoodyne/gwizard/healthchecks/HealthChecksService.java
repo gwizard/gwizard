@@ -18,16 +18,19 @@ import java.util.concurrent.TimeUnit;
  */
 @Singleton
 @Slf4j
-public class PeriodicHealthCheckService extends AbstractScheduledService {
+public class HealthChecksService extends AbstractScheduledService {
 
 	private final HealthChecks healthChecks;
-	private final PeriodicHealthCheckConfig config;
+	private final HealthChecksConfig config;
 
 	@Inject
-	public PeriodicHealthCheckService(Services services, PeriodicHealthCheckConfig config, HealthChecks healthChecks) {
-		services.add(this);
+	public HealthChecksService(Services services, HealthChecksConfig config, HealthChecks healthChecks) {
 		this.config = config;
 		this.healthChecks = healthChecks;
+
+		// No need to start it up if we're not configured
+		if (config.getInterval() != null)
+			services.add(this);
 	}
 
 	@Override

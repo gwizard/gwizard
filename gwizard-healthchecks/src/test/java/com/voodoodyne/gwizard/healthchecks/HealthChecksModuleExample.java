@@ -81,8 +81,8 @@ public class HealthChecksModuleExample {
 		}
 
 		@Provides
-		public PeriodicHealthCheckConfig periodicHealthCheckConfig() {
-			PeriodicHealthCheckConfig cfg = new PeriodicHealthCheckConfig();
+		public HealthChecksConfig periodicHealthCheckConfig() {
+			HealthChecksConfig cfg = new HealthChecksConfig();
 			cfg.setInterval(Duration.seconds(10));
 			return cfg;
 		}
@@ -92,8 +92,7 @@ public class HealthChecksModuleExample {
 		final Injector injector = Guice.createInjector(
 				new ExampleModule(),
 				new MetricsModule(), // to show checks also exposed as metrics via JMX
-				new HealthChecksModule(), // binding for HealthChecks
-				new PeriodicHealthCheckModule() // binding for a dumb service that periodically runs all
+				new HealthChecksModule() // binding for HealthChecks
 		);
 
 		// start services
