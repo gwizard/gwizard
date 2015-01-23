@@ -16,4 +16,4 @@ See https://github.com/dropwizard/metrics-healthchecks
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/healthchecks/example/HealthCheckModuleExample.java)
+[A self-contained example](src/test/java/com/voodoodyne/gwizard/healthchecks/HealthCheckModuleExample.java)
