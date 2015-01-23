@@ -210,13 +210,8 @@
 		</dependency>
 
 		<!-- Testing -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8</version>
-			<scope>test</scope>
-		</dependency>
 
+		<!-- Sadly, hamcrest needs to be at the top because testng includes junit and junit has an ancient hamcrest baked in-->
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-core</artifactId>
@@ -227,6 +222,13 @@
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
 			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8</version>
 			<scope>test</scope>
 		</dependency>
 
