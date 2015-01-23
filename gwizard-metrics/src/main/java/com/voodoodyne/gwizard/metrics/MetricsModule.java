@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 /**
  * Add the metrics-guice MetricsInstrumentationModule to scan for metrics annotations.
  */
-@EqualsAndHashCode(of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class MetricsModule extends AbstractModule {
 	private final MetricRegistry metricRegistry = new MetricRegistry();
 

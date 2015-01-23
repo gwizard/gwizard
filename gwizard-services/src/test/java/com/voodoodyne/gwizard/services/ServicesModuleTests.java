@@ -60,7 +60,6 @@ public class ServicesModuleTests {
 		mgr.stopAsync().awaitStopped();
 	}
 
-
 	@Test
 	public void serviceMgrAndServicesRunning() {
 		mgr.startAsync().awaitHealthy();

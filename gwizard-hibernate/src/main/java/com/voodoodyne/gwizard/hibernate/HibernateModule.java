@@ -20,7 +20,7 @@ import javax.inject.Inject;
  * See the gwizard-example application for a demonstration.</p>
  */
 @RequiredArgsConstructor
-@EqualsAndHashCode(of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class HibernateModule extends AbstractModule {
 
 	private final String persistenceUnitName;

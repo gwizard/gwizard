@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 
 /**
  */
-@EqualsAndHashCode(of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class RestModule extends ServletModule {
 	@Override
 	protected void configureServlets() {

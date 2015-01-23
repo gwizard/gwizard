@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.inject.Singleton;
 
 @Slf4j
-@EqualsAndHashCode(of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class ServicesModule extends AbstractModule {
 
 	@Override

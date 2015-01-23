@@ -19,7 +19,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * <p>This is automatically installed by the RestModule.</p>
  */
-@EqualsAndHashCode(of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class JaxrsModule extends ServletModule
 {
 	@Override

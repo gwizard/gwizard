@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  */
-@EqualsAndHashCode(of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class WebModule extends ServletModule {
 	@Override
 	protected void configureServlets() {

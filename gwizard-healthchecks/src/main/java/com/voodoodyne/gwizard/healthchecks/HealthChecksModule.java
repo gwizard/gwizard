@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  *
  * depends on gwizard-services
  */
-@EqualsAndHashCode(of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class HealthChecksModule extends AbstractModule {
 
 	@Override

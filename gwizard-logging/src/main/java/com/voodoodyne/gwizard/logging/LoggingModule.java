@@ -9,7 +9,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  */
-@EqualsAndHashCode(of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class LoggingModule extends AbstractModule {
 
 	public LoggingModule() {
