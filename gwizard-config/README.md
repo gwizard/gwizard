@@ -71,6 +71,43 @@ It is generally handy to put all of your application configuration in a single f
 which have no knowledge of each other need to somehow share space in your configuration class. This is easy to do with
 provider methods in your Guice module(s).
 
+### Creating a new configuration POJO
+
+Inside your module, you create a POJO
+
+```java
+@Data
+public class MyModuleConfig {
+	private String bindAddress;
+	private int port;
+}
+```
+
+Then, inside your module you inject that POJO wherever it's needed.
+
+```java
+@Singleton
+public class MyService {
+
+	private final MyModuleConfig cfg;
+
+	@Inject
+	public MyService(MyModuleConfig cfg) {
+		this.cfg = cfg;
+	}
+}
+```
+
+When you write test cases, [Guice's JIT binding](https://github.com/google/guice/wiki/JustInTimeBindings)
+will take care of provisioning the POJO.
+
+When your module is consumed by an application in their configuration (see below), the
+application will have defined a Guice Provider. That binding will override the JIT binding
+and rather than a new instance of the configuration POJO, you'll get the MyModuleConfig object
+which is a delegate of the application's configuration.
+
+### Consuming configuration POJOs
+
 For example, let's say you wish to use the `WebModule` (which looks for a bound `WebConfig`) and the `HibernateModule`
 (which looks for a bound `DatabaseConfig`):
 
@@ -78,6 +115,7 @@ For example, let's say you wish to use the `WebModule` (which looks for a bound 
 @Data
 public class MyConfig {
 	private WebConfig web;
+	private MyModuleConfig myModule;
 	private DatabaseConfig database;
 	private String myOtherConfigProperty;
 }
@@ -102,4 +140,3 @@ public class MyModule extends AbstractModule {
 
 You have one single config file and you have bound the `WebConfig` and `DatabaseConfig` objects so that components
 in modules which depend on these bindings can find them.
-

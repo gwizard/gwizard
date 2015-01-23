@@ -7,8 +7,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.voodoodyne.gwizard.metrics.MetricsModule;
 import com.voodoodyne.gwizard.services.Run;
+import io.dropwizard.util.Duration;
 
 public class HealthChecksModuleExample {
 
@@ -77,13 +79,21 @@ public class HealthChecksModuleExample {
 			bind(HealthCheckInJmxToo.class).asEagerSingleton();
 			bind(DeadlockHcWrapper.class).asEagerSingleton();
 		}
+
+		@Provides
+		public PeriodicHealthCheckConfig periodicHealthCheckConfig() {
+			PeriodicHealthCheckConfig cfg = new PeriodicHealthCheckConfig();
+			cfg.setInterval(Duration.seconds(10));
+			return cfg;
+		}
 	}
 
 	public static void main(String[] args) throws Exception {
 		final Injector injector = Guice.createInjector(
 				new ExampleModule(),
 				new MetricsModule(), // to show checks also exposed as metrics via JMX
-				new HealthChecksModule()
+				new HealthChecksModule(), // binding for HealthChecks
+				new PeriodicHealthCheckModule() // binding for a dumb service that periodically runs all
 		);
 
 		// start services
