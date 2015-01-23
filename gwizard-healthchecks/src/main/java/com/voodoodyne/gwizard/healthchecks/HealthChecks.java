@@ -2,12 +2,12 @@ package com.voodoodyne.gwizard.healthchecks;
 
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Register health checks here. Bind your health checks as eager singletons; @Inject this class in the constructor
@@ -39,16 +39,20 @@ public class HealthChecks {
 	}
 
 	/**
-	 * Runs all of the healthchecks once.
+	 * Runs all of the healthchecks once and returns a map of the results
+	 * @return a map of the health check results
 	 */
-	public void run() {
-		// TODO: use version of runHealthChecks which runs checks in parallel?
-		for (Map.Entry<String, HealthCheck.Result> entry : healthCheckRegistry.runHealthChecks().entrySet()) {
-			if (entry.getValue().isHealthy()) {
-				log.trace("{} : OK {}", entry.getKey(), Strings.nullToEmpty(entry.getValue().getMessage()));
-			} else {
-				log.warn("{} : FAIL - {}", entry.getKey(), Strings.nullToEmpty(entry.getValue().getMessage()), entry.getValue().getError());
-			}
-		}
+	public SortedMap<String, HealthCheck.Result> run() {
+		return healthCheckRegistry.runHealthChecks();
 	}
+
+	/**
+	 * Runs the registered health checks in parallel and returns a map of the results.
+	 * @return a map of the health check results
+	 */
+	public SortedMap<String, HealthCheck.Result> run(ExecutorService executorService) {
+		return healthCheckRegistry.runHealthChecks(executorService);
+	}
+
+
 }
