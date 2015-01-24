@@ -1,6 +1,5 @@
 package com.voodoodyne.gwizard.healthchecks;
 
-import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
 import com.google.inject.AbstractModule;
@@ -11,6 +10,7 @@ import com.google.inject.Provides;
 import com.voodoodyne.gwizard.metrics.MetricsModule;
 import com.voodoodyne.gwizard.services.Run;
 import io.dropwizard.util.Duration;
+import lombok.extern.slf4j.Slf4j;
 
 public class HealthChecksModuleExample {
 
@@ -30,33 +30,35 @@ public class HealthChecksModuleExample {
 	}
 
 	/**
-	 * dumb example that shows we can also expose 'health' via JMX
+	 * dumb example that shows we can also expose health via JMX
 	 */
-	public static class HealthCheckInJmxToo extends  HealthCheck {
+	public static class JmxHealthCheck extends AbstractMetricReportingHealthCheck {
+		public static final String name = "example";
 		@Inject
-		public HealthCheckInJmxToo(HealthChecks healthChecks) {
-			healthChecks.add("example", this);
-		}
-
-		/**
-		 *
-		 * the MetricsModule adds the metrics-guice instrumentation module,
-		 * which will see this @Gauge annotation and create a metric with
-		 * the ObjectName : "metrics:name=example.healthy"
-		 *
-		 * @return 1 if healthy, zero if unhealthy (null if exception occurred)
-		 */
-		@Gauge(name="example.healthy", absolute = true)
-		public Integer healthGaugeMethod() {
-			try {
-				return check().isHealthy() ? 1 : 0;
-			} catch (Exception e) {
-				return null;
-			}
+		public JmxHealthCheck(HealthChecks healthChecks) {
+			super(healthChecks, name);
 		}
 
 		@Override
 		protected Result check() throws Exception {
+			return Result.healthy();
+		}
+	}
+
+	/**
+	 * dumb example that shows we can also expose health via JMX
+	 */
+	@Slf4j
+	public static class CachedJmxHealthCheck extends AbstractMetricReportingHealthCheck {
+		public static final String name = "exampleCached";
+		@Inject
+		public CachedJmxHealthCheck(HealthChecks healthChecks) {
+			super(healthChecks, name, Duration.seconds(30));
+		}
+
+		@Override
+		protected Result check() throws Exception {
+			log.trace("called!");
 			return Result.healthy();
 		}
 	}
@@ -76,14 +78,15 @@ public class HealthChecksModuleExample {
 		@Override
 		protected void configure() {
 			bind(ChronicallyUnhealthy.class).asEagerSingleton();
-			bind(HealthCheckInJmxToo.class).asEagerSingleton();
+			bind(JmxHealthCheck.class).asEagerSingleton();
+			bind(CachedJmxHealthCheck.class).asEagerSingleton();
 			bind(DeadlockHcWrapper.class).asEagerSingleton();
 		}
 
 		@Provides
 		public HealthChecksConfig periodicHealthCheckConfig() {
 			HealthChecksConfig cfg = new HealthChecksConfig();
-			cfg.setInterval(Duration.seconds(10));
+			cfg.setInterval(Duration.seconds(30));
 			return cfg;
 		}
 	}
