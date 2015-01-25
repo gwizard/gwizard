@@ -2,7 +2,7 @@ package com.google.inject.persist.jpa;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.voodoodyne.gwizard.hibernate.DatabaseConfig;
+import org.gwizard.hibernate.DatabaseConfig;
 import java.util.Properties;
 
 /**
