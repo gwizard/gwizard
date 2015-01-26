@@ -15,7 +15,7 @@ Now that you have been warned, here's how to use it.
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-jersey</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -26,7 +26,7 @@ or specify the gwizard-web maven dependency. You also don't need an explicit mav
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/jersey/example/JerseyModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/jersey/example/JerseyModuleExample.java)
 
 ```java
 public class JerseyModuleExample {

@@ -8,7 +8,7 @@ All we do is help manage the configuration; Guice Persist (and of course Hiberna
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-hibernate</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -16,10 +16,10 @@ All we do is help manage the configuration; Guice Persist (and of course Hiberna
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/hibernate/example/HibernateModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/hibernate/example/HibernateModuleExample.java)
 
 Hibernate does not fit easily into a pasted code snippet. Look at the self-contained example above, or
-better yet the [full GWizard example](https://github.com/stickfigure/gwizard-example).
+better yet the [full GWizard example](https://github.com/gwizard/gwizard-example).
 
 What you need to know:
 

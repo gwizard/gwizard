@@ -10,7 +10,7 @@ or specify the gwizard-web maven dependency.
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-rest</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -18,7 +18,7 @@ or specify the gwizard-web maven dependency.
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/rest/example/RestModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/rest/example/RestModuleExample.java)
 
 ```java
 public class RestModuleExample {

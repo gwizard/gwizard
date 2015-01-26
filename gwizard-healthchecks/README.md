@@ -8,7 +8,7 @@ See https://github.com/dropwizard/metrics-healthchecks
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-healthchecks</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -16,4 +16,4 @@ See https://github.com/dropwizard/metrics-healthchecks
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/healthchecks/HealthChecksModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/healthchecks/HealthChecksModuleExample.java)

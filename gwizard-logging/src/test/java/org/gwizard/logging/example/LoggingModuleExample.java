@@ -25,7 +25,7 @@ public class LoggingModuleExample {
 		public LoggingConfig loggingConfig() {
 			// Normally you would pull this from a larger config object
 			LoggingConfig cfg = new LoggingConfig();
-			cfg.getLoggers().put("com.voodoodyne.gwizard.logging.example", Level.ERROR);
+			cfg.getLoggers().put("org.gwizard.logging.example", Level.ERROR);
 			return cfg;
 		}
 	}

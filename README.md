@@ -10,13 +10,13 @@ The best place for help is the gwizard Google Group: https://groups.google.com/f
 
 ## Code
 
-https://github.com/stickfigure/gwizard
+https://github.com/gwizard/gwizard
 
 ## Example Project
 
 The best way to understand GWizard is to fork a simple example project:
 
-https://github.com/stickfigure/gwizard-example
+https://github.com/gwizard/gwizard-example
 
 ## Requirements
 

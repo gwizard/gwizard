@@ -14,7 +14,7 @@ See https://code.google.com/p/guava-libraries/wiki/ServiceExplained
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-services</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -27,7 +27,7 @@ can ignore gwizard-services. Those other modules configure ServicesModule.
 
 If you want to explicitly configure services, you can register them like this:
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/services/example/ServicesModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/services/example/ServicesModuleExample.java)
 
 Example service:
 

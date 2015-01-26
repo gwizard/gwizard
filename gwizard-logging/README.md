@@ -7,7 +7,7 @@ There are a couple ways to manage the configuration.
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-logging</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -17,7 +17,7 @@ This pulls in all relevant dependencies.
 
 ## Usage: Configured using logback.xml
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/logging/example/LoggingModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/logging/example/LoggingModuleExample.java)
 
 If you prefer the [traditional Logback configuration boostrap process](http://logback.qos.ch/manual/configuration.html),
 just register the `LoggingModule`:
@@ -44,9 +44,9 @@ At the moment there is only one way to put logging configuration in your master 
 
 ### XML in your YAML
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/logging/example/LoggingModuleExample2.java)
+[A self-contained example](src/test/java/org/gwizard/logging/example/LoggingModuleExample2.java)
 
-You can also find a complete example in the [GWizard example app](https://github.com/stickfigure/gwizard-example).
+You can also find a complete example in the [GWizard example app](https://github.com/gwizard/gwizard-example).
 
 Logback's configuration code understands XML, not YAML. So for now, the easiest way to maintain log configuration
 is to store a big chunk of XML in your YAML config. Because of YAML's text blocks, this is surprisingly elegant:

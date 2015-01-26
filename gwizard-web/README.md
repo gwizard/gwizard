@@ -9,7 +9,7 @@ this is your huckleberry.
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-web</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -17,7 +17,7 @@ this is your huckleberry.
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/web/example/WebModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/web/example/WebModuleExample.java)
 
 ```java
 public class WebModuleExample {
@@ -44,7 +44,7 @@ public class WebModuleExample {
 
 The default port is 8080. You can control web server behavior by binding an instance of `WebConfig`,
 which you probably want to draw out of your master config object (see gwizard-config). See the self-contained
-example (or the [gwizard-example application](https://github.com/stickfigure/gwizard-example) for a more thorough
+example (or the [gwizard-example application](https://github.com/gwizard/gwizard-example) for a more thorough
 example.
 
 If you look closely you'll note that `WebConfig` is rather thin on configuration options - that's because this

@@ -5,7 +5,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.voodoodyne" level="trace"/>
+	<logger name="org.gwizard" level="trace"/>
 
 	<root level="info">
 		<appender-ref ref="console"/>

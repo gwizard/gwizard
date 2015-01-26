@@ -11,7 +11,7 @@ adds metrics-guice's AOP scanning for @Timed, @Metered, etc annotations.
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-metrics</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -20,4 +20,4 @@ adds metrics-guice's AOP scanning for @Timed, @Metered, etc annotations.
 ## Usage
 
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/metrics/example/MetricsModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/metrics/example/MetricsModuleExample.java)

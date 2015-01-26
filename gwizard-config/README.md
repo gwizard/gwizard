@@ -7,7 +7,7 @@ system properties.
 
 ```xml
 	<dependency>
-		<groupId>com.voodoodyne.gwizard</groupId>
+		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-config</artifactId>
 		<version>${gwizard.version}</version>
 	</dependency>
@@ -15,7 +15,7 @@ system properties.
 
 ## Usage
 
-[A self-contained example](src/test/java/com/voodoodyne/gwizard/config/example/ConfigModuleExample.java)
+[A self-contained example](src/test/java/org/gwizard/config/example/ConfigModuleExample.java)
 
 Instantiate the `ConfigModule` by passing it a config File (typically `args[0]`) and a simple POJO class to read.
 

@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.voodoodyne.gwizard</groupId>
+	<groupId>org.gwizard</groupId>
 	<artifactId>gwizard-parent</artifactId>
 	<version>0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>GWizard</name>
 	<description>A Java framework, inspired by DropWizard, for developing RESTful web services with Guice</description>
-	<url>https://github.com/stickfigure/gwizard</url>
+	<url>https://github.com/gwizard/gwizard</url>
 
 	<modules>
 		<module>gwizard-config</module>
@@ -41,8 +41,8 @@
 	</properties>
 
 	<scm>
-		<url>scm:git:https://github.com/stickfigure/gwizard.git</url>
-		<developerConnection>scm:git:https://github.com/stickfigure/gwizard.git</developerConnection>
+		<url>scm:git:https://github.com/gwizard/gwizard.git</url>
+		<developerConnection>scm:git:https://github.com/gwizard/gwizard.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -237,17 +237,17 @@
 		<dependencies>
 			<!-- our gwizard modules, always ${project.version} -->
 			<dependency>
-				<groupId>com.voodoodyne.gwizard</groupId>
+				<groupId>org.gwizard</groupId>
 				<artifactId>gwizard-metrics</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.voodoodyne.gwizard</groupId>
+				<groupId>org.gwizard</groupId>
 				<artifactId>gwizard-services</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.voodoodyne.gwizard</groupId>
+				<groupId>org.gwizard</groupId>
 				<artifactId>gwizard-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
