@@ -9,7 +9,6 @@ import org.gwizard.services.Services;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This service periodically runs health checks at a configured interval and
@@ -47,6 +46,6 @@ public class HealthChecksService extends AbstractScheduledService {
 
 	@Override
 	protected Scheduler scheduler() {
-		return Scheduler.newFixedRateSchedule(0, config.getInterval().toSeconds(), TimeUnit.SECONDS);
+		return Scheduler.newFixedRateSchedule(0, config.getInterval().getQuantity(), config.getInterval().getUnit());
 	}
 }
