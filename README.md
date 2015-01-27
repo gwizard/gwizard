@@ -51,8 +51,8 @@ Here's a complete JAX-RS REST service which you can run from the command line:
 ```java
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import RestModule;
-import Run;
+import org.gwizard.rest.RestModule;
+import org.gwizard.services.Run;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
