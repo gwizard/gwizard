@@ -40,7 +40,7 @@ public class RestModuleExample {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Guice.createInjector(new MyModule(), new RestModule()).getInstance(WebServer.class).startJoin();
+		Guice.createInjector(new MyModule(), new RestModule()).getInstance(Run.class).start();
 	}
 }
 ```
@@ -62,4 +62,5 @@ Yeah, seems like a good idea for a feature. Easy to add. Request it.
 * Any JAX-RS-annotated classes which have been bound in Guice are processed.
   * `@Path`-annotated classes become REST endpoints.
   * `@Provider`-annotated classes become JAX-RS providers. This is the JAXRS annotation, not the injection interface!
-* See the `WebModule` contract for web server configuration information, or how to start the server.
+* See the `WebModule` contract for web server configuration information.
+* The web server starts up when services are started up (ie, `Run.start()`).
