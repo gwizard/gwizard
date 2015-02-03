@@ -19,6 +19,7 @@
 		<dependency>
 			<groupId>org.gwizard</groupId>
 			<artifactId>gwizard-web</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

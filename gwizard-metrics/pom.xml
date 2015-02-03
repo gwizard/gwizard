@@ -15,6 +15,7 @@
 		<dependency>
 			<groupId>org.gwizard</groupId>
 			<artifactId>gwizard-services</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

@@ -246,23 +246,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- our gwizard modules, always ${project.version} -->
-			<dependency>
-				<groupId>org.gwizard</groupId>
-				<artifactId>gwizard-metrics</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gwizard</groupId>
-				<artifactId>gwizard-services</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gwizard</groupId>
-				<artifactId>gwizard-web</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
 			<!-- google -->
 			<dependency>
 				<groupId>com.google.inject</groupId>

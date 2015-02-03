@@ -15,16 +15,18 @@
 		<dependency>
 			<groupId>org.gwizard</groupId>
 			<artifactId>gwizard-services</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>io.dropwizard.metrics</groupId>
-			<artifactId>metrics-healthchecks</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.gwizard</groupId>
 			<artifactId>gwizard-metrics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.dropwizard.metrics</groupId>
+			<artifactId>metrics-healthchecks</artifactId>
 		</dependency>
 
 		<dependency>
