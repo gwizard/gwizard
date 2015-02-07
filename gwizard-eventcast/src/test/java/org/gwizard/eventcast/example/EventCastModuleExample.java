@@ -3,6 +3,7 @@
 package org.gwizard.eventcast.example;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.util.concurrent.Uninterruptibles;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.gwizard.eventcast.EventCastModule;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class EventCastModuleExample {
@@ -30,6 +32,9 @@ public class EventCastModuleExample {
 		void eventOccurred(String foo, String bar);
 	}
 
+	/**
+	 * implementation for a class that receives both sorts of events
+	 */
 	@Slf4j
 	public static class MyEventReceiver implements MyEventListener, MyOtherEventListener  {
 		private static final AtomicLong instanceCount = new AtomicLong(0);
@@ -43,6 +48,9 @@ public class EventCastModuleExample {
 		@Override
 		public void eventOccurred(String foo) {
 			log.info("[receiver{}] Event {}", instanceId, foo);
+
+			// sleep to make the handler behave badly
+			Uninterruptibles.sleepUninterruptibly(10, TimeUnit.MILLISECONDS);
 		}
 
 		@Override
@@ -51,6 +59,9 @@ public class EventCastModuleExample {
 		}
 	}
 
+	/**
+	 * implementation that receives only one sort of event
+	 */
 	@Slf4j
 	public static class MyEventReceiver2 implements MyEventListener {
 
@@ -60,6 +71,9 @@ public class EventCastModuleExample {
 		}
 	}
 
+	/**
+	 * a class that sends events
+	 */
 	@Slf4j
 	public static class MyEventSender {
 		private final MyEventListener eventListener;
@@ -74,20 +88,6 @@ public class EventCastModuleExample {
 		}
 	}
 
-	@Slf4j
-	public static class MyOtherEventSender {
-		private final MyOtherEventListener eventListener;
-
-		@Inject
-		public MyOtherEventSender(MyOtherEventListener eventListener) {
-			this.eventListener = eventListener;
-		}
-
-		public void trigger(String eventParam1, String eventParam2) {
-			eventListener.eventOccurred(eventParam1, eventParam2);
-		}
-	}
-
 	/**
 	 */
 	public static class ExampleModule extends AbstractModule {
@@ -96,7 +96,7 @@ public class EventCastModuleExample {
 			// EventCastModule has bound the event caster, consumers should
 			// use eventCastBindingModuleBuilder()
 			install(EventCast.eventCastBindingModuleBuilder()
-					.implement(MyEventListener.class, Executors.newFixedThreadPool(3)) // demonstrate async
+					.implement(MyEventListener.class, Executors.newFixedThreadPool(2)) // oooh async, fancy shmancy
 					.implement(MyOtherEventListener.class)
 					.build());
 
@@ -117,8 +117,11 @@ public class EventCastModuleExample {
 		}
 		injector.getInstance(MyEventReceiver2.class);
 
-		// now, send events
+		// receivers created, now we can send events
+
+		// send event using sender impl
 		injector.getInstance(MyEventSender.class).trigger("foo");
-		injector.getInstance(MyOtherEventSender.class).trigger("bar", "baz");
+
+		injector.getInstance(MyOtherEventListener.class).eventOccurred("bar", "baz");
 	}
 }
