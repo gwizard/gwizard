@@ -1,0 +1,13 @@
+<configuration>
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d %5p [%t] %40.40c:%4L - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.gwizard" level="trace"/>
+
+	<root level="info">
+		<appender-ref ref="console"/>
+	</root>
+</configuration>
