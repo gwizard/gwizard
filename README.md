@@ -157,6 +157,14 @@ The `HealthCheckModule` glues in the metrics-healthchecks library.
 
 [README for gwizard-healthchecks](gwizard-healthchecks/README.md)
 
+### gwizard-eventcast
+
+The `EventCast` module glues in the eventcast library, which provides loosely coupled publish-subscribe
+messaging between objects
+
+[README for gwizard-eventcast](gwizard-eventcast/README.md)
+
+
 ## Mini-FAQ
 We will try to cover some design questions.
 

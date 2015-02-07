@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.gwizard</groupId>
+		<artifactId>gwizard-parent</artifactId>
+		<version>0.6-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>gwizard-eventcast</artifactId>
+	<name>GWizard EventCast</name>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.lexicalscope.eventcast</groupId>
+			<artifactId>eventcast</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.gwizard</groupId>
+			<artifactId>gwizard-services</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- This is just for running tests -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+    </dependencies>
+</project>
