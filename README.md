@@ -157,6 +157,12 @@ The `HealthCheckModule` glues in the metrics-healthchecks library.
 
 [README for gwizard-healthchecks](gwizard-healthchecks/README.md)
 
+### gwizard-rpc
+
+The `RpcModule` provides a simple and convenient RPC system for pure-Java SOA systems.
+
+[README for gwizard-rpc](gwizard-rpc/README.md)
+
 ## Mini-FAQ
 We will try to cover some design questions.
 

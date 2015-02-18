@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.gwizard</groupId>
+		<artifactId>gwizard-parent</artifactId>
+		<version>0.6-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>gwizard-rpc</artifactId>
+	<name>GWizard RPC</name>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.gwizard</groupId>
+			<artifactId>gwizard-web</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-servlet</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.voodoodyne.trivet</groupId>
+			<artifactId>trivet</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<!-- This is just for running tests -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
