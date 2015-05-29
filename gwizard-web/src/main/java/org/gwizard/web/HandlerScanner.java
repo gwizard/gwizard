@@ -23,7 +23,7 @@ public class HandlerScanner {
 		this.injector = injector;
 	}
 
-	/** Start the process, visiting each ServletContextListener bound in the injector or any parents */
+	/** Start the process, visiting each Handler bound in the injector or any parents */
 	public void accept(Visitor visitor) {
 		accept(injector, visitor);
 	}
