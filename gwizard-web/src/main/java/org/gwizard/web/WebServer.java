@@ -5,11 +5,9 @@ import com.google.inject.servlet.GuiceFilter;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.gwizard.web.EventListenerScanner.Visitor;
-
+import org.gwizard.web.Scanner.Visitor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.EventListener;
@@ -58,7 +56,7 @@ public class WebServer {
 		// that have been bound. For example, the GuiceResteasyBootstrapServletContextListener
 		// which gets bound by gwizard-rest.
 		// Sigh no java8
-		eventListenerScanner.accept(new Visitor() {
+		eventListenerScanner.accept(new Visitor<EventListener>() {
 			@Override
 			public void visit(EventListener listener) {
 				sch.addEventListener(listener);
@@ -71,7 +69,7 @@ public class WebServer {
 		handlers.addHandler(server.getHandler());
 
 		// This will add any registered jetty Handlers that have been bound.
-		handlerScanner.accept(new HandlerScanner.Visitor() {
+		handlerScanner.accept(new Visitor<Handler>() {
 			@Override
 			public void visit(Handler handler) {
 				handlers.addHandler(handler);
