@@ -2,10 +2,14 @@ package org.gwizard.web;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
-import org.gwizard.web.EventListenerScanner.Visitor;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.gwizard.web.EventListenerScanner.Visitor;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.EventListener;
@@ -20,17 +24,20 @@ public class WebServer {
 
 	private final WebConfig webConfig;
 	private final EventListenerScanner eventListenerScanner;
+	private final HandlerScanner handlerScanner;
 
 	private Server server;
 
 	@Inject
-	public WebServer(WebConfig webConfig, EventListenerScanner eventListenerScanner) {
+	public WebServer(WebConfig webConfig, EventListenerScanner eventListenerScanner, HandlerScanner handlerScanner) {
 		this.webConfig = webConfig;
 		this.eventListenerScanner = eventListenerScanner;
+		this.handlerScanner = handlerScanner;
 	}
 
 	/**
 	 * Start the web server. Does not block.
+	 *
 	 * @see Server#start()
 	 */
 	public void start() throws Exception {
@@ -58,6 +65,21 @@ public class WebServer {
 			}
 		});
 
+        final HandlerCollection handlers = new HandlerCollection();
+
+		// the sch is currently the server handler, add it to the list
+		handlers.addHandler(server.getHandler());
+
+		// This will add any registered jetty Handlers that have been bound.
+		handlerScanner.accept(new HandlerScanner.Visitor() {
+			@Override
+			public void visit(Handler handler) {
+				handlers.addHandler(handler);
+			}
+		});
+
+		server.setHandler(handlers);
+
 		// Start the server
 		server.start();
 	}
@@ -70,7 +92,7 @@ public class WebServer {
 	protected Server createServer(WebConfig webConfig) {
 		return new Server(webConfig.getPort());
 	}
-        
+
 	/**
 	 * signal the web server to stop
 	 */

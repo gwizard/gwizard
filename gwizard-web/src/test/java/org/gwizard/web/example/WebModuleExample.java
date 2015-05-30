@@ -1,9 +1,20 @@
 package org.gwizard.web.example;
 
+import ch.qos.logback.access.PatternLayout;
+import ch.qos.logback.access.jetty.RequestLogImpl;
+import ch.qos.logback.access.PatternLayoutEncoder;
+import ch.qos.logback.access.spi.IAccessEvent;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.ConsoleAppender;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.servlet.ServletModule;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.gwizard.services.Run;
 import org.gwizard.web.WebConfig;
 import org.gwizard.web.WebModule;
@@ -41,8 +52,36 @@ public class WebModuleExample {
 		}
 	}
 
+	public static class TestHandlerModule extends AbstractModule {
+
+		@Override
+		protected void configure() {
+			RequestLogImpl requestLog = new RequestLogImpl();
+
+			ConsoleAppender<IAccessEvent> consoleAppender = new ConsoleAppender<>();
+			consoleAppender.setContext(requestLog);
+			consoleAppender.setName("console");
+
+			PatternLayoutEncoder patternLayout = new PatternLayoutEncoder();
+			patternLayout.setContext(requestLog);
+			patternLayout.setPattern("%h %l %u %user %date \"%r\" %s %b");
+			patternLayout.start();
+
+			consoleAppender.setEncoder(patternLayout);
+			consoleAppender.start();
+
+			requestLog.addAppender(consoleAppender);
+
+			RequestLogHandler requestLogHandler = new RequestLogHandler();
+			requestLogHandler.setRequestLog(requestLog);
+
+			bind(RequestLogHandler.class).toInstance(requestLogHandler);
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
 		final Injector injector = Guice.createInjector(
+						new TestHandlerModule(),
 						new MyModule(),
 						new WebModule());
 
