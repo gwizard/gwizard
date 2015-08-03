@@ -16,38 +16,38 @@ import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
 
 public class HibernateModuleTest {
 
-    @Test
-    public void bridgeModuleOverridesJpaProperties() {
-        // given
-        MyModule myModule = new MyModule();
-        Map<String, String> configProperties = myModule.databaseConfig().getProperties();
-        Injector injector = Guice.createInjector(myModule, new HibernateModule());
+	@Test
+	public void bridgeModuleOverridesJpaProperties() {
+		// given
+		MyModule myModule = new MyModule();
+		Map<String, String> configProperties = myModule.databaseConfig().getProperties();
+		Injector injector = Guice.createInjector(myModule, new HibernateModule());
 
-        // when
-        EntityManagerFactory entityManagerFactory = injector.getInstance(EntityManagerFactory.class);
+		// when
+		EntityManagerFactory entityManagerFactory = injector.getInstance(EntityManagerFactory.class);
 
-        assertThat(entityManagerFactory.getProperties()).contains(
-                entry(DIALECT, configProperties.get(DIALECT)),
-                entry(HBM2DDL_AUTO, configProperties.get(HBM2DDL_AUTO))
-        );
-        entityManagerFactory.close();
-    }
+		assertThat(entityManagerFactory.getProperties()).contains(
+				entry(DIALECT, configProperties.get(DIALECT)),
+				entry(HBM2DDL_AUTO, configProperties.get(HBM2DDL_AUTO))
+		);
+		entityManagerFactory.close();
+	}
 
-    @Test
-    public void canPersistAndQueryEntityManager() {
-        // given
-        MyModule myModule = new MyModule();
-        Injector injector = Guice.createInjector(myModule, new HibernateModule());
-        Work work = injector.getInstance(Work.class);
+	@Test
+	public void canPersistAndQueryEntityManager() {
+		// given
+		MyModule myModule = new MyModule();
+		Injector injector = Guice.createInjector(myModule, new HibernateModule());
+		Work work = injector.getInstance(Work.class);
 
-        // when
-        assert(work.countThings()) == 0;
-        work.makeAThing();
-        work.makeAThing();
-        work.makeAThing();
+		// when
+		assert(work.countThings()) == 0;
+		work.makeAThing();
+		work.makeAThing();
+		work.makeAThing();
 
-        // then
-        assert(work.countThings()) == 3;
-        injector.getInstance(EntityManagerFactory.class).close();
-    }
+		// then
+		assert(work.countThings()) == 3;
+		injector.getInstance(EntityManagerFactory.class).close();
+	}
 }
