@@ -3,7 +3,11 @@ package com.google.inject.persist.jpa;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import org.gwizard.hibernate.DatabaseConfig;
+
+import java.util.Map;
 import java.util.Properties;
+
+import static org.hibernate.cfg.AvailableSettings.*;
 
 /**
  * This allows us to pull database config out of Guice instead of hardcoding it in the
@@ -22,12 +26,12 @@ public class WizardBridgeModule extends AbstractModule {
 	 */
 	@Provides
 	@Jpa
-	public Properties properties(DatabaseConfig cfg) {
+	public Map<?, ?> properties(DatabaseConfig cfg) {
 		Properties props = new Properties();
-		props.setProperty("hibernate.connection.driver_class", cfg.getDriverClass());
-		props.setProperty("hibernate.connection.url", cfg.getUrl());
-		props.setProperty("hibernate.connection.username", cfg.getUser());
-		props.setProperty("hibernate.connection.password", cfg.getPassword());
+		props.setProperty(DRIVER, cfg.getDriverClass());
+		props.setProperty(URL, cfg.getUrl());
+		props.setProperty(USER, cfg.getUser());
+		props.setProperty(PASS, cfg.getPassword());
 
 		props.putAll(cfg.getProperties());
 
