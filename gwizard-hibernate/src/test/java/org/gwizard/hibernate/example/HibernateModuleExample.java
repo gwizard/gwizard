@@ -5,10 +5,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.persist.Transactional;
-import org.gwizard.hibernate.DatabaseConfig;
-import org.gwizard.hibernate.HibernateModule;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.gwizard.hibernate.DatabaseConfig;
+import org.gwizard.hibernate.HibernateModule;
+
 import javax.inject.Singleton;
 import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
@@ -16,7 +17,10 @@ import javax.persistence.Id;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.UUID;
+
 import static org.gwizard.hibernate.EM.em;
+import static org.hibernate.cfg.AvailableSettings.DIALECT;
+import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
 
 /**
  * Self-contained example of using Hibernate
@@ -59,8 +63,8 @@ public class HibernateModuleExample {
 			cfg.setDriverClass("org.h2.Driver");
 			cfg.setUser("sa");
 			cfg.setUrl("jdbc:h2:mem:test");
-			cfg.getProperties().put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-			cfg.getProperties().put("hibernate.hbm2ddl.auto", "create");
+			cfg.getProperties().put(DIALECT, "org.hibernate.dialect.H2Dialect");
+			cfg.getProperties().put(HBM2DDL_AUTO, "create");
 			return cfg;
 		}
 	}

@@ -3,6 +3,8 @@ package com.google.inject.persist.jpa;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import org.gwizard.hibernate.DatabaseConfig;
+
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -22,7 +24,7 @@ public class WizardBridgeModule extends AbstractModule {
 	 */
 	@Provides
 	@Jpa
-	public Properties properties(DatabaseConfig cfg) {
+	public Map<?, ?> properties(DatabaseConfig cfg) {
 		Properties props = new Properties();
 		props.setProperty("hibernate.connection.driver_class", cfg.getDriverClass());
 		props.setProperty("hibernate.connection.url", cfg.getUrl());
