@@ -1,19 +1,14 @@
 package org.gwizard.web.example;
 
-import ch.qos.logback.access.PatternLayout;
-import ch.qos.logback.access.jetty.RequestLogImpl;
 import ch.qos.logback.access.PatternLayoutEncoder;
+import ch.qos.logback.access.jetty.RequestLogImpl;
 import ch.qos.logback.access.spi.IAccessEvent;
-import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.servlet.ServletModule;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.gwizard.services.Run;
 import org.gwizard.web.WebConfig;
