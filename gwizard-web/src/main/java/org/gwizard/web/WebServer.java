@@ -1,16 +1,18 @@
 package org.gwizard.web;
 
-import com.google.common.base.Preconditions;
-import com.google.inject.servlet.GuiceFilter;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.EventListener;
+
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.gwizard.web.Scanner.Visitor;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.EventListener;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.servlet.GuiceFilter;
 
 /**
  * Simple Jetty-based embedded web server which configures itself from a bound WebConfig and serves the
@@ -23,14 +25,19 @@ public class WebServer {
 	private final WebConfig webConfig;
 	private final EventListenerScanner eventListenerScanner;
 	private final HandlerScanner handlerScanner;
+	private final ServletContextConfiguratorScanner servletContextConfiguratorScanner;
 
 	private Server server;
 
 	@Inject
-	public WebServer(WebConfig webConfig, EventListenerScanner eventListenerScanner, HandlerScanner handlerScanner) {
+	public WebServer(WebConfig webConfig,
+			EventListenerScanner eventListenerScanner,
+			HandlerScanner handlerScanner,
+			ServletContextConfiguratorScanner servletContextConfiguratorScanner) {
 		this.webConfig = webConfig;
 		this.eventListenerScanner = eventListenerScanner;
 		this.handlerScanner = handlerScanner;
+		this.servletContextConfiguratorScanner = servletContextConfiguratorScanner;
 	}
 
 	/**
@@ -77,6 +84,14 @@ public class WebServer {
 		});
 
 		server.setHandler(handlers);
+
+		// to allow customization of the servletcontext we scan for ServletContextConfigurators that have been bound
+		servletContextConfiguratorScanner.accept(new Visitor<ServletContextConfigurator>() {
+			@Override
+			public void visit(ServletContextConfigurator servletContextConfigurator) {
+				servletContextConfigurator.configure(sch);
+			}
+		});
 
 		// Start the server
 		server.start();
