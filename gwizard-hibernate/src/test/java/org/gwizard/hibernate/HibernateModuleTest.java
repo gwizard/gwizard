@@ -3,14 +3,16 @@ package org.gwizard.hibernate;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.gwizard.hibernate.example.HibernateModuleExample.MyModule;
+import org.hamcrest.collection.IsMapContaining;
 import org.testng.annotations.Test;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.StrictAssertions.entry;
 import static org.gwizard.hibernate.example.HibernateModuleExample.Work;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
 import static org.hibernate.cfg.AvailableSettings.DIALECT;
 import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
 
@@ -26,10 +28,11 @@ public class HibernateModuleTest {
 		// when
 		EntityManagerFactory entityManagerFactory = injector.getInstance(EntityManagerFactory.class);
 
-		assertThat(entityManagerFactory.getProperties()).contains(
-				entry(DIALECT, configProperties.get(DIALECT)),
-				entry(HBM2DDL_AUTO, configProperties.get(HBM2DDL_AUTO))
-		);
+		assertThat(entityManagerFactory.getProperties(), IsMapContaining.hasEntry(
+				equalTo(DIALECT), equalTo(configProperties.get(DIALECT))));
+		assertThat(entityManagerFactory.getProperties(), IsMapContaining.hasEntry(
+				equalTo(HBM2DDL_AUTO), equalTo(configProperties.get(HBM2DDL_AUTO))));
+
 		entityManagerFactory.close();
 	}
 
@@ -38,16 +41,17 @@ public class HibernateModuleTest {
 		// given
 		MyModule myModule = new MyModule();
 		Injector injector = Guice.createInjector(myModule, new HibernateModule());
-		Work work = injector.getInstance(Work.class);
 
 		// when
-		assert(work.countThings()) == 0;
-		work.makeAThing();
-		work.makeAThing();
-		work.makeAThing();
+		Work work = injector.getInstance(Work.class);
 
 		// then
-		assert(work.countThings()) == 3;
+		assertThat(work.countThings(), is(0L));
+		work.makeAThing();
+		work.makeAThing();
+		work.makeAThing();
+		assertThat(work.countThings(), is(3L));
+
 		injector.getInstance(EntityManagerFactory.class).close();
 	}
 }
