@@ -1,4 +1,4 @@
-package org.gwizard.services.interceptor;
+package org.gwizard.services.autoconfig;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;

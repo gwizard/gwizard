@@ -1,17 +1,17 @@
-package org.gwizard.services.interceptor;
+package org.gwizard.services.autoconfig;
 
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.ServiceManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import org.gwizard.services.Services;
 import org.gwizard.services.ServicesModule;
 import org.testng.annotations.Test;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -48,7 +48,7 @@ public class AutoServiceTest {
 		Services mockServices = mock(Services.class);
 
 		// when
-		Guice.createInjector(
+		Injector injector = Guice.createInjector(
 				new AbstractModule() {
 					@Override
 					protected void configure() {
@@ -62,8 +62,8 @@ public class AutoServiceTest {
 		);
 
 		// then
-		verify(mockServices).add(any(Service.class));
-		verify(mockServices).add(any(Service.Listener.class));
-		verify(mockServices).add(any(ServiceManager.Listener.class));
+		verify(mockServices).add(injector.getInstance(ExampleService.class));
+		verify(mockServices).add(injector.getInstance(ExampleServiceListener.class));
+		verify(mockServices).add(injector.getInstance(ExampleServiceManagerListener.class));
 	}
 }

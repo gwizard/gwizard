@@ -1,4 +1,4 @@
-package org.gwizard.services.interceptor;
+package org.gwizard.services.autoconfig;
 
 import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.ServiceManager;
@@ -10,7 +10,7 @@ import org.gwizard.services.Services;
 
 import javax.inject.Provider;
 
-public class AutoServiceListener implements TypeListener {
+class AutoServiceListener implements TypeListener {
 
 	private final Provider<Services> servicesProvider;
 
@@ -19,14 +19,14 @@ public class AutoServiceListener implements TypeListener {
 	}
 
 	@Override
-	public void hear(TypeLiteral typeLiteral, TypeEncounter typeEncounter) {
+	public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
 		final Class<?> clazz = typeLiteral.getRawType();
 		if (Service.class.isAssignableFrom(clazz)) {
-			typeEncounter.register((InjectionListener) i -> servicesProvider.get().add((Service) i));
+			typeEncounter.register((InjectionListener<I>) i -> servicesProvider.get().add((Service)i));
 		} else if (Service.Listener.class.isAssignableFrom(clazz)) {
-			typeEncounter.register((InjectionListener) i -> servicesProvider.get().add((Service.Listener) i));
+			typeEncounter.register((InjectionListener<I>) i -> servicesProvider.get().add((Service.Listener)i));
 		} else if (ServiceManager.Listener.class.isAssignableFrom(clazz)) {
-			typeEncounter.register((InjectionListener) i -> servicesProvider.get().add((ServiceManager.Listener) i));
+			typeEncounter.register((InjectionListener<I>) i -> servicesProvider.get().add((ServiceManager.Listener) i));
 		}
 	}
 }

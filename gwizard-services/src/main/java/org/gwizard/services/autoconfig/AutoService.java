@@ -1,4 +1,4 @@
-package org.gwizard.services.interceptor;
+package org.gwizard.services.autoconfig;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
