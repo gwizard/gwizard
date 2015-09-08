@@ -5,7 +5,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import org.gwizard.services.Services;
 
-public class AutoServiceModule extends AbstractModule {
+public class AutoServicesModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
