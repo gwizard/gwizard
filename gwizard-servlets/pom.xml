@@ -12,6 +12,10 @@
     <artifactId>gwizard-servlets</artifactId>
     <name>GWizard Servlets</name>
     <packaging>jar</packaging>
+    <description>
+        A set of utility servlets for GWizard, allowing you to expose valuable information about
+        your environment.
+    </description>
 
     <dependencies>
 
@@ -69,6 +73,36 @@
             <artifactId>guice-servlet</artifactId>
         </dependency>
 
+        <!-- They moved the helpful test classes underneath the tests classifier -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-http</artifactId>
+            <version>${jetty.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- This is just for running tests -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

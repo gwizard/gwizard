@@ -1,4 +1,4 @@
-package org.gwizard;
+package org.gwizard.servlets;
 
 import com.google.inject.servlet.ServletModule;
 import lombok.EqualsAndHashCode;

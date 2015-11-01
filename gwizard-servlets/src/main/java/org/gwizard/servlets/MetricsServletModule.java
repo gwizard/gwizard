@@ -1,35 +1,36 @@
-package org.gwizard;
+package org.gwizard.servlets;
 
-import com.google.common.util.concurrent.MoreExecutors;
+import com.codahale.metrics.MetricFilter;
 import com.google.inject.multibindings.OptionalBinder;
 import com.google.inject.servlet.ServletModule;
 import lombok.EqualsAndHashCode;
-import java.util.concurrent.ExecutorService;
+
+import static com.codahale.metrics.MetricFilter.ALL;
 
 /***
  * This small ServletModule configures the {@link MetricsServlet}.
  * It is <b>important</b> that this module be placed before the RestModule
  */
 @EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
-public class HealthCheckServletModule extends ServletModule {
+public class MetricsServletModule extends ServletModule {
 
-    public static final String HEALTHCHECK_URI = "/healthcheck";
+    public static final String METRICS_URI = "/metrics";
 
     private final String prefixUri;
 
-    public HealthCheckServletModule(String prefixUri) {
+    public MetricsServletModule(String prefixUri) {
         this.prefixUri = prefixUri;
     }
 
     @Override
     protected void configureServlets() {
         //Users can override the MetricsFilter binding if they'd like
-        OptionalBinder.newOptionalBinder(binder(), ExecutorService.class).setDefault().toInstance(MoreExecutors.newDirectExecutorService());
-        serve(getUri()).with(HealthCheckServlet.class);
+        OptionalBinder.newOptionalBinder(binder(), MetricFilter.class).setDefault().toInstance(ALL);
+        serve(getUri()).with(MetricsServlet.class);
     }
 
     private String getUri() {
-        return String.format("%s%s",prefixUri, HEALTHCHECK_URI);
+        return String.format("%s%s",prefixUri, METRICS_URI);
     }
 
 }

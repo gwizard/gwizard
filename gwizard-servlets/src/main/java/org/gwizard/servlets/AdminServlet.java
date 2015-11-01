@@ -1,4 +1,4 @@
-package org.gwizard;
+package org.gwizard.servlets;
 
 import com.google.common.net.HttpHeaders;
 
@@ -11,10 +11,6 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
-import static org.gwizard.HealthCheckServletModule.HEALTHCHECK_URI;
-import static org.gwizard.MetricsServletModule.METRICS_URI;
-import static org.gwizard.PingServletModule.PING_URI;
-import static org.gwizard.ThreadDumpServletModule.THREADS_URI;
 
 @Singleton
 public class AdminServlet extends HttpServlet {
@@ -49,8 +45,8 @@ public class AdminServlet extends HttpServlet {
         resp.setContentType(MediaType.TEXT_HTML);
         try (final PrintWriter writer = resp.getWriter())
         {
-            writer.println(MessageFormat.format(TEMPLATE, path, METRICS_URI, path, PING_URI, path,
-                    THREADS_URI, path, HEALTHCHECK_URI));
+            writer.println(MessageFormat.format(TEMPLATE, path, MetricsServletModule.METRICS_URI, path, PingServletModule.PING_URI, path,
+                    ThreadDumpServletModule.THREADS_URI, path, HealthCheckServletModule.HEALTHCHECK_URI));
         }
     }
 
