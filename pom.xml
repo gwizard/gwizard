@@ -21,6 +21,7 @@
 		<module>gwizard-healthchecks</module>
 		<module>gwizard-metrics</module>
 		<module>gwizard-rpc</module>
+		<module>gwizard-swagger</module>
 	</modules>
 
 	<properties>
@@ -37,9 +38,13 @@
 		<metrics.version>3.1.2</metrics.version>
 		<metricsguice.version>3.1.3</metricsguice.version>
 		<dropwizard.version>0.8.1</dropwizard.version>
-        <hibernate.em.version>5.0.0.CR3</hibernate.em.version>
+        	<hibernate.em.version>5.0.0.CR3</hibernate.em.version>
 		<hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
 		<snakeyaml.version>1.15</snakeyaml.version>
+		<swagger.version>1.5.8</swagger.version>
+		<servlet-api.version>2.5</servlet-api.version>
+		<jaxrs-api.version>3.0.10.Final</jaxrs-api.version>
+		<assertj.version>2.4.1</assertj.version>
 	</properties>
 
 	<scm>
@@ -377,6 +382,35 @@
 				<version>${hibernate.validator.version}</version>
 			</dependency>
 
+			<!-- swagger -->
+	        <dependency>
+	            <groupId>io.swagger</groupId>
+	            <artifactId>swagger-jaxrs</artifactId>
+	            <version>${swagger.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>io.swagger</groupId>
+	            <artifactId>swagger-annotations</artifactId>
+	            <version>${swagger.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>io.swagger</groupId>
+	            <artifactId>swagger-rest</artifactId>
+	            <version>${swagger.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>javax.servlet</groupId>
+	            <artifactId>servlet-api</artifactId>
+	            <version>${servlet-api.version}</version>
+	        </dependency>
+
+			<!-- RESTEasy -->
+			<dependency>
+			    <groupId>org.jboss.resteasy</groupId>
+			    <artifactId>jaxrs-api</artifactId>
+			    <version>${jaxrs-api.version}</version>
+			</dependency>
+	  
 		</dependencies>
 	</dependencyManagement>
 </project>
