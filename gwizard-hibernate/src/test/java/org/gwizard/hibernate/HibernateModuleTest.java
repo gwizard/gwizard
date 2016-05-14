@@ -1,18 +1,19 @@
 package org.gwizard.hibernate;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import org.gwizard.hibernate.example.HibernateModuleExample.MyModule;
-import org.testng.annotations.Test;
-
-import javax.persistence.EntityManagerFactory;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.StrictAssertions.entry;
-import static org.gwizard.hibernate.example.HibernateModuleExample.Work;
 import static org.hibernate.cfg.AvailableSettings.DIALECT;
 import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
+
+import java.util.Map;
+
+import javax.persistence.EntityManagerFactory;
+
+import org.gwizard.hibernate.example.HibernateModuleExample.MyModule;
+import org.gwizard.hibernate.example.HibernateModuleExample.Work;
+import org.testng.annotations.Test;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class HibernateModuleTest {
 
@@ -26,10 +27,10 @@ public class HibernateModuleTest {
 		// when
 		EntityManagerFactory entityManagerFactory = injector.getInstance(EntityManagerFactory.class);
 
-		assertThat(entityManagerFactory.getProperties()).contains(
-				entry(DIALECT, configProperties.get(DIALECT)),
-				entry(HBM2DDL_AUTO, configProperties.get(HBM2DDL_AUTO))
-		);
+		Map<String, Object> actual = entityManagerFactory.getProperties();
+		assertThat(actual.get(DIALECT)).isEqualTo(configProperties.get(DIALECT));
+		assertThat(actual.get(HBM2DDL_AUTO)).isEqualTo(configProperties.get(HBM2DDL_AUTO));
+
 		entityManagerFactory.close();
 	}
 
