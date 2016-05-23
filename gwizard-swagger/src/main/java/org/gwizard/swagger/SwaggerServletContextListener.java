@@ -49,7 +49,6 @@ final class SwaggerServletContextListener implements ServletContextListener {
 	  
     BeanConfig beanConfig = new BeanConfig();
     
-    beanConfig.setScan(true);
     beanConfig.setHost(swaggerConfig.getHost());
     beanConfig.setBasePath(swaggerConfig.getBasePath());
     beanConfig.setPrettyPrint(swaggerConfig.isPrettyPrint());
@@ -62,6 +61,9 @@ final class SwaggerServletContextListener implements ServletContextListener {
     } else {
       log.debug("Added resource packages {} to swagger bean config", resourcePackages);
     }
+
+    // setScan() actually performs it! (must go last.
+    beanConfig.setScan(true);
 
     return beanConfig;
     
