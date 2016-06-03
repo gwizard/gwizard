@@ -1,7 +1,5 @@
 # GWizard
 
-[![Build Status](https://travis-ci.org/KangoV/gwizard.svg?branch=master)](https://travis-ci.org/KangoV/gwizard)
-
 GWizard is a modular, opinionated toolkit for building RESTful web services on a Guice backbone. GWizard is
 implemented as a set of Guice modules (packaged in separate maven modules) which you can mix and match
 to enable features like logging, jaxrs services, hibernate, etc with near-zero boilerplate.
