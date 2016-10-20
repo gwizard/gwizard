@@ -10,7 +10,19 @@
 	<artifactId>gwizard-swagger</artifactId>
 	<name>GWizard Swagger</name>
 	<packaging>jar</packaging>
-	
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.gwizard</groupId>
+				<artifactId>gwizard-bom</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 
 		<dependency>

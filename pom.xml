@@ -22,6 +22,7 @@
 		<module>gwizard-metrics</module>
 		<module>gwizard-rpc</module>
 		<module>gwizard-swagger</module>
+		<module>gwizard-bom</module>
 	</modules>
 
 	<properties>
@@ -212,12 +213,14 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
 		</dependency>
 
 		<!-- Everything logs via SLF4j, but if you want standard gwizard logging output, use the LoggingModule -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<!-- Testing -->
@@ -257,160 +260,4 @@
         </dependency>
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<!-- google -->
-			<dependency>
-				<groupId>com.google.inject</groupId>
-				<artifactId>guice</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-servlet</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-multibindings</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava.version}</version>
-			</dependency>
-
-			<!-- logging -->
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>${logback.version}</version>
-			</dependency>
-
-			<!-- dropwizard -->
-			<dependency>
-				<groupId>io.dropwizard</groupId>
-				<artifactId>dropwizard-configuration</artifactId>
-				<version>${dropwizard.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.dropwizard</groupId>
-				<artifactId>dropwizard-util</artifactId>
-				<version>${dropwizard.version}</version>
-			</dependency>
-
-			<!-- metrics -->
-			<dependency>
-				<groupId>io.dropwizard.metrics</groupId>
-				<artifactId>metrics-healthchecks</artifactId>
-				<version>${metrics.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.dropwizard.metrics</groupId>
-				<artifactId>metrics-jvm</artifactId>
-				<version>${metrics.version}</version>
-			</dependency>
-
-			<!-- jackson -->
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-core</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-annotations</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.jaxrs</groupId>
-				<artifactId>jackson-jaxrs-json-provider</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.jaxrs</groupId>
-				<artifactId>jackson-jaxrs-base</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.dataformat</groupId>
-				<artifactId>jackson-dataformat-yaml</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.datatype</groupId>
-				<artifactId>jackson-datatype-guava</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.datatype</groupId>
-				<artifactId>jackson-datatype-joda</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.module</groupId>
-				<artifactId>jackson-module-afterburner</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.yaml</groupId>
-				<artifactId>snakeyaml</artifactId>
-				<version>${snakeyaml.version}</version>
-			</dependency>
-
-			<!-- hibernate -->
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-entitymanager</artifactId>
-                <version>${hibernate.em.version}</version>
-            </dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-validator</artifactId>
-				<version>${hibernate.validator.version}</version>
-			</dependency>
-
-			<!-- swagger -->
-	        <dependency>
-	            <groupId>io.swagger</groupId>
-	            <artifactId>swagger-jaxrs</artifactId>
-	            <version>${swagger.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>io.swagger</groupId>
-	            <artifactId>swagger-annotations</artifactId>
-	            <version>${swagger.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>io.swagger</groupId>
-	            <artifactId>swagger-rest</artifactId>
-	            <version>${swagger.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>javax.servlet</groupId>
-	            <artifactId>servlet-api</artifactId>
-	            <version>${servlet-api.version}</version>
-	        </dependency>
-
-			<!-- RESTEasy -->
-			<dependency>
-			    <groupId>org.jboss.resteasy</groupId>
-			    <artifactId>jaxrs-api</artifactId>
-			    <version>${jaxrs-api.version}</version>
-			</dependency>
-	  
-		</dependencies>
-	</dependencyManagement>
 </project>

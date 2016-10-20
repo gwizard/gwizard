@@ -11,17 +11,27 @@
 	<name>GWizard Health Checks</name>
 	<packaging>jar</packaging>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.gwizard</groupId>
+				<artifactId>gwizard-bom</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.gwizard</groupId>
 			<artifactId>gwizard-services</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.gwizard</groupId>
 			<artifactId>gwizard-metrics</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

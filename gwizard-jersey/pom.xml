@@ -15,11 +15,22 @@
 		<jersey.version>2.13</jersey.version>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.gwizard</groupId>
+				<artifactId>gwizard-bom</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.gwizard</groupId>
 			<artifactId>gwizard-web</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
