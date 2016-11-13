@@ -27,6 +27,17 @@
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 
+		<!--
+		For some horrible reason, maven is pulling in 3.1.4.GA via resteasy-guice, which
+		is incompatible with recent versionf of hibernate-entitymanager. Naming this version
+		higher upstream should fix the issue.
+		-->
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>3.3.0.Final</version>
+		</dependency>
+
 		<!-- Test deps -->
 
 		<dependency>
