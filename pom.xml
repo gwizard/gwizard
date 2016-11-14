@@ -49,7 +49,7 @@
 
 	<scm>
 		<url>scm:git:https://github.com/gwizard/gwizard.git</url>
-		<developerConnection>scm:git:https://github.com/gwizard/gwizard.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:gwizard/gwizard.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
