@@ -3,7 +3,7 @@
 
 	<groupId>org.gwizard</groupId>
 	<artifactId>gwizard-parent</artifactId>
-	<version>0.8-SNAPSHOT</version>
+	<version>0.8</version>
 	<packaging>pom</packaging>
 
 	<name>GWizard</name>
@@ -50,7 +50,7 @@
 	<scm>
 		<url>scm:git:https://github.com/gwizard/gwizard.git</url>
 		<developerConnection>scm:git:git@github.com:gwizard/gwizard.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>0.8</tag>
 	</scm>
 
 	<licenses>
