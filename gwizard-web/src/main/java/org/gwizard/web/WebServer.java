@@ -45,7 +45,7 @@ public class WebServer {
 		server = createServer(webConfig);
 
 		// Create a servlet context and add the jersey servlet.
-		final ServletContextHandler sch = new ServletContextHandler(server, "/");
+		final ServletContextHandler sch = createRootServletContextHandler();
 
 		sch.addFilter(GuiceFilter.class, "/*", null);
 
@@ -66,7 +66,7 @@ public class WebServer {
         final HandlerCollection handlers = new HandlerCollection();
 
 		// the sch is currently the server handler, add it to the list
-		handlers.addHandler(server.getHandler());
+		handlers.addHandler(sch);
 
 		// This will add any registered jetty Handlers that have been bound.
 		handlerScanner.accept(new Visitor<Handler>() {
@@ -80,6 +80,15 @@ public class WebServer {
 
 		// Start the server
 		server.start();
+	}
+
+	/**
+	 * Overrideable method to create the root ServletContextHandler. This can be used so that the Server can
+	 * have a ServletContextHandler that will be able to handle Sessions for example.
+	 * By default we create a bare-bones ServletContextHandler that is not set up to handle Sessions.
+	 */
+	protected ServletContextHandler createRootServletContextHandler() {
+		return new ServletContextHandler(null, "/");
 	}
 
 	/**
