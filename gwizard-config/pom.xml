@@ -11,6 +11,18 @@
 	<name>GWizard Config</name>
 	<packaging>jar</packaging>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.gwizard</groupId>
+				<artifactId>gwizard-bom</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<!-- We can use dropwizard's configuration parser, yeay -->
 		<dependency>

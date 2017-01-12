@@ -11,6 +11,18 @@
 	<artifactId>gwizard-hibernate</artifactId>
 	<name>GWizard Hibernate</name>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.gwizard</groupId>
+				<artifactId>gwizard-bom</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
