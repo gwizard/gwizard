@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class ServiceManagerListener extends ServiceManager.Listener {
 	@Override
-	public void failure(Service service) {
+	public void failure(final Service service) {
 		log.error("Service failure: {}", service.toString(), service.failureCause());
 		System.exit(1);
 	}

@@ -11,22 +11,22 @@ class LoggingServiceListener extends Service.Listener {
 	/** */
 	private final Logger serviceLogger;
 
-	public LoggingServiceListener(Service service) {
+	public LoggingServiceListener(final Service service) {
 		this.serviceLogger = LoggerFactory.getLogger(service.getClass());
 	}
 
 	@Override
-	public void failed(Service.State from, Throwable failure) {
+	public void failed(final Service.State from, final Throwable failure) {
 		serviceLogger.warn("failed {}", from.name(), failure);
 	}
 
 	@Override
-	public void terminated(Service.State from) {
+	public void terminated(final Service.State from) {
 		serviceLogger.debug("terminated (from: {})", from);
 	}
 
 	@Override
-	public void stopping(Service.State from) {
+	public void stopping(final Service.State from) {
 		serviceLogger.debug("stopping (from: {})", from);
 	}
 

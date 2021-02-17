@@ -6,12 +6,11 @@ package org.gwizard.swagger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.testng.annotations.Test;
-
 import com.google.common.collect.Lists;
 
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.models.Swagger;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author darren

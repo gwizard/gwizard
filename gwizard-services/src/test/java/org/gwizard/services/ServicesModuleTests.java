@@ -6,13 +6,13 @@ import com.google.common.util.concurrent.ServiceManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -38,7 +38,7 @@ public class ServicesModuleTests {
 	@Mock
 	protected ServiceManager.Listener mockMgrListener;
 
-	@BeforeMethod
+	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
@@ -55,7 +55,7 @@ public class ServicesModuleTests {
 		mgr = injector.getInstance(ServiceManager.class);
 	}
 
-	@AfterMethod
+	@AfterEach
 	public void teardown() {
 		mgr.stopAsync().awaitStopped();
 	}
@@ -63,9 +63,9 @@ public class ServicesModuleTests {
 	@Test
 	public void serviceMgrAndServicesRunning() {
 		mgr.startAsync().awaitHealthy();
-		assertThat(mgr.isHealthy(), equalTo(true));
-		assertThat(testService1.state(), equalTo(Service.State.RUNNING));
-		assertThat(testService2.state(), equalTo(Service.State.RUNNING));
+		assertThat(mgr.isHealthy()).isEqualTo(true);
+		assertThat(testService1.state()).isEqualTo(Service.State.RUNNING);
+		assertThat(testService2.state()).isEqualTo(Service.State.RUNNING);
 	}
 
 	@Test

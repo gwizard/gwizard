@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.InputStream;
 import java.util.Map;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class YamlTest {
 
@@ -19,15 +19,15 @@ public class YamlTest {
 
 		// Literal 'null' seems to produce the string "null"
 		assert map.containsKey("first");
-		assertThat(map.get("first"), nullValue());
+		assertThat(map.get("first")).isNull();
 
 		// Literal '~' seems to produce the string "~"
 		assert map.containsKey("second");
-		assertThat(map.get("second"), nullValue());
+		assertThat(map.get("second")).isNull();
 
 		// Literal '!!null' seems to produce an empty string
 		assert map.containsKey("third");
-		assertThat(map.get("third"), nullValue());
+		assertThat(map.get("third")).isNull();
 	}
 
 }

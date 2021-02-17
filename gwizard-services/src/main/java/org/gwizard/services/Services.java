@@ -31,7 +31,7 @@ public class Services {
 	 * Add a service that will be managed on startup. Typically you create services by @Injecting the
 	 * Services object and calling add(this). Must be called before start.
 	 */
-	public void add(Service service) {
+	public void add(final Service service) {
 		checkNotStarted();
 		services.add(service);
 	}
@@ -39,7 +39,7 @@ public class Services {
 	/**
 	 * Add a listener that will apply to every service. Must be called before start.
 	 */
-	public void add(Service.Listener listener) {
+	public void add(final Service.Listener listener) {
 		checkNotStarted();
 		serviceListeners.add(listener);
 	}
@@ -47,7 +47,7 @@ public class Services {
 	/**
 	 * Add a listener to the servicemanager. Must be called before start.
 	 */
-	public void add(ServiceManager.Listener listener) {
+	public void add(final ServiceManager.Listener listener) {
 		checkNotStarted();
 		serviceManagerListeners.add(listener);
 	}
@@ -60,21 +60,21 @@ public class Services {
 	 * Create a service manager from the present data. This should be done only once.
 	 */
 	ServiceManager makeServiceManager() {
-		assert !done;
+		Preconditions.checkState(!done, "ServiceManager already created; it should be a singleton");
 		done = true;
 
-		ServiceManager serviceManager = new ServiceManager(services);
+		final ServiceManager serviceManager = new ServiceManager(services);
 
 		serviceManager.addListener(new ServiceManagerListener(), MoreExecutors.directExecutor());
 
-		for (ServiceManager.Listener listener : serviceManagerListeners) {
+		for (final ServiceManager.Listener listener : serviceManagerListeners) {
 			serviceManager.addListener(listener, MoreExecutors.directExecutor());
 		}
 
-		for (Service service : services) {
+		for (final Service service : services) {
 			service.addListener(new LoggingServiceListener(service), MoreExecutors.directExecutor());
 
-			for (Service.Listener listener : serviceListeners) {
+			for (final Service.Listener listener : serviceListeners) {
 				service.addListener(listener, MoreExecutors.directExecutor());
 			}
 		}

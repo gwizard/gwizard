@@ -19,7 +19,7 @@ public class MetricsModule extends AbstractModule {
 
 		bind(MetricRegistry.class).toInstance(metricRegistry);
 
-		install(new MetricsInstrumentationModule(metricRegistry));
+		install(MetricsInstrumentationModule.builder().withMetricRegistry(metricRegistry).build());
 
 		bind(MetricsService.class).asEagerSingleton();
 	}

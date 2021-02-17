@@ -17,7 +17,7 @@ public class ServicesModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	public ServiceManager serviceManager(Services services) {
+	public ServiceManager serviceManager(final Services services) {
 		return services.makeServiceManager();
 	}
 }
