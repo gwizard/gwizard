@@ -30,9 +30,9 @@ public class HibernateModule extends AbstractModule {
 		this("gw-persistence-unit");
 	}
 
-	static class Initializer {
+	private static class Initializer {
 		@Inject
-		public Initializer(PersistService service) {
+		public Initializer(final PersistService service) {
 			service.start();
 		}
 	}

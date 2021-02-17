@@ -2,7 +2,6 @@ package org.gwizard.hibernate;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.persist.PersistService;
 import org.gwizard.hibernate.example.HibernateModuleExample.MyModule;
 import org.gwizard.hibernate.example.HibernateModuleExample.Work;
 import org.junit.jupiter.api.Test;
@@ -23,8 +22,6 @@ public class HibernateModuleTest {
 		final Map<String, String> configProperties = myModule.databaseConfig().getProperties();
 		final Injector injector = Guice.createInjector(myModule, new HibernateModule());
 
-		injector.getInstance(PersistService.class).start();
-
 		// when
 		final EntityManagerFactory entityManagerFactory = injector.getInstance(EntityManagerFactory.class);
 
@@ -40,7 +37,6 @@ public class HibernateModuleTest {
 		// given
 		final MyModule myModule = new MyModule();
 		final Injector injector = Guice.createInjector(myModule, new HibernateModule());
-		injector.getInstance(PersistService.class).start();
 
 		final Work work = injector.getInstance(Work.class);
 

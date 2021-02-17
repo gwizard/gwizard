@@ -26,7 +26,7 @@ public class WizardBridgeModule extends AbstractModule {
 	 */
 	@Provides
 	@Jpa
-	public Map<?, ?> properties(DatabaseConfig cfg) {
+	public Map<?, ?> properties(final DatabaseConfig cfg) {
 		Properties props = new Properties();
 		props.setProperty(DRIVER, cfg.getDriverClass());
 		props.setProperty(URL, cfg.getUrl());
