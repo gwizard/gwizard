@@ -95,7 +95,8 @@ public class Main {
 		final Injector injector = Guice.createInjector(
 			new LoggingModule(),
 			new MyModule(),
-			new ConfigModule(new File(args[0], MyConfig.class);
+			new ConfigModule(new File(args[0], MyConfig.class))
+        );
 
 		log.info("Hello!");
 	}
