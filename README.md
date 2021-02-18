@@ -20,7 +20,7 @@ https://github.com/gwizard/gwizard-example
 
 ## Requirements
 
-GWizard requires a minimum of Java 7.
+GWizard requires a minimum of Java 11.
 
 ## Overview
 
@@ -46,7 +46,7 @@ public static void main(String[] args) throws Exception {
 
 ## Yeah Yeah, Show Me Some Code
 
-Here's a complete JAX-RS REST service which you can run from the command line:
+Here's a complete one-file JAX-RS REST service which you can run from the command line:
 
 ```java
 import com.google.inject.AbstractModule;
@@ -82,8 +82,6 @@ public class Main {
 ```
 
 ## The Modules
-
-Note: GWizard is ready to use today, but this project is young and the contracts may change in the future.
 
 These are the modules currently present in GWizard. See their individual README files for detailed information.
 
@@ -175,7 +173,7 @@ in the README files.
 We like DW; as opinionated developers, it's a pleasure to find an opinionated framework
 which shares most of our opinions. We just wish it had _one more_ opinion - dependency injection (of
 any flavor) would have cut out most of the boilerplate in Dropwizard;
-"bag" objects like Environment and Bootstrap could disappear from the API footprint entirely.
+"bag" objects like `Environment` and `Bootstrap` could disappear from the API footprint entirely.
 Aside from that:
 
 * Jersey2 does not play nicely with Guice (see below).
@@ -187,9 +185,6 @@ This is not compatible with our testing philosophy.
 GWizard came about because as we progressively Guice-ified a Dropwizard application, we replaced more and more of DW.
 This is the logical conclusion of that process. We try to preserve the spirit of Dropwizard, and leverage DW's
 code as dependency jars where reasonable.
-
-However, Dropwizard is *vastly* more mature, with *many* more features, and *lovely* documentation.
-If you like it, use it!
 
 ### Why did you pick RESTEasy over Jersey?
 We didn't, originally, which is how we discovered what a trainwreck Jersey2 has become.
@@ -215,7 +210,6 @@ Dagger2 looks neato! We'll consider migrating (or creating DWizard) just as soon
 Aspects are just too useful for managing transaction state, identity, etc. AOP doesn't appear to
 be on the Dagger2 roadmap yet, and in the mean time, Guice works great.
 
-### What's missing?
-LOTS. Health checks, web views, more configuration options for Jetty, instructions on how to build a fat jar
-(you can just follow [Dropwizard's example](http://dropwizard.io/getting-started.html#building-fat-jars)), probably some sort of
-*very* simple authentication/authorization framework (AOP is grand). Maybe a little bit of glue for MongoDB.
+### How do I deploy a GWizard app?
+Make a fat jar and run it like an executable. [Dropwizard's example](http://dropwizard.io/getting-started.html#building-fat-jars)
+is great.
