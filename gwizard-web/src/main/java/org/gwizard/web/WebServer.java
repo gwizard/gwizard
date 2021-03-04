@@ -44,7 +44,6 @@ public class WebServer {
 		// Create the server.
 		server = createServer(webConfig);
 
-		// Create a servlet context and add the jersey servlet.
 		final ServletContextHandler sch = createRootServletContextHandler();
 
 		sch.addFilter(GuiceFilter.class, "/*", null);
@@ -55,13 +54,7 @@ public class WebServer {
 		// This will add any registered ServletContextListeners or other misc servlet listeners
 		// that have been bound. For example, the GuiceResteasyBootstrapServletContextListener
 		// which gets bound by gwizard-rest.
-		// Sigh no java8
-		eventListenerScanner.accept(new Visitor<EventListener>() {
-			@Override
-			public void visit(EventListener listener) {
-				sch.addEventListener(listener);
-			}
-		});
+		eventListenerScanner.accept(sch::addEventListener);
 
         final HandlerCollection handlers = new HandlerCollection();
 
@@ -69,12 +62,7 @@ public class WebServer {
 		handlers.addHandler(sch);
 
 		// This will add any registered jetty Handlers that have been bound.
-		handlerScanner.accept(new Visitor<Handler>() {
-			@Override
-			public void visit(Handler handler) {
-				handlers.addHandler(handler);
-			}
-		});
+		handlerScanner.accept(handlers::addHandler);
 
 		server.setHandler(handlers);
 

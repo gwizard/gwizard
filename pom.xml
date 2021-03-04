@@ -16,7 +16,6 @@
 		<module>gwizard-services</module>
 		<module>gwizard-web</module>
 		<module>gwizard-rest</module>
-		<module>gwizard-jersey</module>
 		<module>gwizard-hibernate</module>
 		<module>gwizard-healthchecks</module>
 		<module>gwizard-metrics</module>
@@ -31,7 +30,7 @@
 		<jetty.version>9.4.36.v20210114</jetty.version>
 		<resteasy.version>4.6.0.Final</resteasy.version>
 		<jackson.version>2.12.1</jackson.version>
-		<guice.version>4.2.3</guice.version>
+		<guice.version>5.0.1</guice.version>
 		<slf4j.version>1.7.30</slf4j.version>
 		<logback.version>1.2.3</logback.version>
 		<guava.version>30.1-jre</guava.version>

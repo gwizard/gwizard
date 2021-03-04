@@ -114,18 +114,6 @@ in your modules into REST endpoints. Installing this module automatically instal
 
 [README for gwizard-rest](gwizard-rest/README.md)
 
-### gwizard-jersey
-
-The `JerseyModule` is an alternative to `gwizard-rest`, based on Jersey instead of RESTEasy. Jersey v2 does not play
-nicely with Guice, and the [jersey2-guice adapter](https://github.com/Squarespace/jersey2-guice) (used by this module)
-may break with future Jersey point releases. This module is here for the poor souls that are forced to use Jersey for
-one reason or another; since you write your JAX-RS classes the same either way, most developers should never notice the
-difference between Jersey and RESTEasy.
-
-As with gwizard-rest, you do not need to explicitly install the `WebModule`.
-
-[README for gwizard-jersey](gwizard-jersey/README.md)
-
 ### gwizard-hibernate
 
 The `HibernateModule` provides a little bit of glue around guice-persist to give you Hibernate (as a JPA
@@ -176,7 +164,7 @@ any flavor) would have cut out most of the boilerplate in Dropwizard;
 "bag" objects like `Environment` and `Bootstrap` could disappear from the API footprint entirely.
 Aside from that:
 
-* Jersey2 does not play nicely with Guice (see below).
+* Jersey2 does not play nicely with Guice.
 * The dropwizard-guice bundle is hobbled by the fact that very little of the framework is instantiated by Guice.
 * Dropwizard relies on Jersey for AOP (eg, HibernateBundle's UnitOfWork transaction management). This means you
 can't touch your database except through the web container (!); all other tests must mock the DB/DAO.
@@ -186,29 +174,8 @@ GWizard came about because as we progressively Guice-ified a Dropwizard applicat
 This is the logical conclusion of that process. We try to preserve the spirit of Dropwizard, and leverage DW's
 code as dependency jars where reasonable.
 
-### Why did you pick RESTEasy over Jersey?
-We didn't, originally, which is how we discovered what a trainwreck Jersey2 has become.
-
-Jersey1 worked great with Guice. For Jersey2, the team wrote their own DI framework from scratch
-(HK2) and littered it with global state, config files in META-INF/service,
-and other JavaEE-isms that make my skin crawl. In the year and a half that Jersey2 has been
-released, nobody has managed to make it play 100% nicely with Guice. The
-[most valiant attempt](https://github.com/Squarespace/jersey2-guice) uses reflection to punch
-values into private final fields in HK2's static globals. It will likely break in future point
-releases of Jersey.
-
-If I sound bitter writing this, it's because I wasted a stupid amount of time getting it to work.
-By comparison, RESTEasy comes pre-baked with Guice integration that worked almost immediately.
-
-I'm sorry I doubted you, Team JBoss.
-
-The truth is it doesn't really matter which JAX-RS framework you use. You write your resource
-classes the same either way. If you need Jersey, use `gwizard-jersey`. Otherwise stick with `gwizard-rest`.
-
 ### What about Dagger instead of Guice?
-Dagger2 looks neato! We'll consider migrating (or creating DWizard) just as soon as it supports AOP.
-Aspects are just too useful for managing transaction state, identity, etc. AOP doesn't appear to
-be on the Dagger2 roadmap yet, and in the mean time, Guice works great.
+Dagger2 looks neato! But it isn't aimed at server-side development and does not support AOP.
 
 ### How do I deploy a GWizard app?
 Make a fat jar and run it like an executable. [Dropwizard's example](http://dropwizard.io/getting-started.html#building-fat-jars)

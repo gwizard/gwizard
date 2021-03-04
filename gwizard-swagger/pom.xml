@@ -35,19 +35,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.google.inject.extensions</groupId>
-			<artifactId>guice-multibindings</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.inject</groupId>
-					<artifactId>guice</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-		<!-- end: guice -->	
+		<!-- end: guice -->
 		
 		<!-- start: swagger -->
         <dependency>
