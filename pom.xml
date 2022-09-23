@@ -27,24 +27,24 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<jetty.version>9.4.36.v20210114</jetty.version>
-		<resteasy.version>4.6.0.Final</resteasy.version>
-		<jackson.version>2.12.1</jackson.version>
-		<guice.version>5.0.1</guice.version>
-		<slf4j.version>1.7.30</slf4j.version>
-		<logback.version>1.2.3</logback.version>
-		<guava.version>30.1-jre</guava.version>
-		<metrics.version>4.1.7</metrics.version>
+		<jetty.version>9.4.49.v20220914</jetty.version>
+		<resteasy.version>4.7.7.Final</resteasy.version>
+		<jackson.version>2.13.4</jackson.version>
+		<guice.version>5.1.0</guice.version>
+		<slf4j.version>2.0.2</slf4j.version>
+		<logback.version>1.4.1</logback.version>
+		<guava.version>31.1-jre</guava.version>
+		<metrics.version>4.2.12</metrics.version>
 		<metricsguice.version>3.2.2</metricsguice.version>
-		<dropwizard.version>2.0.19</dropwizard.version>
-        <hibernate.core.version>5.4.28.Final</hibernate.core.version>
-		<hibernate.validator.version>7.0.1.Final</hibernate.validator.version>
+		<dropwizard.version>2.0.33</dropwizard.version>
+        <hibernate.core.version>5.6.11.Final</hibernate.core.version>
+		<hibernate.validator.version>8.0.0.Final</hibernate.validator.version>
 		<validation.api.version>2.0.1.Final</validation.api.version>
-		<snakeyaml.version>1.27</snakeyaml.version>
-		<swagger.version>1.6.2</swagger.version>
+		<snakeyaml.version>1.32</snakeyaml.version>
+		<swagger.version>1.6.6</swagger.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
 		<jaxrs-api.version>3.0.12.Final</jaxrs-api.version>
-		<assertj.version>3.19.0</assertj.version>
+		<assertj.version>3.23.1</assertj.version>
 		<junit.version>5.7.1</junit.version>
 	</properties>
 
