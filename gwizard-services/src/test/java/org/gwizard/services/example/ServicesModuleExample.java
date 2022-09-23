@@ -6,10 +6,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import lombok.extern.slf4j.Slf4j;
 import org.gwizard.services.Run;
 import org.gwizard.services.Services;
 import org.gwizard.services.ServicesModule;
-import lombok.extern.slf4j.Slf4j;
+
 import javax.inject.Inject;
 
 /**

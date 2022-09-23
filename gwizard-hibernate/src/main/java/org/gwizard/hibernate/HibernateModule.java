@@ -7,6 +7,7 @@ import com.google.inject.persist.jpa.WizardBridgeModule;
 import com.google.inject.util.Modules;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+
 import javax.inject.Inject;
 
 /**

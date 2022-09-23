@@ -2,6 +2,7 @@ package org.gwizard.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 import java.io.InputStream;
 import java.util.Map;
 

@@ -7,7 +7,10 @@ import org.gwizard.hibernate.DatabaseConfig;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.hibernate.cfg.AvailableSettings.*;
+import static org.hibernate.cfg.AvailableSettings.DRIVER;
+import static org.hibernate.cfg.AvailableSettings.PASS;
+import static org.hibernate.cfg.AvailableSettings.URL;
+import static org.hibernate.cfg.AvailableSettings.USER;
 
 /**
  * This allows us to pull database config out of Guice instead of hardcoding it in the

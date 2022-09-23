@@ -3,8 +3,8 @@ package org.gwizard.metrics;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.AbstractModule;
 import com.palominolabs.metrics.guice.MetricsInstrumentationModule;
-import org.gwizard.services.ServicesModule;
 import lombok.EqualsAndHashCode;
+import org.gwizard.services.ServicesModule;
 
 /**
  * Add the metrics-guice MetricsInstrumentationModule to scan for metrics annotations.

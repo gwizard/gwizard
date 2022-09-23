@@ -2,15 +2,13 @@ package org.gwizard.web;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.gwizard.web.Scanner.Visitor;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.EventListener;
 
 /**
  * Simple Jetty-based embedded web server which configures itself from a bound WebConfig and serves the

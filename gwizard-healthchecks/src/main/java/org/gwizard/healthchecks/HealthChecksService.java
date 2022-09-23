@@ -5,8 +5,8 @@ import com.google.common.base.Strings;
 import com.google.common.util.concurrent.AbstractScheduledService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.gwizard.services.Services;
 import lombok.extern.slf4j.Slf4j;
+import org.gwizard.services.Services;
 
 import java.util.Map;
 

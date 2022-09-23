@@ -6,6 +6,7 @@ import io.dropwizard.configuration.ConfigurationFactory;
 import io.dropwizard.configuration.YamlConfigurationFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.validation.Validator;

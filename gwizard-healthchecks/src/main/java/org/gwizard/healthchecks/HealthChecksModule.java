@@ -4,8 +4,8 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import org.gwizard.services.ServicesModule;
 import lombok.EqualsAndHashCode;
+import org.gwizard.services.ServicesModule;
 
 /**
  * binding for a periodic service that runs health checks and logs results

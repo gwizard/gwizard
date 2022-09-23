@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Provides;
+import lombok.Data;
 import org.gwizard.rest.RestModule;
 import org.gwizard.services.Run;
-import lombok.Data;
+
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

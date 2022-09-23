@@ -2,8 +2,8 @@ package org.gwizard.web;
 
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.inject.Inject;
-import org.gwizard.services.Services;
 import lombok.extern.slf4j.Slf4j;
+import org.gwizard.services.Services;
 
 /**
  * A Guava service to startup / shutdown the web server.

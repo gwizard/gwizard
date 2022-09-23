@@ -8,8 +8,9 @@ import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.inject.Inject;
-import org.gwizard.services.Services;
 import lombok.extern.slf4j.Slf4j;
+import org.gwizard.services.Services;
+
 import java.lang.management.ManagementFactory;
 
 /**

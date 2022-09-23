@@ -1,12 +1,10 @@
 package org.gwizard.swagger;
 
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
+import lombok.Data;
 import org.assertj.core.util.Lists;
 
-import lombok.Data;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * This is the root configuration object for the API specification.

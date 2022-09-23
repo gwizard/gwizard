@@ -5,6 +5,7 @@ import com.google.inject.servlet.ServletModule;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
+
 import javax.inject.Provider;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Request;
