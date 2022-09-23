@@ -84,6 +84,7 @@ public class Main {
 ## The Modules
 
 These are the modules currently present in GWizard. See their individual README files for detailed information.
+All of these modules are optional, but if you're reading this page, you probably want at least a few of them.
 
 ### gwizard-config
 
