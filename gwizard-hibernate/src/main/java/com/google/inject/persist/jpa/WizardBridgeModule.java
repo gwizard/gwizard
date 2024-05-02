@@ -7,7 +7,10 @@ import org.gwizard.hibernate.DatabaseConfig;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.hibernate.cfg.AvailableSettings.*;
+import static org.hibernate.cfg.AvailableSettings.DRIVER;
+import static org.hibernate.cfg.AvailableSettings.PASS;
+import static org.hibernate.cfg.AvailableSettings.URL;
+import static org.hibernate.cfg.AvailableSettings.USER;
 
 /**
  * This allows us to pull database config out of Guice instead of hardcoding it in the
@@ -26,7 +29,7 @@ public class WizardBridgeModule extends AbstractModule {
 	 */
 	@Provides
 	@Jpa
-	public Map<?, ?> properties(DatabaseConfig cfg) {
+	public Map<?, ?> properties(final DatabaseConfig cfg) {
 		Properties props = new Properties();
 		props.setProperty(DRIVER, cfg.getDriverClass());
 		props.setProperty(URL, cfg.getUrl());

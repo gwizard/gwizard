@@ -3,8 +3,10 @@ package org.gwizard.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.configuration.ConfigurationException;
 import io.dropwizard.configuration.ConfigurationFactory;
+import io.dropwizard.configuration.YamlConfigurationFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.validation.Validator;
@@ -29,7 +31,7 @@ public class ConfigProvider<T> implements Provider<T> {
 			@PropertyPrefix String propertyPrefix,
 			@ConfigFile File configFile) {
 
-		this.configurationFactory = new ConfigurationFactory<>(configClass, validator, objectMapper, propertyPrefix);
+		this.configurationFactory = new YamlConfigurationFactory<>(configClass, validator, objectMapper, propertyPrefix);
 		this.configFile = configFile;
 	}
 
@@ -38,6 +40,7 @@ public class ConfigProvider<T> implements Provider<T> {
 			throw new IllegalStateException("No such config file " + configFile);
 
 		try {
+			//noinspection unchecked
 			return (T)configurationFactory.build(configFile);
 		} catch (IOException | ConfigurationException e) {
 			throw new RuntimeException(e);

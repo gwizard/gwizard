@@ -64,3 +64,4 @@ Yeah, seems like a good idea for a feature. Easy to add. Request it.
   * `@Provider`-annotated classes become JAX-RS providers. This is the JAXRS annotation, not the injection interface!
 * See the `WebModule` contract for web server configuration information.
 * The web server starts up when services are started up (ie, `Run.start()`).
+* You may configure a path prefix (eg, `/api`) by passing it in to the `RestModule` constructor.

@@ -2,8 +2,9 @@ package org.gwizard.config.example;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.gwizard.config.ConfigModule;
 import lombok.Data;
+import org.gwizard.config.ConfigModule;
+
 import java.io.File;
 
 /**

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-parent</artifactId>
-		<version>0.7-SNAPSHOT</version>
+		<version>0.12-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>gwizard-rest</artifactId>
@@ -36,10 +36,14 @@
 
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-core</artifactId>
+			<version>${resteasy.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-guice</artifactId>
 			<version>${resteasy.version}</version>
-
-			<!-- It's hard work keeping clogging out of a project! It would conflict with jcl-over-slf4j -->
+			<!-- Conflicts with jcl-over-slf4j -->
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>

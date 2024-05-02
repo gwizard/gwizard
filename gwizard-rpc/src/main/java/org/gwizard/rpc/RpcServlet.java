@@ -2,6 +2,7 @@ package org.gwizard.rpc;
 
 import com.google.inject.Injector;
 import com.voodoodyne.trivet.TrivetServlet;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

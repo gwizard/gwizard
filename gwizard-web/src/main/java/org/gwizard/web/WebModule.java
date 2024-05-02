@@ -1,8 +1,8 @@
 package org.gwizard.web;
 
 import com.google.inject.servlet.ServletModule;
-import org.gwizard.services.ServicesModule;
 import lombok.EqualsAndHashCode;
+import org.gwizard.services.ServicesModule;
 
 /**
  */

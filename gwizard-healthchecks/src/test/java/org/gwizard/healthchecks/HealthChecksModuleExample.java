@@ -7,10 +7,10 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import org.gwizard.metrics.MetricsModule;
-import org.gwizard.services.Run;
 import io.dropwizard.util.Duration;
 import lombok.extern.slf4j.Slf4j;
+import org.gwizard.metrics.MetricsModule;
+import org.gwizard.services.Run;
 
 public class HealthChecksModuleExample {
 

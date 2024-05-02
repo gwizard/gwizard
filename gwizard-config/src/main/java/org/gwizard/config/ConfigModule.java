@@ -6,6 +6,7 @@ import com.google.inject.TypeLiteral;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import javax.inject.Singleton;
 import javax.validation.Validation;
 import javax.validation.Validator;

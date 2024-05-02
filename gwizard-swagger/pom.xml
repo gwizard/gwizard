@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-parent</artifactId>
-		<version>0.7-SNAPSHOT</version>
+		<version>0.12-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>gwizard-swagger</artifactId>
@@ -47,19 +47,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.google.inject.extensions</groupId>
-			<artifactId>guice-multibindings</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.inject</groupId>
-					<artifactId>guice</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-		<!-- end: guice -->	
+		<!-- end: guice -->
 		
 		<!-- start: swagger -->
         <dependency>
@@ -78,7 +66,7 @@
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <!-- end: swagger -->
 

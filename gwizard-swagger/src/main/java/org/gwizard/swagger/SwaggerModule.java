@@ -1,15 +1,14 @@
 package org.gwizard.swagger;
 
 
-import javax.servlet.ServletContextListener;
-
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.servlet.ServletModule;
-
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.ServletContextListener;
 
 @Slf4j
 @EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent

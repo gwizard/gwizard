@@ -2,15 +2,13 @@ package org.gwizard.web;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.gwizard.web.Scanner.Visitor;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.EventListener;
 
 /**
  * Simple Jetty-based embedded web server which configures itself from a bound WebConfig and serves the
@@ -44,8 +42,7 @@ public class WebServer {
 		// Create the server.
 		server = createServer(webConfig);
 
-		// Create a servlet context and add the jersey servlet.
-		final ServletContextHandler sch = new ServletContextHandler(server, "/");
+		final ServletContextHandler sch = createRootServletContextHandler();
 
 		sch.addFilter(GuiceFilter.class, "/*", null);
 
@@ -55,31 +52,29 @@ public class WebServer {
 		// This will add any registered ServletContextListeners or other misc servlet listeners
 		// that have been bound. For example, the GuiceResteasyBootstrapServletContextListener
 		// which gets bound by gwizard-rest.
-		// Sigh no java8
-		eventListenerScanner.accept(new Visitor<EventListener>() {
-			@Override
-			public void visit(EventListener listener) {
-				sch.addEventListener(listener);
-			}
-		});
+		eventListenerScanner.accept(sch::addEventListener);
 
         final HandlerCollection handlers = new HandlerCollection();
 
 		// the sch is currently the server handler, add it to the list
-		handlers.addHandler(server.getHandler());
+		handlers.addHandler(sch);
 
 		// This will add any registered jetty Handlers that have been bound.
-		handlerScanner.accept(new Visitor<Handler>() {
-			@Override
-			public void visit(Handler handler) {
-				handlers.addHandler(handler);
-			}
-		});
+		handlerScanner.accept(handlers::addHandler);
 
 		server.setHandler(handlers);
 
 		// Start the server
 		server.start();
+	}
+
+	/**
+	 * Overrideable method to create the root ServletContextHandler. This can be used so that the Server can
+	 * have a ServletContextHandler that will be able to handle Sessions for example.
+	 * By default we create a bare-bones ServletContextHandler that is not set up to handle Sessions.
+	 */
+	protected ServletContextHandler createRootServletContextHandler() {
+		return new ServletContextHandler(null, "/");
 	}
 
 	/**

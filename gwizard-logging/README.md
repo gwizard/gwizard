@@ -95,7 +95,8 @@ public class Main {
 		final Injector injector = Guice.createInjector(
 			new LoggingModule(),
 			new MyModule(),
-			new ConfigModule(new File(args[0], MyConfig.class);
+			new ConfigModule(new File(args[0], MyConfig.class))
+        );
 
 		log.info("Hello!");
 	}
@@ -112,3 +113,21 @@ it leaves the default Logback bootstrap configuration intact. Overrides from the
 * On app start, looks at a bound `LoggingConfig`; if there is xml present, configures Logback accordingly.
   * The default just-in-time bound `LoggingConfig` does nothing (has no xml).
 * Any levels specified in `LoggingConfig`'s `loggers` property are overrides.
+
+## `LogCallInterceptor`
+
+The `LogCall` and `LogCallInterceptor` aspect is often useful for eg logging all JAXRS methods:
+
+```
+@Override
+protected void configure() {
+    final Matcher<AnnotatedElement> jaxrsMethods = Matchers.annotatedWith(LogCall.class)
+            .or(Matchers.annotatedWith(GET.class))
+            .or(Matchers.annotatedWith(POST.class))
+            .or(Matchers.annotatedWith(PUT.class))
+            .or(Matchers.annotatedWith(DELETE.class))
+            .or(Matchers.annotatedWith(OPTIONS.class))
+            .or(Matchers.annotatedWith(HEAD.class));
+    bindInterceptor(Matchers.any(), jaxrsMethods, new LogCallInterceptor());
+}
+```

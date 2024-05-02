@@ -5,6 +5,7 @@ import com.google.inject.servlet.ServletModule;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
+
 import javax.inject.Provider;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Request;
@@ -24,10 +25,10 @@ public class JaxrsModule extends ServletModule
 {
 	@Override
 	protected void configureServlets() {
-		bind(Request.class).toProvider(new ResteasyContextProvider<Request>(Request.class)).in(RequestScoped.class);
-		bind(HttpHeaders.class).toProvider(new ResteasyContextProvider<HttpHeaders>(HttpHeaders.class)).in(RequestScoped.class);
-		bind(UriInfo.class).toProvider(new ResteasyContextProvider<UriInfo>(UriInfo.class)).in(RequestScoped.class);
-		bind(SecurityContext.class).toProvider(new ResteasyContextProvider<SecurityContext>(SecurityContext.class)).in(RequestScoped.class);
+		bind(Request.class).toProvider(new ResteasyContextProvider<>(Request.class)).in(RequestScoped.class);
+		bind(HttpHeaders.class).toProvider(new ResteasyContextProvider<>(HttpHeaders.class)).in(RequestScoped.class);
+		bind(UriInfo.class).toProvider(new ResteasyContextProvider<>(UriInfo.class)).in(RequestScoped.class);
+		bind(SecurityContext.class).toProvider(new ResteasyContextProvider<>(SecurityContext.class)).in(RequestScoped.class);
 	}
 
 	@RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class JaxrsModule extends ServletModule
 
 		@Override
 		public T get() {
-			return ResteasyProviderFactory.getContextData(instanceClass);
+			return ResteasyProviderFactory.getInstance().getContextData(instanceClass);
 		}
 	}
 }

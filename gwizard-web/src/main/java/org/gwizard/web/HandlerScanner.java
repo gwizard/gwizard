@@ -2,6 +2,7 @@ package org.gwizard.web;
 
 import com.google.inject.Injector;
 import org.eclipse.jetty.server.Handler;
+
 import javax.inject.Inject;
 
 /**

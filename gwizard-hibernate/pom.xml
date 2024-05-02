@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-parent</artifactId>
-		<version>0.7-SNAPSHOT</version>
+		<version>0.12-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>gwizard-hibernate</artifactId>
@@ -32,12 +32,27 @@
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
+			<artifactId>hibernate-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${validation.api.version}</version>
+		</dependency>
+		<!--
+		For some horrible reason, maven is pulling in 3.1.4.GA via resteasy-guice, which
+		is incompatible with recent versionf of hibernate-entitymanager. Naming this version
+		higher upstream should fix the issue.
+		-->
+<!--		<dependency>-->
+<!--			<groupId>org.jboss.logging</groupId>-->
+<!--			<artifactId>jboss-logging</artifactId>-->
+<!--			<version>3.3.0.Final</version>-->
+<!--		</dependency>-->
 
 		<!-- Test deps -->
 

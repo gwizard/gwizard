@@ -3,7 +3,7 @@
 
 	<groupId>org.gwizard</groupId>
 	<artifactId>gwizard-parent</artifactId>
-	<version>0.7-SNAPSHOT</version>
+	<version>0.12-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>GWizard</name>
@@ -16,7 +16,6 @@
 		<module>gwizard-services</module>
 		<module>gwizard-web</module>
 		<module>gwizard-rest</module>
-		<module>gwizard-jersey</module>
 		<module>gwizard-hibernate</module>
 		<module>gwizard-healthchecks</module>
 		<module>gwizard-metrics</module>
@@ -29,28 +28,30 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<jetty.version>9.3.1.v20150714</jetty.version>
-		<resteasy.version>3.0.10.Final</resteasy.version>
-		<jackson.version>2.5.4</jackson.version>
-		<guice.version>4.0</guice.version>
-		<slf4j.version>1.7.12</slf4j.version>
-		<logback.version>1.1.2</logback.version>
-		<guava.version>18.0</guava.version>
-		<metrics.version>3.1.2</metrics.version>
-		<metricsguice.version>3.1.3</metricsguice.version>
-		<dropwizard.version>0.8.1</dropwizard.version>
-        	<hibernate.em.version>5.0.0.CR3</hibernate.em.version>
-		<hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
-		<snakeyaml.version>1.15</snakeyaml.version>
-		<swagger.version>1.5.8</swagger.version>
-		<servlet-api.version>2.5</servlet-api.version>
-		<jaxrs-api.version>3.0.10.Final</jaxrs-api.version>
-		<assertj.version>2.4.1</assertj.version>
+		<jetty.version>9.4.49.v20220914</jetty.version>
+		<resteasy.version>4.7.7.Final</resteasy.version>
+		<jackson.version>2.13.4</jackson.version>
+		<guice.version>5.1.0</guice.version>
+		<slf4j.version>2.0.2</slf4j.version>
+		<logback.version>1.4.1</logback.version>
+		<guava.version>31.1-jre</guava.version>
+		<metrics.version>4.2.12</metrics.version>
+		<metricsguice.version>3.2.2</metricsguice.version>
+		<dropwizard.version>2.0.33</dropwizard.version>
+        <hibernate.core.version>5.6.11.Final</hibernate.core.version>
+		<hibernate.validator.version>8.0.0.Final</hibernate.validator.version>
+		<validation.api.version>2.0.1.Final</validation.api.version>
+		<snakeyaml.version>1.32</snakeyaml.version>
+		<swagger.version>1.6.6</swagger.version>
+		<servlet-api.version>3.1.0</servlet-api.version>
+		<jaxrs-api.version>3.0.12.Final</jaxrs-api.version>
+		<assertj.version>3.23.1</assertj.version>
+		<junit.version>5.7.1</junit.version>
 	</properties>
 
 	<scm>
 		<url>scm:git:https://github.com/gwizard/gwizard.git</url>
-		<developerConnection>scm:git:https://github.com/gwizard/gwizard.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:gwizard/gwizard.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -87,17 +88,6 @@
 	</distributionManagement>
 
 	<profiles>
-		<!-- only set -Xdoclint:none if using jdk 8. -->
-		<profile>
-			<id>doclint-java8-disable</id>
-			<activation>
-				<jdk>[1.8,)</jdk>
-			</activation>
-			<properties>
-				<javadoc.opts>-Xdoclint:none</javadoc.opts>
-			</properties>
-		</profile>
-
 		<profile>
 			<id>release-sign-artifacts</id>
 			<activation>
@@ -130,17 +120,16 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
+				<version>3.8.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<release>11</release>
 				</configuration>
 			</plugin>
 			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.4</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -153,7 +142,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.1</version>
+				<version>3.1.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -162,25 +151,20 @@
 					</execution>
 				</executions>
 				<configuration>
-					<additionalparam>${javadoc.opts}</additionalparam>
+					<doclint>none</doclint>
 				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18</version>
-				<configuration>
-					<includes>
-						<include>**/*Test*.java</include>
-					</includes>
-				</configuration>
+				<version>2.22.2</version>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>2.5.3</version>
 				<configuration>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<releaseProfiles>release-sign-artifacts</releaseProfiles>
@@ -190,7 +174,7 @@
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.5</version>
+				<version>1.6.8</version>
 				<extensions>true</extensions>
 				<configuration>
 					<serverId>ossrh</serverId>
@@ -205,7 +189,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.14.8</version>
+			<version>1.18.30</version>
 			<scope>provided</scope> <!-- only needed at build time -->
 		</dependency>
 
@@ -224,40 +208,30 @@
 		</dependency>
 
 		<!-- Testing -->
-
-		<!-- Sadly, hamcrest needs to be at the top because testng includes junit and junit has an ancient hamcrest baked in-->
 		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-			<version>1.3</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-			<version>1.3</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>1.9.5</version>
+			<version>3.2.4</version>
 			<scope>test</scope>
 		</dependency>
 
-        <dependency>
+		<dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>2.4.1</version>
+            <version>${assertj.version}</version>
         </dependency>
 	</dependencies>
-
 </project>

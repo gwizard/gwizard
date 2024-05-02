@@ -30,10 +30,13 @@ public class HibernateModuleExample {
 	@Data
 	@NoArgsConstructor
 	public static class Thing {
-		private @Id UUID id = UUID.randomUUID();
+		private @Id UUID id;
 		private String name;
 
-		public Thing(String name) { setName(name); }
+		public Thing(String name) {
+			setId(UUID.randomUUID());
+			setName(name);
+		}
 	}
 
 	public static class Work {
@@ -44,8 +47,8 @@ public class HibernateModuleExample {
 
 		@Transactional
 		public long countThings() {
-			CriteriaBuilder cb = em().getCriteriaBuilder();
-			CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+			final CriteriaBuilder cb = em().getCriteriaBuilder();
+			final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 			cq.select(cb.count(cq.from(Thing.class)));
 			return em().createQuery(cq).getSingleResult();
 		}
@@ -59,7 +62,7 @@ public class HibernateModuleExample {
 		@Provides
 		@Singleton
 		public DatabaseConfig databaseConfig() {
-			DatabaseConfig cfg = new DatabaseConfig();
+			final DatabaseConfig cfg = new DatabaseConfig();
 			cfg.setDriverClass("org.h2.Driver");
 			cfg.setUser("sa");
 			cfg.setUrl("jdbc:h2:mem:test");

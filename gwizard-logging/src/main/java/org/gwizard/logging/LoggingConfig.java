@@ -3,6 +3,7 @@ package org.gwizard.logging;
 import ch.qos.logback.classic.Level;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
