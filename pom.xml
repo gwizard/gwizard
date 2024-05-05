@@ -11,6 +11,7 @@
 	<url>https://github.com/gwizard/gwizard</url>
 
 	<modules>
+		<module>gwizard-bom</module>
 		<module>gwizard-config</module>
 		<module>gwizard-logging</module>
 		<module>gwizard-services</module>
@@ -21,32 +22,33 @@
 		<module>gwizard-metrics</module>
 		<module>gwizard-rpc</module>
 		<module>gwizard-swagger</module>
-		<module>gwizard-bom</module>
 	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<jetty.version>9.4.49.v20220914</jetty.version>
-		<resteasy.version>4.7.7.Final</resteasy.version>
-		<jackson.version>2.13.4</jackson.version>
-		<guice.version>5.1.0</guice.version>
-		<slf4j.version>2.0.2</slf4j.version>
-		<logback.version>1.4.1</logback.version>
-		<guava.version>31.1-jre</guava.version>
-		<metrics.version>4.2.12</metrics.version>
-		<metricsguice.version>3.2.2</metricsguice.version>
-		<dropwizard.version>2.0.33</dropwizard.version>
-        <hibernate.core.version>5.6.11.Final</hibernate.core.version>
-		<hibernate.validator.version>8.0.0.Final</hibernate.validator.version>
-		<validation.api.version>2.0.1.Final</validation.api.version>
-		<snakeyaml.version>1.32</snakeyaml.version>
-		<swagger.version>1.6.6</swagger.version>
-		<servlet-api.version>3.1.0</servlet-api.version>
+		<guice.version>7.0.0</guice.version>
+		<resteasy.version>6.2.8.Final</resteasy.version>
+		<jakartaee.version>10.0.0</jakartaee.version>
+
+		<jetty.version>12.0.8</jetty.version>
+		<jackson.version>2.17.0</jackson.version>
+		<slf4j.version>2.0.13</slf4j.version>
+		<logback.version>1.5.6</logback.version>
+		<guava.version>33.1.0-jre</guava.version>
+		<metrics.version>4.2.25</metrics.version>
+		<metricsguice.version>3.2.2</metricsguice.version>	<!-- 5.x requires metrics 5.x which isn't GA yet -->
+		<dropwizard.version>4.0.7</dropwizard.version>
+        <hibernate.core.version>6.5.0.Final</hibernate.core.version>
+		<hibernate.validator.version>8.0.1.Final</hibernate.validator.version>
+		<validation.api.version>3.0.2</validation.api.version>
+		<snakeyaml.version>2.2</snakeyaml.version>
+		<swagger.version>2.2.21</swagger.version>
+		<servlet-api.version>6.0.0</servlet-api.version>
 		<jaxrs-api.version>3.0.12.Final</jaxrs-api.version>
-		<assertj.version>3.23.1</assertj.version>
-		<junit.version>5.7.1</junit.version>
+		<assertj.version>3.25.3</assertj.version>
+		<junit.version>5.10.2</junit.version>
 	</properties>
 
 	<scm>
@@ -120,16 +122,16 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.12.1</version>
 				<configuration>
-					<release>11</release>
+					<release>17</release>
 				</configuration>
 			</plugin>
 			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -142,7 +144,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>3.6.3</version>
 				<executions>
 					<execution>
 						<goals>
@@ -158,13 +160,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>3.2.5</version>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
+				<version>3.0.1</version>
 				<configuration>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<releaseProfiles>release-sign-artifacts</releaseProfiles>
@@ -174,7 +176,7 @@
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.8</version>
+				<version>1.6.13</version>
 				<extensions>true</extensions>
 				<configuration>
 					<serverId>ossrh</serverId>
@@ -224,14 +226,15 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.2.4</version>
+			<version>5.8.0</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
+            <version>3.25.3</version>
+			<scope>test</scope>
         </dependency>
 	</dependencies>
 </project>

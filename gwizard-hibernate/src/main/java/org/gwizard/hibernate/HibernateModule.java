@@ -8,7 +8,7 @@ import com.google.inject.util.Modules;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * <p>This module provides a little bit of glue between guice-persist and the rest of gwizard.

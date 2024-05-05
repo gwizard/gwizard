@@ -7,9 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.inject.Singleton;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import jakarta.inject.Singleton;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import java.io.File;
 
 /**

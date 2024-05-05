@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.voodoodyne.trivet</groupId>
 			<artifactId>trivet</artifactId>
-			<version>1.0</version>
+			<version>1.1</version>
 		</dependency>
 
 		<!-- This is just for running tests -->

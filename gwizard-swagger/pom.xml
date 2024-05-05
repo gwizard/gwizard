@@ -25,11 +25,11 @@
 
 	<dependencies>
 
-		<dependency>
-		    <groupId>org.jboss.resteasy</groupId>
-		    <artifactId>jaxrs-api</artifactId>
-		    <scope>provided</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--		    <groupId>org.jboss.resteasy</groupId>-->
+<!--		    <artifactId>jaxrs-api</artifactId>-->
+<!--		    <scope>provided</scope>-->
+<!--		</dependency>-->
 
 		<!-- start: guice -->	
 		<dependency>
@@ -40,35 +40,35 @@
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
 			<artifactId>guice-servlet</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.inject</groupId>
-					<artifactId>guice</artifactId>
-				</exclusion>
-			</exclusions>
+<!--			<exclusions>-->
+<!--				<exclusion>-->
+<!--					<groupId>com.google.inject</groupId>-->
+<!--					<artifactId>guice</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
 		</dependency>
 		<!-- end: guice -->
 		
 		<!-- start: swagger -->
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-jaxrs</artifactId>
-            <exclusions>
-            	<exclusion>
-            		<artifactId>jsr311-api</artifactId>
-            		<groupId>javax.ws.rs</groupId>
-            	</exclusion>
-            </exclusions>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.swagger</groupId>
+            <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
         </dependency>
+		<!-- end: swagger -->
+
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
-        <!-- end: swagger -->
+
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+		</dependency>
 
 		<!-- This is just for running tests -->
 		<dependency>

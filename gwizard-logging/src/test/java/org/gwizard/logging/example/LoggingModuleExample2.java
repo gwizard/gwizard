@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.gwizard.logging.LoggingConfig;
 import org.gwizard.logging.LoggingModule;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Demonstrates more explicit management of logging configuration. Normally you would extract the LoggingConfig

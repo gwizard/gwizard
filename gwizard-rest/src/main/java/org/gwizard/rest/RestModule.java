@@ -4,11 +4,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.servlet.ServletModule;
 import lombok.EqualsAndHashCode;
+import org.gwizard.guiceeasy.GuiceeasyHttpServletDispatcher;
+import org.gwizard.guiceeasy.GuiceeasyModule;
 import org.gwizard.web.WebModule;
-import org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener;
-import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 
-import javax.inject.Singleton;
 import java.util.Map;
 
 /**
@@ -33,21 +32,16 @@ public class RestModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
 		install(new WebModule());
-		install(new JaxrsModule());
-
-		// Binding this will cause it to be picked up by gwizard-web
-		bind(GuiceResteasyBootstrapServletContextListener.class);
+		install(new GuiceeasyModule());
 
 		// Make sure RESTEasy picks this up so we get our ObjectMapper from guice
 		bind(ObjectMapperContextResolver.class);
 
-		bind(HttpServletDispatcher.class).in(Singleton.class);
-
 		if (path == null) {
-			serve("/*").with(HttpServletDispatcher.class);
+			serve("/*").with(GuiceeasyHttpServletDispatcher.class);
 		} else {
 			final Map<String, String> initParams = ImmutableMap.of("resteasy.servlet.mapping.prefix", path);
-			serve(path + "/*").with(HttpServletDispatcher.class, initParams);
+			serve(path + "/*").with(GuiceeasyHttpServletDispatcher.class, initParams);
 		}
 	}
 }

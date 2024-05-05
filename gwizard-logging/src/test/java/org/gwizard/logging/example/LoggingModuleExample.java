@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.gwizard.logging.LoggingConfig;
 import org.gwizard.logging.LoggingModule;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * This uses logback's default configuration bootstrap routine, looking for logback.xml etc.

@@ -2,7 +2,7 @@ package org.gwizard.web;
 
 import com.google.inject.Injector;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.EventListener;
 
 /**

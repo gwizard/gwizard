@@ -1,9 +1,9 @@
 package org.gwizard.swagger;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
-import org.assertj.core.util.Lists;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**

@@ -2,13 +2,12 @@ package org.gwizard.web;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import org.eclipse.jetty.ee10.servlet.DefaultServlet;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
 /**
  * Simple Jetty-based embedded web server which configures itself from a bound WebConfig and serves the
@@ -25,7 +24,7 @@ public class WebServer {
 	private Server server;
 
 	@Inject
-	public WebServer(WebConfig webConfig, EventListenerScanner eventListenerScanner, HandlerScanner handlerScanner) {
+	public WebServer(final WebConfig webConfig, final EventListenerScanner eventListenerScanner, final HandlerScanner handlerScanner) {
 		this.webConfig = webConfig;
 		this.eventListenerScanner = eventListenerScanner;
 		this.handlerScanner = handlerScanner;
@@ -50,11 +49,10 @@ public class WebServer {
 		sch.addServlet(DefaultServlet.class, "/");
 
 		// This will add any registered ServletContextListeners or other misc servlet listeners
-		// that have been bound. For example, the GuiceResteasyBootstrapServletContextListener
-		// which gets bound by gwizard-rest.
+		// that have been bound.
 		eventListenerScanner.accept(sch::addEventListener);
 
-        final HandlerCollection handlers = new HandlerCollection();
+        final ContextHandlerCollection handlers = new ContextHandlerCollection();
 
 		// the sch is currently the server handler, add it to the list
 		handlers.addHandler(sch);
@@ -62,7 +60,7 @@ public class WebServer {
 		// This will add any registered jetty Handlers that have been bound.
 		handlerScanner.accept(handlers::addHandler);
 
-		server.setHandler(handlers);
+		server.setHandler(sch);
 
 		// Start the server
 		server.start();
@@ -74,7 +72,7 @@ public class WebServer {
 	 * By default we create a bare-bones ServletContextHandler that is not set up to handle Sessions.
 	 */
 	protected ServletContextHandler createRootServletContextHandler() {
-		return new ServletContextHandler(null, "/");
+		return new ServletContextHandler("/");
 	}
 
 	/**
@@ -82,7 +80,7 @@ public class WebServer {
 	 * into WebConfig, but for now this gives users a hook to satisfy their needs. Bind a subclass to WebConfig,
 	 * subclass this WebServer, and change behavior to whatever you want.
 	 */
-	protected Server createServer(WebConfig webConfig) {
+	protected Server createServer(final WebConfig webConfig) {
 		return new Server(webConfig.getPort());
 	}
 

@@ -6,7 +6,7 @@ import org.gwizard.hibernate.example.HibernateModuleExample.MyModule;
 import org.gwizard.hibernate.example.HibernateModuleExample.Work;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;

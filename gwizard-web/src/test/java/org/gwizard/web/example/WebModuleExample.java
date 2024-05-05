@@ -1,24 +1,18 @@
 package org.gwizard.web.example;
 
-import ch.qos.logback.access.PatternLayoutEncoder;
-import ch.qos.logback.access.jetty.RequestLogImpl;
-import ch.qos.logback.access.spi.IAccessEvent;
-import ch.qos.logback.core.ConsoleAppender;
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.servlet.ServletModule;
-import org.eclipse.jetty.server.handler.RequestLogHandler;
+import jakarta.inject.Singleton;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.gwizard.services.Run;
 import org.gwizard.web.WebConfig;
 import org.gwizard.web.WebModule;
 
-import javax.inject.Singleton;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -48,36 +42,8 @@ public class WebModuleExample {
 		}
 	}
 
-	public static class TestHandlerModule extends AbstractModule {
-
-		@Override
-		protected void configure() {
-			RequestLogImpl requestLog = new RequestLogImpl();
-
-			ConsoleAppender<IAccessEvent> consoleAppender = new ConsoleAppender<>();
-			consoleAppender.setContext(requestLog);
-			consoleAppender.setName("console");
-
-			PatternLayoutEncoder patternLayout = new PatternLayoutEncoder();
-			patternLayout.setContext(requestLog);
-			patternLayout.setPattern("%h %l %u %user %date \"%r\" %s %b");
-			patternLayout.start();
-
-			consoleAppender.setEncoder(patternLayout);
-			consoleAppender.start();
-
-			requestLog.addAppender(consoleAppender);
-
-			RequestLogHandler requestLogHandler = new RequestLogHandler();
-			requestLogHandler.setRequestLog(requestLog);
-
-			bind(RequestLogHandler.class).toInstance(requestLogHandler);
-		}
-	}
-
 	public static void main(String[] args) throws Exception {
 		final Injector injector = Guice.createInjector(
-						new TestHandlerModule(),
 						new MyModule(),
 						new WebModule());
 

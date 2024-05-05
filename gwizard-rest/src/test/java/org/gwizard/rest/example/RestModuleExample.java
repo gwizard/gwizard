@@ -5,8 +5,8 @@ import com.google.inject.Guice;
 import org.gwizard.rest.RestModule;
 import org.gwizard.services.Run;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
 
 /**
  * Self-contained example of using the RestModule by itself

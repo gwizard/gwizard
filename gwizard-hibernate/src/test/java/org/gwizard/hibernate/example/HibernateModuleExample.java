@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 import org.gwizard.hibernate.DatabaseConfig;
 import org.gwizard.hibernate.HibernateModule;
 
-import javax.inject.Singleton;
-import javax.persistence.Entity;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Id;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+import jakarta.inject.Singleton;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Id;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import java.util.UUID;
 
 import static org.gwizard.hibernate.EM.em;

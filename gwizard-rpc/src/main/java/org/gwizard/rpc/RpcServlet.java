@@ -3,8 +3,8 @@ package org.gwizard.rpc;
 import com.google.inject.Injector;
 import com.voodoodyne.trivet.TrivetServlet;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * The glue that turns an RPC request into a method call

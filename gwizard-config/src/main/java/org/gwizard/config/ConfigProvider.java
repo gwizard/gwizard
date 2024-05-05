@@ -7,9 +7,9 @@ import io.dropwizard.configuration.YamlConfigurationFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.validation.Validator;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.validation.Validator;
 import java.io.File;
 import java.io.IOException;
 

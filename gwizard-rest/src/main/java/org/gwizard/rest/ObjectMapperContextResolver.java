@@ -3,8 +3,8 @@ package org.gwizard.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
-import javax.ws.rs.ext.ContextResolver;
-import javax.ws.rs.ext.Provider;
+import jakarta.ws.rs.ext.ContextResolver;
+import jakarta.ws.rs.ext.Provider;
 
 /**
  * A little wiring that lets us give the guice ObjectMapper to JAXRS frameworks like RESTEasy.

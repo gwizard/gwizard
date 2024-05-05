@@ -1,8 +1,8 @@
 package org.gwizard.hibernate;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.persistence.EntityManager;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.persistence.EntityManager;
 
 /**
  * <p>Because DI is not always the right idea.</p>

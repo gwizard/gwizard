@@ -11,7 +11,7 @@ import org.gwizard.services.Run;
 import org.gwizard.services.Services;
 import org.gwizard.services.ServicesModule;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Self-contained example of using the ServicesModule by itself.

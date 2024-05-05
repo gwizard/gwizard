@@ -6,7 +6,7 @@ import com.google.inject.Provides;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 @Slf4j
 @EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
