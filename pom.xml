@@ -21,7 +21,6 @@
 		<module>gwizard-healthchecks</module>
 		<module>gwizard-metrics</module>
 		<module>gwizard-rpc</module>
-		<module>gwizard-swagger</module>
 	</modules>
 
 	<properties>
