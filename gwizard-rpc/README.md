@@ -22,11 +22,12 @@ or specify the gwizard-web maven dependency.
 
 ## Maven
 
+Install the gwizard bom, then:
+
 ```xml
 	<dependency>
 		<groupId>org.gwizard</groupId>
 		<artifactId>gwizard-rpc</artifactId>
-		<version>${gwizard.version}</version>
 	</dependency>
 ```
 
@@ -100,5 +101,5 @@ This will print "Hello, world".
  * You can change the endpoint for rpc like this: `new RpcModule("/some/other/rpc/enpdoint")`
  * There is no inherent security model in this stack. Good candidates are:
    * Use a servlet filter
-   * Apply an aspect to @Remote classes via Guice
+   * Apply an aspect to `@Remote` classes via Guice
 

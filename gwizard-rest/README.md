@@ -8,12 +8,13 @@ or specify the gwizard-web maven dependency.
 
 ## Maven
 
+Install the gwizard bom, then:
+
 ```xml
-	<dependency>
-		<groupId>org.gwizard</groupId>
-		<artifactId>gwizard-rest</artifactId>
-		<version>${gwizard.version}</version>
-	</dependency>
+    <dependency>
+        <groupId>org.gwizard</groupId>
+        <artifactId>gwizard-rest</artifactId>
+    </dependency>
 ```
 
 ## Usage
@@ -22,26 +23,26 @@ or specify the gwizard-web maven dependency.
 
 ```java
 public class RestModuleExample {
-	/** A standard JAX-RS resource class */
-	@Path("/hello")
-	public static class HelloResource {
-		@GET
-		public String hello() {
-			return "hello, world";
-		}
-	}
+    /** A standard JAX-RS resource class */
+    @Path("/hello")
+    public static class HelloResource {
+        @GET
+        public String hello() {
+            return "hello, world";
+        }
+    }
 
-	public static class MyModule extends AbstractModule {
-		@Override
-		protected void configure() {
-			// All resources must be bound so they will be picked up by resteasy
-			bind(HelloResource.class);
-		}
-	}
+    public static class MyModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            // All resources must be bound so they will be picked up by resteasy
+            bind(HelloResource.class);
+        }
+    }
 
-	public static void main(String[] args) throws Exception {
-		Guice.createInjector(new MyModule(), new RestModule()).getInstance(Run.class).start();
-	}
+    public static void main(String[] args) throws Exception {
+        Guice.createInjector(new MyModule(), new RestModule()).getInstance(Run.class).start();
+    }
 }
 ```
 
@@ -54,7 +55,8 @@ resource classes (and providers) to RESTEasy by binding them in Guice.
 ### Classpath Scanning
 
 Wouldn't it be cool to use Reflections to scan for these JAXRS classes so you don't have to bind them yourself?
-Yeah, seems like a good idea for a feature. Easy to add. Request it.
+We have so far avoided it because we worry about application startup time. But feel free to add a feature request.
+It's also not terribly difficult to add yourself. 
 
 ## Contract
 

@@ -6,12 +6,13 @@ All we do is help manage the configuration; Guice Persist (and of course Hiberna
 
 ## Maven
 
+Install the gwizard bom, then:
+
 ```xml
-	<dependency>
-		<groupId>org.gwizard</groupId>
-		<artifactId>gwizard-hibernate</artifactId>
-		<version>${gwizard.version}</version>
-	</dependency>
+    <dependency>
+        <groupId>org.gwizard</groupId>
+        <artifactId>gwizard-hibernate</artifactId>
+    </dependency>
 ```
 
 ## Usage
@@ -31,11 +32,11 @@ absolutely requires it. Fortunately, it need not contain anything other than thi
 
 ```xml
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
-			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-	<persistence-unit name="gw-persistence-unit" transaction-type="RESOURCE_LOCAL">
-		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-	</persistence-unit>
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="gw-persistence-unit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    </persistence-unit>
 </persistence>
 ```
 

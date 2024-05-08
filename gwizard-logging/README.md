@@ -5,12 +5,13 @@ There are a couple ways to manage the configuration.
 
 ## Maven
 
+Install the gwizard bom, then:
+
 ```xml
-	<dependency>
-		<groupId>org.gwizard</groupId>
-		<artifactId>gwizard-logging</artifactId>
-		<version>${gwizard.version}</version>
-	</dependency>
+    <dependency>
+        <groupId>org.gwizard</groupId>
+        <artifactId>gwizard-logging</artifactId>
+    </dependency>
 ```
 
 This pulls in all relevant dependencies.
@@ -55,7 +56,7 @@ is to store a big chunk of XML in your YAML config. Because of YAML's text block
 # example.yml
 logging:
   loggers:
-  	"com.example.whatever": WARN	# override anything in xml
+    "com.example.whatever": WARN	# override anything in xml
 
   xml: |
     <configuration>
@@ -76,30 +77,30 @@ logging:
 ```java
 @Slf4j
 public class Main {
-	@Data
-	public static class MyConfig {
-		LoggingConfig logging = new LoggingConfig();
-	}
+    @Data
+    public static class MyConfig {
+        LoggingConfig logging = new LoggingConfig();
+    }
 
-	public static class MyModule extends AbstractModule {
-		@Override
-		protected void configure() {}
+    public static class MyModule extends AbstractModule {
+        @Override
+        protected void configure() {}
 
-		@Provides
-		public LoggingConfig loggingConfig(MyConfig cfg) {
-			return cfg.getLogging();
-		}
-	}
+        @Provides
+        public LoggingConfig loggingConfig(MyConfig cfg) {
+            return cfg.getLogging();
+        }
+    }
 
-	public static void main(String[] args) throws Exception {
-		final Injector injector = Guice.createInjector(
-			new LoggingModule(),
-			new MyModule(),
-			new ConfigModule(new File(args[0], MyConfig.class))
+    public static void main(String[] args) throws Exception {
+        final Injector injector = Guice.createInjector(
+            new LoggingModule(),
+            new MyModule(),
+            new ConfigModule(new File(args[0], MyConfig.class))
         );
 
-		log.info("Hello!");
-	}
+        log.info("Hello!");
+    }
 }
 
 ```

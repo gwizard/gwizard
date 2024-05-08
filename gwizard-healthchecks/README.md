@@ -6,12 +6,13 @@ See https://github.com/dropwizard/metrics-healthchecks
 
 ## Maven
 
+Install the gwizard bom, then:
+
 ```xml
-	<dependency>
-		<groupId>org.gwizard</groupId>
-		<artifactId>gwizard-healthchecks</artifactId>
-		<version>${gwizard.version}</version>
-	</dependency>
+    <dependency>
+        <groupId>org.gwizard</groupId>
+        <artifactId>gwizard-healthchecks</artifactId>
+    </dependency>
 ```
 
 ## Usage

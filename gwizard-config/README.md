@@ -5,12 +5,13 @@ system properties.
 
 ## Maven
 
+Install the gwizard bom, then:
+
 ```xml
-	<dependency>
-		<groupId>org.gwizard</groupId>
-		<artifactId>gwizard-config</artifactId>
-		<version>${gwizard.version}</version>
-	</dependency>
+    <dependency>
+        <groupId>org.gwizard</groupId>
+        <artifactId>gwizard-config</artifactId>
+    </dependency>
 ```
 
 ## Usage
@@ -78,8 +79,8 @@ Inside your module, you create a POJO
 ```java
 @Data
 public class MyModuleConfig {
-	private String bindAddress;
-	private int port;
+    private String bindAddress;
+    private int port;
 }
 ```
 
@@ -89,12 +90,12 @@ Then, inside your module you inject that POJO wherever it's needed.
 @Singleton
 public class MyService {
 
-	private final MyModuleConfig cfg;
+    private final MyModuleConfig cfg;
 
-	@Inject
-	public MyService(MyModuleConfig cfg) {
-		this.cfg = cfg;
-	}
+    @Inject
+    public MyService(MyModuleConfig cfg) {
+        this.cfg = cfg;
+    }
 }
 ```
 
@@ -114,27 +115,27 @@ For example, let's say you wish to use the `WebModule` (which looks for a bound 
 ```java
 @Data
 public class MyConfig {
-	private WebConfig web;
-	private MyModuleConfig myModule;
-	private DatabaseConfig database;
-	private String myOtherConfigProperty;
+    private WebConfig web;
+    private MyModuleConfig myModule;
+    private DatabaseConfig database;
+    private String myOtherConfigProperty;
 }
 ```
 
 ```java
 public class MyModule extends AbstractModule {
-	@Override
-	protected void configure() { /* ... */ }
+    @Override
+    protected void configure() { /* ... */ }
 
-	@Provides
-	public WebConfig webConfig(MyConfig cfg) {
-		return cfg.getWeb();
-	}
+    @Provides
+    public WebConfig webConfig(MyConfig cfg) {
+        return cfg.getWeb();
+    }
 
-	@Provides
-	public DatabaseConfig databaseConfig(MyConfig cfg) {
-		return cfg.getDatabase();
-	}
+    @Provides
+    public DatabaseConfig databaseConfig(MyConfig cfg) {
+        return cfg.getDatabase();
+    }
 }
 ```
 

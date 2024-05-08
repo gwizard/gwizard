@@ -7,12 +7,13 @@ this is your huckleberry.
 
 ## Maven
 
+Install the gwizard bom, then:
+
 ```xml
-	<dependency>
-		<groupId>org.gwizard</groupId>
-		<artifactId>gwizard-web</artifactId>
-		<version>${gwizard.version}</version>
-	</dependency>
+    <dependency>
+        <groupId>org.gwizard</groupId>
+        <artifactId>gwizard-web</artifactId>
+    </dependency>
 ```
 
 ## Usage
@@ -21,25 +22,25 @@ this is your huckleberry.
 
 ```java
 public class WebModuleExample {
-	@Singleton
-	public static class HelloServlet extends HttpServlet {
-		@Override
-		protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			resp.getWriter().println("Hello, World");
-		}
-	}
+    @Singleton
+    public static class HelloServlet extends HttpServlet {
+        @Override
+        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            resp.getWriter().println("Hello, World");
+        }
+    }
 
-	public static class MyModule extends ServletModule {
-		@Override
-		protected void configureServlets() {
-			serve("/hello").with(HelloServlet.class);
-		}
-	}
+    public static class MyModule extends ServletModule {
+        @Override
+        protected void configureServlets() {
+            serve("/hello").with(HelloServlet.class);
+        }
+    }
 
-	public static void main(String[] args) throws Exception {
-		final Injector injector = Guice.createInjector(new MyModule(), new WebModule());
-		injector.getInstance(Run.class).start();
-	}
+    public static void main(String[] args) throws Exception {
+        final Injector injector = Guice.createInjector(new MyModule(), new WebModule());
+        injector.getInstance(Run.class).start();
+    }
 ```
 
 The default port is 8080. You can control web server behavior by binding an instance of `WebConfig`,
