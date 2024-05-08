@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>org.gwizard.guiceeasy</groupId>
 			<artifactId>guiceeasy</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0</version>
 		</dependency>
 
 		<dependency>
