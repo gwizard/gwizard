@@ -20,7 +20,14 @@ https://github.com/gwizard/gwizard-example
 
 ## Requirements
 
-GWizard requires a minimum of Java 11.
+GWizard 1.0 requires a minimum of Java 17. It uses:
+
+* Guice 7.x
+* Resteasy 6
+* Jetty 12
+* The `jakarta.*` namespace
+
+The 0.x releases of GWizard use Jetty 9 and the `javax.*` namespace. 
 
 ## Overview
 
@@ -155,8 +162,7 @@ We will try to cover some design questions.
 
 ### Another framework??
 It really isn't. GWizard is just a tiny bit of glue holding together excellent components written by other people.
-GWizard is "just a library" with fewer lines of actual code than there are lines of text
-in the README files.
+GWizard is "just a library" with fewer lines of actual code than there are lines of text in the README files.
 
 ### What's wrong with Dropwizard? Isn't there a Guice module for DW?
 We like DW; as opinionated developers, it's a pleasure to find an opinionated framework
@@ -176,8 +182,9 @@ This is the logical conclusion of that process. We try to preserve the spirit of
 code as dependency jars where reasonable.
 
 ### What about Dagger instead of Guice?
-Dagger2 looks neato! But it isn't aimed at server-side development and does not support AOP.
+Dagger2 is great! It would be interesting to build a DagWizard. Unfortunately it doesn't have servlet support
+built-in, so there's a big hurdle to jump. 
 
 ### How do I deploy a GWizard app?
-Make a fat jar and run it like an executable. [Dropwizard's example](http://dropwizard.io/getting-started.html#building-fat-jars)
-is great.
+Make a fat jar and run it like an executable. 
+[Dropwizard's example](https://www.dropwizard.io/en/stable/getting-started.html#building-fat-jars) is great.
