@@ -12,11 +12,15 @@ The best place for help is the gwizard Google Group: https://groups.google.com/f
 
 https://github.com/gwizard/gwizard
 
-## Example Project
+## Examples
 
 The best way to understand GWizard is to fork a simple example project:
 
 https://github.com/gwizard/gwizard-example
+
+For an example of how to serve static content (a Vite build) with GWizard:
+
+https://github.com/gwizard/gwizard-example-vite
 
 ## Requirements
 
