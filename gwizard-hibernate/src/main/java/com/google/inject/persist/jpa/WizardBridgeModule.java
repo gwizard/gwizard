@@ -31,12 +31,21 @@ public class WizardBridgeModule extends AbstractModule {
 	@Jpa
 	public Map<?, ?> properties(final DatabaseConfig cfg) {
 		Properties props = new Properties();
-		props.setProperty(DRIVER, cfg.getDriverClass());
-		props.setProperty(URL, cfg.getUrl());
-		props.setProperty(USER, cfg.getUser());
-		props.setProperty(PASS, cfg.getPassword());
 
-		props.putAll(cfg.getProperties());
+		if (cfg.getDriverClass() != null)
+			props.setProperty(DRIVER, cfg.getDriverClass());
+
+		if (cfg.getUrl() != null)
+			props.setProperty(URL, cfg.getUrl());
+
+		if (cfg.getUser() != null)
+			props.setProperty(USER, cfg.getUser());
+
+		if (cfg.getPassword() != null)
+			props.setProperty(PASS, cfg.getPassword());
+
+		if (cfg.getProperties() != null)
+			props.putAll(cfg.getProperties());
 
 		return props;
 	}
