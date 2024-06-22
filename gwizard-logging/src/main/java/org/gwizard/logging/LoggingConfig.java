@@ -1,8 +1,6 @@
 package org.gwizard.logging;
 
 import ch.qos.logback.classic.Level;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,17 +19,10 @@ import java.util.Map;
  *
  * <p>If the xml value is null or empty, we leave the standard Logback boostrap config alone.</p>
  */
-@Data
-@NoArgsConstructor
-public class LoggingConfig {
+public interface LoggingConfig {
 	/** Optional raw xml content for logback config that will replace any preexisting configuration */
-	private String xml;
+	default String getXml() { return null; }
 
 	/** Override any logging levels specified in either the xml or in the logback bootstrap */
-	private Map<String, Level> loggers = new LinkedHashMap<>();
-
-	/** Sometimes convenient */
-	public LoggingConfig(String xml) {
-		this.xml = xml;
-	}
+	default Map<String, Level> getLoggers() { return new LinkedHashMap<>(); }
 }

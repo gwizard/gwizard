@@ -7,9 +7,12 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import org.gwizard.logging.LoggingConfig;
+import org.gwizard.logging.LoggingConfigProperties;
 import org.gwizard.logging.LoggingModule;
 
 import jakarta.inject.Singleton;
+
+import java.util.Map;
 
 /**
  * This uses logback's default configuration bootstrap routine, looking for logback.xml etc.
@@ -25,9 +28,7 @@ public class LoggingModuleExample {
 		@Singleton
 		public LoggingConfig loggingConfig() {
 			// Normally you would pull this from a larger config object
-			LoggingConfig cfg = new LoggingConfig();
-			cfg.getLoggers().put("org.gwizard.logging.example", Level.ERROR);
-			return cfg;
+			return new LoggingConfigProperties(null, Map.of("org.gwizard.logging.example", Level.ERROR));
 		}
 	}
 

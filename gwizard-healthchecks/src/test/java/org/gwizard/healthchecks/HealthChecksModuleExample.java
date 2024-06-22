@@ -85,7 +85,7 @@ public class HealthChecksModuleExample {
 
 		@Provides
 		public HealthChecksConfig periodicHealthCheckConfig() {
-			HealthChecksConfig cfg = new HealthChecksConfig();
+			final HealthChecksConfigProperties cfg = new HealthChecksConfigProperties();
 			cfg.setInterval(Duration.seconds(30));
 			return cfg;
 		}

@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import org.gwizard.logging.LoggingConfig;
+import org.gwizard.logging.LoggingConfigProperties;
 import org.gwizard.logging.LoggingModule;
 
 import jakarta.inject.Singleton;
@@ -36,7 +37,7 @@ public class LoggingModuleExample2 {
 		@Provides
 		@Singleton
 		public LoggingConfig loggingConfig() {
-			return new LoggingConfig(LOGBACK_CONFIG_XML);
+			return new LoggingConfigProperties(LOGBACK_CONFIG_XML);
 		}
 	}
 

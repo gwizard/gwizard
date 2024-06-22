@@ -5,17 +5,18 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.persist.Transactional;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.gwizard.hibernate.DatabaseConfig;
-import org.gwizard.hibernate.HibernateModule;
-
 import jakarta.inject.Singleton;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Id;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.gwizard.hibernate.DatabaseConfig;
+import org.gwizard.hibernate.DatabaseConfigProperties;
+import org.gwizard.hibernate.HibernateModule;
+
 import java.util.UUID;
 
 import static org.gwizard.hibernate.EM.em;
@@ -62,7 +63,7 @@ public class HibernateModuleExample {
 		@Provides
 		@Singleton
 		public DatabaseConfig databaseConfig() {
-			final DatabaseConfig cfg = new DatabaseConfig();
+			final DatabaseConfigProperties cfg = new DatabaseConfigProperties();
 			cfg.setDriverClass("org.h2.Driver");
 			cfg.setUser("sa");
 			cfg.setUrl("jdbc:h2:mem:test");

@@ -1,12 +1,9 @@
 package org.gwizard.web;
 
-import lombok.Data;
-
 /**
- * Standard configuration options for a GWizard app.
+ * Standard configuration options for a GWizard app. Conforms to record format.
  */
-@Data
-public class WebConfig {
+public interface WebConfig {
 	/** */
-	private int port = 8080;
+	default int getPort() { return 8080; }
 }

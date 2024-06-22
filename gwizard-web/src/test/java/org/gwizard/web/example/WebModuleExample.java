@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.gwizard.services.Run;
 import org.gwizard.web.WebConfig;
+import org.gwizard.web.WebConfigProperties;
 import org.gwizard.web.WebModule;
 
 import java.io.IOException;
@@ -36,9 +37,7 @@ public class WebModuleExample {
 		@Provides
 		@Singleton
 		public WebConfig webConfig() {
-			WebConfig cfg = new WebConfig();
-			cfg.setPort(8888);	// default is 8080
-			return cfg;
+			return new WebConfigProperties(8888);
 		}
 	}
 
