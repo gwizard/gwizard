@@ -59,7 +59,7 @@ may be used remotely; if you wish to restrict to a subset of interfaces, you can
 `@Remote(Hello.class)`. Note that `@ImplementedBy` is a standard guice annotation; it is optional and can be used
 in liu of explicitly binding `Hello` to `HelloImpl` in your guice module.
 
-The server is a standard GWizard application. In this example, the default enpdoint of `/rpc` is used:
+The server is a standard GWizard application. In this example, the default endpoint of `/rpc` is used:
 
 ```java
 public class ServerExample {
@@ -89,7 +89,7 @@ This will print "Hello, world".
 
  * Method binding is performed by calling Guice `getInstance()` on the interface class specified by the client.
  * Server security requires that only an interface can be specified (not a concrete class) and that the
-   instance returned by `getInstance()` must be annoted `@Remote`.
+   instance returned by `getInstance()` must be annotated `@Remote`.
  * Parameters and return values are encoded with Java serialization. It is **strongly recommended** that you
    specify a constant `serialVersionUID` on all classes that pass through RPC boundaries.
  * With a constant `serialVersionUID`, data model mismatches are flexible - fields not present in the
@@ -102,4 +102,4 @@ This will print "Hello, world".
  * There is no inherent security model in this stack. Good candidates are:
    * Use a servlet filter
    * Apply an aspect to `@Remote` classes via Guice
-
+ * It is not safe to java-deserialize untrusted payloads. Don't use this to publish APIs to untrusted clients.
