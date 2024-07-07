@@ -25,10 +25,10 @@ or specify the gwizard-web maven dependency.
 Install the gwizard bom, then:
 
 ```xml
-	<dependency>
-		<groupId>org.gwizard</groupId>
-		<artifactId>gwizard-rpc</artifactId>
-	</dependency>
+    <dependency>
+        <groupId>org.gwizard</groupId>
+        <artifactId>gwizard-rpc</artifactId>
+    </dependency>
 ```
 
 ## Usage
@@ -40,17 +40,17 @@ First, create a Java interface and implementation of that interface:
 ```java
 @ImplementedBy(HelloImpl.class)
 public interface Hello {
-	String hi(String name);
+    String hi(String name);
 }
 ```
 
 ```java
 @Remote
 public class HelloImpl implements Hello {
-	@Override
-	public String hi(String name) {
-		return "Hello, " + name;
-	}
+    @Override
+    public String hi(String name) {
+        return "Hello, " + name;
+    }
 }
 ```
 
@@ -63,9 +63,9 @@ The server is a standard GWizard application. In this example, the default endpo
 
 ```java
 public class ServerExample {
-	public static void main(String[] args) throws Exception {
-		Guice.createInjector(new RpcModule()).getInstance(Run.class).start();
-	}
+    public static void main(String[] args) throws Exception {
+        Guice.createInjector(new RpcModule()).getInstance(Run.class).start();
+    }
 }
 ```
 
@@ -74,12 +74,12 @@ then look like this:
 
 ```java
 public class ClientExample {
-	public static void main(String[] args) throws Exception {
-		Hello hello = Client.create("http://localhost:8080/rpc", Hello.class);
-		String result = hello.hi("world");
+    public static void main(String[] args) throws Exception {
+        Hello hello = Client.create("http://localhost:8080/rpc", Hello.class);
+        String result = hello.hi("world");
 
-		System.out.println(result);
-	}
+        System.out.println(result);
+    }
 }
 ```
 
