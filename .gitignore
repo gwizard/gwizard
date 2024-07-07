@@ -5,4 +5,5 @@ dependency-reduced-pom.xml
 .DS_Store
 .project
 .classpath
-/.settings/
+.settings
+build
