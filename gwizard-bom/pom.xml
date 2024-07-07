@@ -120,13 +120,6 @@
                 <version>${swagger.version}</version>
             </dependency>
 
-            <!-- RESTEasy -->
-<!--            <dependency>-->
-<!--                <groupId>org.jboss.resteasy</groupId>-->
-<!--                <artifactId>jaxrs-api</artifactId>-->
-<!--                <version>${jaxrs-api.version}</version>-->
-<!--            </dependency>-->
-
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-bom</artifactId>
@@ -138,6 +131,22 @@
                 <groupId>org.eclipse.jetty.ee10</groupId>
                 <artifactId>jetty-ee10-webapp</artifactId>
                 <version>${jetty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-bom</artifactId>
+                <version>${mockito.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!-- GWizard modules -->
@@ -199,6 +208,11 @@
             <dependency>
                 <groupId>org.gwizard</groupId>
                 <artifactId>gwizard-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gwizard</groupId>
+                <artifactId>gwizard-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

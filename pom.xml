@@ -21,6 +21,7 @@
 		<module>gwizard-healthchecks</module>
 		<module>gwizard-metrics</module>
 		<module>gwizard-rpc</module>
+		<module>gwizard-test</module>
 	</modules>
 
 	<properties>
@@ -46,8 +47,9 @@
 		<swagger.version>2.2.21</swagger.version>
 		<servlet-api.version>6.0.0</servlet-api.version>
 		<jaxrs-api.version>3.0.12.Final</jaxrs-api.version>
-		<assertj.version>3.25.3</assertj.version>
-		<junit.version>5.10.2</junit.version>
+		<assertj.version>3.26.0</assertj.version>
+		<junit.version>5.10.3</junit.version>
+		<mockito.version>5.12.0</mockito.version>
 	</properties>
 
 	<scm>
@@ -190,7 +192,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
+			<version>1.18.34</version>
 			<scope>provided</scope> <!-- only needed at build time -->
 		</dependency>
 
@@ -225,7 +227,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>5.8.0</version>
+			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 
