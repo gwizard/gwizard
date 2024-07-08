@@ -1,6 +1,8 @@
 # GWizard Test
 
-This is going to require some explanation.
+This is a tool for making integration-like tests. You can create a guice injector with a module configuration
+similar to your application, inject objects into your tests, and call methods on them. There's also tooling
+to simulate request contexts.
 
 ## Maven
 
@@ -16,3 +18,4 @@ Install the gwizard bom, then:
 
 ## Usage
 
+TODO
