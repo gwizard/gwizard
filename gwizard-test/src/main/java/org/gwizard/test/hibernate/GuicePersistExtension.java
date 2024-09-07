@@ -2,6 +2,8 @@ package org.gwizard.test.hibernate;
 
 import com.google.inject.Injector;
 import com.google.inject.persist.PersistFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.gwizard.test.GuiceExtension;
 import org.gwizard.test.Requestor;
 import org.gwizard.test.web.ServletFilterAdapter;
@@ -20,8 +22,8 @@ public class GuicePersistExtension implements BeforeEachCallback, AfterEachCallb
 
 		final PersistFilter filter = injector.getInstance(PersistFilter.class);
 
-		final Requestor requestor = injector.getInstance(Requestor.class);
-		requestor.addFilter(new ServletFilterAdapter(filter));
+		final ServletFilterAdapter adapter = new ServletFilterAdapter(filter, injector.getProvider(HttpServletRequest.class), injector.getProvider(HttpServletResponse.class));
+		injector.getInstance(Requestor.class).addFilter(adapter);
 
 		filter.init(null);
 	}

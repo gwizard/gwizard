@@ -2,19 +2,16 @@ package org.gwizard.test;
 
 import com.google.common.collect.Iterables;
 import com.google.common.reflect.TypeToken;
-import com.google.inject.AbstractModule;
 import com.google.inject.BindingAnnotation;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.servlet.RequestScoped;
-import com.google.inject.util.Modules;
+import com.google.inject.servlet.GuiceFilter;
 import jakarta.inject.Qualifier;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.gwizard.test.web.FakeHttpServletRequest;
 import org.gwizard.test.web.FakeHttpServletResponse;
+import org.gwizard.test.web.ServletFilterAdapter;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
@@ -50,24 +47,13 @@ public class GuiceExtension implements BeforeEachCallback, ParameterResolver {
 
 		final Module module = testInstance.module();
 
-		final RequestScope requestScope = new RequestScope();
-
-		final AbstractModule basicTestModule = new AbstractModule() {
-			@Override
-			protected void configure() {
-				this.bindScope(RequestScoped.class, requestScope);
-				this.bind(RequestScope.class).toInstance(requestScope);
-
-				this.bind(HttpServletRequest.class).to(FakeHttpServletRequest.class);
-				this.bind(HttpServletResponse.class).to(FakeHttpServletResponse.class);
-			}
-		};
-
-		final Injector injector = Guice.createInjector(Modules.override(basicTestModule).with(module));
+		final Injector injector = Guice.createInjector(module);
 		context.getStore(NAMESPACE).put(Injector.class, injector);
 
-		final ScopeRequestFilter scopeFilter = injector.getInstance(ScopeRequestFilter.class);
-		injector.getInstance(Requestor.class).addFilter(scopeFilter);
+		// This enables the request scope to work
+		final GuiceFilter guiceFilter = injector.getInstance(GuiceFilter.class);
+		final ServletFilterAdapter guiceFilterAdapter = new ServletFilterAdapter(guiceFilter, FakeHttpServletRequest::new, FakeHttpServletResponse::new);
+		injector.getInstance(Requestor.class).addFilter(guiceFilterAdapter);
 	}
 
 	@Override
