@@ -1,5 +1,15 @@
 # GWizard Release Notes
 
+# 1.1.2
+2024-09-07
+
+* Improved gwizard-test to allow servlet modules to be used in tests.
+
+# 1.1.1
+2024-07-07
+
+* Added an experimental gwizard-test module to make integration-type tests easier.
+
 # 1.1
 2024-06-23
 
