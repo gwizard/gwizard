@@ -24,6 +24,12 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<!-- Gives us reasonable mock servlet objects -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>6.1.12</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

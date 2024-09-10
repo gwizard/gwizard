@@ -7,11 +7,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.servlet.GuiceFilter;
 import jakarta.inject.Qualifier;
-import org.gwizard.test.web.FakeHttpServletRequest;
-import org.gwizard.test.web.FakeHttpServletResponse;
-import org.gwizard.test.web.ServletFilterAdapter;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
@@ -35,6 +31,9 @@ import java.util.stream.Collectors;
  *
  * Some of this is borrowed from:
  * https://github.com/JeffreyFalgout/junit5-guice-extension/blob/master/src/main/java/name/falgout/jeffrey/testing/junit5/GuiceExtension.java
+ *
+ * Note that if you want to use the request scope, you'll need the GuiceWebExtension. And you
+ * probably want the GuiceInjectExtension.
  */
 public class GuiceExtension implements BeforeEachCallback, ParameterResolver {
 	private static final Namespace NAMESPACE = Namespace.create(GuiceExtension.class);
@@ -49,11 +48,6 @@ public class GuiceExtension implements BeforeEachCallback, ParameterResolver {
 
 		final Injector injector = Guice.createInjector(module);
 		context.getStore(NAMESPACE).put(Injector.class, injector);
-
-		// This enables the request scope to work
-		final GuiceFilter guiceFilter = injector.getInstance(GuiceFilter.class);
-		final ServletFilterAdapter guiceFilterAdapter = new ServletFilterAdapter(guiceFilter, FakeHttpServletRequest::new, FakeHttpServletResponse::new);
-		injector.getInstance(Requestor.class).addFilter(guiceFilterAdapter);
 	}
 
 	@Override
