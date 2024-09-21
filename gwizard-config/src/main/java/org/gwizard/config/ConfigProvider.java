@@ -27,7 +27,7 @@ public class ConfigProvider<T> implements Provider<T> {
 	public ConfigProvider(
 			Validator validator,
 			ObjectMapper objectMapper,
-			@ConfigClass Class<T> configClass,
+			@ConfigClass Class<?> configClass,
 			@PropertyPrefix String propertyPrefix,
 			@ConfigFile File configFile) {
 

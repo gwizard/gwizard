@@ -62,7 +62,7 @@ public class ConfigModule<T> extends AbstractModule {
 
 	@Provides
 	@ConfigClass
-	public Class<T> configClass() {
+	public Class<?> configClass() {
 		return configClass;
 	}
 
