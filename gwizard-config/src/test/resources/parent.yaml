@@ -1,0 +1,9 @@
+
+gwizard:
+  import:
+    - "child1.yaml"
+    - "child2.yaml"
+
+first: aaa
+second: bbb
+third: ccc

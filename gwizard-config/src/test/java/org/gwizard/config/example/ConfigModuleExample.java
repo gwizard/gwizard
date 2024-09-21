@@ -27,7 +27,7 @@ public class ConfigModuleExample {
 	/** Expects the first command line arg to be the path to a config yml file */
 	public static void main(String[] args) throws Exception {
 		final File configFile = new File(args[0]);
-		final ConfigModule configModule = new ConfigModule(configFile, MyConfig.class);	// could pass in prefix too
+		final ConfigModule configModule = new ConfigModule(MyConfig.class, configFile);	// could pass in prefix too
 		final Injector injector = Guice.createInjector(configModule);
 
 		// MyConfig is bound as a singleton and can be injected anywhere

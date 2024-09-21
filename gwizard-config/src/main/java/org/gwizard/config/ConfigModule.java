@@ -3,28 +3,47 @@ package org.gwizard.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import jakarta.inject.Singleton;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.inject.Singleton;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 import java.io.File;
 
 /**
  * Module which sets up the configuration object. That object can be anything derived from the Config class.
  */
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
 public class ConfigModule extends AbstractModule {
-	private final File configFile;
 	private final Class<?> configClass;
 	private final String propertyPrefix;
+	private final File configFile;
 
-	public ConfigModule(File configFile, Class<?> configClass) {
-		this(configFile, configClass, "gw");
+	/**
+	 * We will eventually support multiple config files, so that needs to go last.
+	 */
+	@Deprecated
+	public ConfigModule(final File configFile, final Class<?> configClass, final String propertyPrefix) {
+		this(configClass, propertyPrefix, configFile);
+	}
+
+	/**
+	 * We will eventually support multiple config files, so that needs to go last.
+	 */
+	@Deprecated
+	public ConfigModule(final File configFile, final Class<?> configClass) {
+		this(configClass, configFile);
+	}
+
+	/**
+	 * Defaults to the property prefix of "gw"
+	 */
+	public ConfigModule(final Class<?> configClass, final File configFile) {
+		this(configClass, "gw", configFile);
 	}
 
 	@Override
