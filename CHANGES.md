@@ -1,9 +1,9 @@
 # GWizard Release Notes
 
-# 1.1.5
+# 1.1.6
 2024-09-21
 
-* `ConfigModule` is now a generic class, and type `<T>` is the config file class. 
+* `ConfigModule` is now a generic class, and type `<T>` is the config file class.
 
 # 1.1.4
 2024-09-20
