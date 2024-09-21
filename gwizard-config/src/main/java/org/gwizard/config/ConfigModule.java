@@ -13,13 +13,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 
 /**
- * Module which sets up the configuration object. That object can be anything derived from the Config class.
+ * Module which sets up the configuration object.
+ *
+ * @param <T> is the type of the configuration object.
  */
 @Slf4j
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
-public class ConfigModule extends AbstractModule {
-	private final Class<?> configClass;
+public class ConfigModule<T> extends AbstractModule {
+	private final Class<T> configClass;
 	private final String propertyPrefix;
 	private final File configFile;
 
@@ -27,7 +29,7 @@ public class ConfigModule extends AbstractModule {
 	 * We will eventually support multiple config files, so that needs to go last.
 	 */
 	@Deprecated
-	public ConfigModule(final File configFile, final Class<?> configClass, final String propertyPrefix) {
+	public ConfigModule(final File configFile, final Class<T> configClass, final String propertyPrefix) {
 		this(configClass, propertyPrefix, configFile);
 	}
 
@@ -35,14 +37,14 @@ public class ConfigModule extends AbstractModule {
 	 * We will eventually support multiple config files, so that needs to go last.
 	 */
 	@Deprecated
-	public ConfigModule(final File configFile, final Class<?> configClass) {
+	public ConfigModule(final File configFile, final Class<T> configClass) {
 		this(configClass, configFile);
 	}
 
 	/**
 	 * Defaults to the property prefix of "gw"
 	 */
-	public ConfigModule(final Class<?> configClass, final File configFile) {
+	public ConfigModule(final Class<T> configClass, final File configFile) {
 		this(configClass, "gw", configFile);
 	}
 
@@ -60,7 +62,7 @@ public class ConfigModule extends AbstractModule {
 
 	@Provides
 	@ConfigClass
-	public Class<?> configClass() {
+	public Class<T> configClass() {
 		return configClass;
 	}
 

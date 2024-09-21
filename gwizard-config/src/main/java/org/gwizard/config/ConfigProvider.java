@@ -27,12 +27,16 @@ public class ConfigProvider<T> implements Provider<T> {
 	public ConfigProvider(
 			Validator validator,
 			ObjectMapper objectMapper,
-			@ConfigClass Class<?> configClass,
+			@ConfigClass Class<T> configClass,
 			@PropertyPrefix String propertyPrefix,
 			@ConfigFile File configFile) {
 
 		this.configurationFactory = new YamlConfigurationFactory<>(configClass, validator, objectMapper, propertyPrefix);
 		this.configFile = configFile;
+	}
+
+	public ConfigProvider(final ConfigModule<T> configModule, final ObjectMapper objectMapper) {
+		this(configModule.validator(), objectMapper, configModule.configClass(), configModule.propertyPrefix(), configModule.configFile());
 	}
 
 	public T get() {
@@ -42,5 +46,13 @@ public class ConfigProvider<T> implements Provider<T> {
 		} catch (IOException | ConfigurationException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Convenience method if we need to read a configuration before the injector is loaded.
+	 * For example, maybe we have some config that determines which modules to load.
+	 */
+	public static <C> C read(final ConfigModule<C> configModule, final ObjectMapper mapper) {
+		return new ConfigProvider<C>(configModule, mapper).get();
 	}
 }
