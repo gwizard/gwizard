@@ -22,7 +22,7 @@ Instantiate the `ConfigModule` by passing it a config File (typically `args[0]`)
 
 ```java
 File configFile = new File("somefile.yml");
-ConfigModule configModule = new ConfigModule(configFile, MyConfig.class);
+ConfigModule<MyConfig> configModule = new ConfigModule<>(configFile, MyConfig.class);
 Injector injector = Guice.createInjector(configModule);
 ```
 
