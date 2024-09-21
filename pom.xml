@@ -3,7 +3,7 @@
 
 	<groupId>org.gwizard</groupId>
 	<artifactId>gwizard-parent</artifactId>
-	<version>1.1.6-SNAPSHOT</version>
+	<version>1.1.6</version>
 	<packaging>pom</packaging>
 
 	<name>GWizard</name>
@@ -55,7 +55,7 @@
 	<scm>
 		<url>scm:git:https://github.com/gwizard/gwizard.git</url>
 		<developerConnection>scm:git:git@github.com:gwizard/gwizard.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>1.1.6</tag>
 	</scm>
 
 	<licenses>
