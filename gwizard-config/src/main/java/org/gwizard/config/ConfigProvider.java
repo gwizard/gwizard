@@ -36,12 +36,9 @@ public class ConfigProvider<T> implements Provider<T> {
 	}
 
 	public T get() {
-		if (!configFile.exists())
-			throw new IllegalStateException("No such config file " + configFile);
-
 		try {
 			//noinspection unchecked
-			return (T)configurationFactory.build(configFile);
+			return (T)configurationFactory.build(new ImportingConfigurationSourceProvider(), configFile.toString());
 		} catch (IOException | ConfigurationException e) {
 			throw new RuntimeException(e);
 		}

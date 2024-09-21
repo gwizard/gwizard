@@ -15,7 +15,7 @@ class ImportingConfigurationSourceProviderTest {
 
 		final ImportingConfigurationSourceProvider source = new ImportingConfigurationSourceProvider();
 
-		try (final InputStream stream = source.open("gwizard-config/src/test/resources/parent.yaml")) {
+		try (final InputStream stream = source.open(pathToTestParentYaml())) {
 			final JsonNode root = ImportingConfigurationSourceProvider.MAPPER.readTree(stream);
 
 			assertThat(root.path("gwizard")).isEmpty();
@@ -31,5 +31,14 @@ class ImportingConfigurationSourceProviderTest {
 
 			assertThat(root.path("seventh").asText()).isEqualTo("ggg2");
 		}
+	}
+
+	/**
+	 * Careful...
+	 * Running from the IDE: cwd is project root
+	 * Running from maven: cwd is gwizard-config
+	 */
+	private String pathToTestParentYaml() {
+		return Thread.currentThread().getContextClassLoader().getResource("parent.yaml").getPath();
 	}
 }
