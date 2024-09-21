@@ -75,10 +75,12 @@ gwizard:
   import:
     - extraconfig.yaml
     - ../other/moreconfig.yaml 
+    - /with/absolute/path.haml 
 ```
 
 GWizard will merge the yaml files, with later properties overriding earlier properties.
 
+* Unless absolute (with leading separator), paths are relative to the current config file.
 * Imports always override the contents of the base file.
 * It doesn't matter where you put the `gwizard` subtree; imports always override the base file.
 * This doesn't work recursively (yet); you can't have imports in your imports.
