@@ -66,6 +66,23 @@ The prefix can be changed by passing an extra parameter to `ConfigModule`:
 ConfigModule configModule = new ConfigModule(configFile, MyConfig.class, "artichoke");
 ```
 
+### Imports
+
+You can import other configuration files from within your configuration file by putting this in your file:
+
+```yaml
+gwizard:
+  import:
+    - extraconfig.yaml
+    - ../other/moreconfig.yaml 
+```
+
+GWizard will merge the yaml files, with later properties overriding earlier properties.
+
+* Imports always override the contents of the base file.
+* It doesn't matter where you put the `gwizard` subtree; imports always override the base file.
+* This doesn't work recursively (yet); you can't have imports in your imports.
+
 ## Best Practices
 
 It is generally handy to put all of your application configuration in a single file. This means that different modules
