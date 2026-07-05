@@ -29,27 +29,26 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<guice.version>7.0.0</guice.version>
-		<resteasy.version>6.2.8.Final</resteasy.version>
-		<jakartaee.version>10.0.0</jakartaee.version>
+		<resteasy.version>7.0.2.Final</resteasy.version>
+		<jakartaee.version>11.0.0</jakartaee.version>
 
-		<jetty.version>12.0.8</jetty.version>
-		<jackson.version>2.17.0</jackson.version>
-		<slf4j.version>2.0.13</slf4j.version>
-		<logback.version>1.5.6</logback.version>
-		<guava.version>33.1.0-jre</guava.version>
-		<metrics.version>4.2.25</metrics.version>
+		<jetty.version>12.1.10</jetty.version>
+		<jackson.version>2.22.0</jackson.version>
+		<slf4j.version>2.0.18</slf4j.version>
+		<logback.version>1.5.36</logback.version>
+		<guava.version>33.6.0-jre</guava.version>
+		<metrics.version>4.2.39</metrics.version>
 		<metricsguice.version>3.2.2</metricsguice.version>	<!-- 5.x requires metrics 5.x which isn't GA yet -->
-		<dropwizard.version>4.0.7</dropwizard.version>
-        <hibernate.core.version>6.5.0.Final</hibernate.core.version>
-		<hibernate.validator.version>8.0.1.Final</hibernate.validator.version>
-		<validation.api.version>3.0.2</validation.api.version>
-		<snakeyaml.version>2.2</snakeyaml.version>
-		<swagger.version>2.2.21</swagger.version>
-		<servlet-api.version>6.0.0</servlet-api.version>
-		<jaxrs-api.version>3.0.12.Final</jaxrs-api.version>
-		<assertj.version>3.26.0</assertj.version>
-		<junit.version>5.10.3</junit.version>
-		<mockito.version>5.12.0</mockito.version>
+		<dropwizard.version>5.0.2</dropwizard.version>
+        <hibernate.core.version>7.4.4.Final</hibernate.core.version>
+		<hibernate.validator.version>9.1.1.Final</hibernate.validator.version>
+		<expressly.version>6.0.0</expressly.version>
+		<swagger.version>2.2.52</swagger.version>
+		<servlet-api.version>6.1.0</servlet-api.version>
+		<jaxrs-api.version>4.0.0.Final</jaxrs-api.version>
+		<assertj.version>3.28.3</assertj.version>
+		<junit.version>5.13.4</junit.version>
+		<mockito.version>5.20.0</mockito.version>
 	</properties>
 
 	<scm>
@@ -81,12 +80,12 @@
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
 		</snapshotRepository>
 		<repository>
 			<id>ossrh</id>
 			<name>Nexus Release Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<url>https://ossrh-staging-api.central.sonatype.com/service/local/</url>
 		</repository>
 	</distributionManagement>
 
@@ -123,7 +122,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.12.1</version>
+				<version>3.14.1</version>
 				<configuration>
 					<release>17</release>
 				</configuration>
@@ -132,7 +131,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.4.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -145,7 +144,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.6.3</version>
+				<version>3.12.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -161,13 +160,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.2.5</version>
+				<version>3.5.6</version>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.3.1</version>
 				<configuration>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<releaseProfiles>release-sign-artifacts</releaseProfiles>
@@ -175,14 +174,13 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.13</version>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>0.10.0</version>
 				<extensions>true</extensions>
 				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+					<publishingServerId>central</publishingServerId>
+					<autoPublish>true</autoPublish>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -192,7 +190,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.34</version>
+			<version>1.18.46</version>
 			<scope>provided</scope> <!-- only needed at build time -->
 		</dependency>
 
@@ -230,11 +228,17 @@
 			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.25.3</version>
+            <version>3.27.6</version>
 			<scope>test</scope>
         </dependency>
 	</dependencies>

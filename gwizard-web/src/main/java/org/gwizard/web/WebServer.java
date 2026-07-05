@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.eclipse.jetty.ee10.servlet.DefaultServlet;
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.servlet.DefaultServlet;
+import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 

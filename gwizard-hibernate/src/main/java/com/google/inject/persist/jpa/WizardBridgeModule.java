@@ -7,10 +7,10 @@ import org.gwizard.hibernate.DatabaseConfig;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.hibernate.cfg.AvailableSettings.DRIVER;
-import static org.hibernate.cfg.AvailableSettings.PASS;
-import static org.hibernate.cfg.AvailableSettings.URL;
-import static org.hibernate.cfg.AvailableSettings.USER;
+import static org.hibernate.cfg.JdbcSettings.JAKARTA_JDBC_DRIVER;
+import static org.hibernate.cfg.JdbcSettings.JAKARTA_JDBC_PASSWORD;
+import static org.hibernate.cfg.JdbcSettings.JAKARTA_JDBC_URL;
+import static org.hibernate.cfg.JdbcSettings.JAKARTA_JDBC_USER;
 
 /**
  * This allows us to pull database config out of Guice instead of hardcoding it in the
@@ -33,16 +33,16 @@ public class WizardBridgeModule extends AbstractModule {
 		Properties props = new Properties();
 
 		if (cfg.getDriverClass() != null)
-			props.setProperty(DRIVER, cfg.getDriverClass());
+			props.setProperty(JAKARTA_JDBC_DRIVER, cfg.getDriverClass());
 
 		if (cfg.getUrl() != null)
-			props.setProperty(URL, cfg.getUrl());
+			props.setProperty(JAKARTA_JDBC_URL, cfg.getUrl());
 
 		if (cfg.getUser() != null)
-			props.setProperty(USER, cfg.getUser());
+			props.setProperty(JAKARTA_JDBC_USER, cfg.getUser());
 
 		if (cfg.getPassword() != null)
-			props.setProperty(PASS, cfg.getPassword());
+			props.setProperty(JAKARTA_JDBC_PASSWORD, cfg.getPassword());
 
 		if (cfg.getProperties() != null)
 			props.putAll(cfg.getProperties());
