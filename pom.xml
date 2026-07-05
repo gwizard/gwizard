@@ -49,6 +49,7 @@
 		<assertj.version>3.28.3</assertj.version>
 		<junit.version>5.13.4</junit.version>
 		<mockito.version>5.20.0</mockito.version>
+		<lombok.version>1.18.46</lombok.version>
 	</properties>
 
 	<scm>
@@ -125,6 +126,13 @@
 				<version>3.14.1</version>
 				<configuration>
 					<release>17</release>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			
@@ -190,7 +198,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.46</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope> <!-- only needed at build time -->
 		</dependency>
 
