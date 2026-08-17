@@ -1,5 +1,14 @@
 # GWizard Release Notes
 
+# 1.2.1
+2026-08-16
+* gwizard-rpc bumps Trivet to 3.0.6
+
+# 1.2.0
+2026-07-05
+* Targets Java 17
+* Multitude of dependency upgrades
+
 # 1.1.6
 2024-09-21
 
