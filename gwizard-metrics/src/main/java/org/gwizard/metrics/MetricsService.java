@@ -1,47 +1,44 @@
 package org.gwizard.metrics;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.jmx.JmxReporter;
-import com.codahale.metrics.jvm.BufferPoolMetricSet;
-import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
-import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
-import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.inject.Inject;
-import lombok.extern.slf4j.Slf4j;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
+import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
 import org.gwizard.services.Services;
 
-import java.lang.management.ManagementFactory;
-
 /**
- * a Service that starts Metrics JmxReporter
+ * Registers JVM meters and closes the application registry and GC listeners on shutdown.
+ * Publishing, if any, is handled by the application's chosen MeterRegistry implementation.
  */
-@Slf4j
 public class MetricsService extends AbstractIdleService {
-	private final MetricRegistry metricRegistry;
-
-	private JmxReporter jmxReporter;
+	private final MeterRegistry registry;
+	private final JvmGcMetrics gcMetrics = new JvmGcMetrics();
 
 	@Inject
-	public MetricsService(Services services, MetricRegistry metricRegistry) {
-		this.metricRegistry = metricRegistry;
-
-		metricRegistry.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
-		metricRegistry.register("jvm.gc", new GarbageCollectorMetricSet());
-		metricRegistry.register("jvm.memory", new MemoryUsageGaugeSet());
-		metricRegistry.register("jvm.threads", new ThreadStatesGaugeSet());
-
+	public MetricsService(final Services services, final MeterRegistry registry) {
+		this.registry = registry;
 		services.add(this);
 	}
 
 	@Override
-	protected void startUp() throws Exception {
-		jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
-		jmxReporter.start();
+	protected void startUp() {
+		new ClassLoaderMetrics().bindTo(registry);
+		new JvmMemoryMetrics().bindTo(registry);
+		new JvmThreadMetrics().bindTo(registry);
+		new ProcessorMetrics().bindTo(registry);
+		gcMetrics.bindTo(registry);
 	}
 
 	@Override
-	protected void shutDown() throws Exception {
-		jmxReporter.stop();
+	protected void shutDown() {
+		try {
+			gcMetrics.close();
+		} finally {
+			registry.close();
+		}
 	}
 }

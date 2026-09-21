@@ -7,7 +7,10 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.Scopes;
 import io.dropwizard.util.Duration;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.gwizard.metrics.MetricsModule;
 import org.gwizard.services.Run;
@@ -30,12 +33,12 @@ public class HealthChecksModuleExample {
 	}
 
 	/**
-	 * dumb example that shows we can also expose health via JMX
+	 * dumb example that shows we can also expose health via Micrometer
 	 */
-	public static class JmxHealthCheck extends AbstractMetricReportingHealthCheck {
+	public static class MetricHealthCheck extends AbstractMetricReportingHealthCheck {
 		public static final String name = "example";
 		@Inject
-		public JmxHealthCheck(HealthChecks healthChecks) {
+		public MetricHealthCheck(HealthChecks healthChecks) {
 			super(healthChecks, name);
 		}
 
@@ -46,13 +49,13 @@ public class HealthChecksModuleExample {
 	}
 
 	/**
-	 * dumb example that shows we can also expose health via JMX
+	 * dumb example that caches health-check gauge samples
 	 */
 	@Slf4j
-	public static class CachedJmxHealthCheck extends AbstractMetricReportingHealthCheck {
+	public static class CachedMetricHealthCheck extends AbstractMetricReportingHealthCheck {
 		public static final String name = "exampleCached";
 		@Inject
-		public CachedJmxHealthCheck(HealthChecks healthChecks) {
+		public CachedMetricHealthCheck(HealthChecks healthChecks) {
 			super(healthChecks, name, Duration.seconds(30));
 		}
 
@@ -77,9 +80,10 @@ public class HealthChecksModuleExample {
 	public static class ExampleModule extends AbstractModule {
 		@Override
 		protected void configure() {
+			bind(MeterRegistry.class).to(SimpleMeterRegistry.class).in(Scopes.SINGLETON);
 			bind(ChronicallyUnhealthy.class).asEagerSingleton();
-			bind(JmxHealthCheck.class).asEagerSingleton();
-			bind(CachedJmxHealthCheck.class).asEagerSingleton();
+			bind(MetricHealthCheck.class).asEagerSingleton();
+			bind(CachedMetricHealthCheck.class).asEagerSingleton();
 			bind(DeadlockHcWrapper.class).asEagerSingleton();
 		}
 
@@ -94,7 +98,7 @@ public class HealthChecksModuleExample {
 	public static void main(String[] args) throws Exception {
 		final Injector injector = Guice.createInjector(
 				new ExampleModule(),
-				new MetricsModule(), // to show checks also exposed as metrics via JMX
+				new MetricsModule(), // to show checks also exposed as Micrometer gauges
 				new HealthChecksModule() // binding for HealthChecks
 		);
 

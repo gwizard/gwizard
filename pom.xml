@@ -38,7 +38,7 @@
 		<logback.version>1.5.36</logback.version>
 		<guava.version>33.6.0-jre</guava.version>
 		<metrics.version>4.2.39</metrics.version>
-		<metricsguice.version>3.2.2</metricsguice.version>	<!-- 5.x requires metrics 5.x which isn't GA yet -->
+		<micrometer.version>1.17.1</micrometer.version>
 		<dropwizard.version>5.0.2</dropwizard.version>
         <hibernate.core.version>7.4.4.Final</hibernate.core.version>
 		<hibernate.validator.version>9.1.1.Final</hibernate.validator.version>

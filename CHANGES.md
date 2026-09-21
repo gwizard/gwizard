@@ -1,5 +1,12 @@
 # GWizard Release Notes
 
+# 1.3.0
+2026-09-20
+* `gwizard-metrics` now uses Micrometer instead of Dropwizard Metrics and metrics-guice.
+  It provides an injectable `MeterRegistry`, Micrometer `@Timed` interception, JVM meters,
+  and lifecycle cleanup. Applications must explicitly bind their chosen registry; there is no default.
+* Health-check gauges now use Micrometer. The Dropwizard health-check API is unchanged.
+
 # 1.2.1
 2026-08-16
 * gwizard-rpc bumps Trivet to 3.0.6

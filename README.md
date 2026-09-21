@@ -145,9 +145,11 @@ If you're already using gwizard-web or gwizard-metrics, you don't need to explic
 
 ### gwizard-metrics
 
-The `MetricsModule` glues in the Metrics library. At the moment, it only adds
-a JMX Reporter to report metrics. It also uses metrics-guice to scan Guice-instantiated
-classes for @Timed, @Metered and other annotations.
+The `MetricsModule` integrates Micrometer, including Guice support for `@Timed`,
+JVM meters, and registry lifecycle management. Applications must explicitly bind a
+singleton `MeterRegistry` for their chosen backend (or an in-memory registry).
+
+[README for gwizard-metrics](gwizard-metrics/README.md)
 
 ### gwizard-healthchecks
 
