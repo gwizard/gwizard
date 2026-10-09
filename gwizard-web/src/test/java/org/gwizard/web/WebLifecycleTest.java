@@ -6,6 +6,7 @@ import com.google.common.util.concurrent.ServiceManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.ServletModule;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.servlet.AsyncContext;
@@ -140,10 +141,15 @@ class WebLifecycleTest {
 			this(asynchronous, drainMillis, 0);
 		}
 		Fixture(final boolean asynchronous, final long drainMillis, final int port) {
+			this(asynchronous, drainMillis, port, null);
+		}
+		Fixture(final boolean asynchronous, final long drainMillis, final int port, final MeterRegistry registry) {
 			servlet = new WorkServlet(dependency, asynchronous);
 			final ContextHandler context = new ContextHandler(extra, "/extra");
 			final Injector injector = Guice.createInjector(new WebModule(), new ServletModule() {
 				@Override protected void configureServlets() {
+					if (registry != null)
+						bind(MeterRegistry.class).toInstance(registry);
 					bind(WebConfig.class).toInstance(new WebConfigProperties(port, drainMillis));
 					bind(WebServer.class).to(ObservedWebServer.class);
 					bind(Handler.class).toInstance(context);
@@ -167,7 +173,8 @@ class WebLifecycleTest {
 					HttpResponse.BodyHandlers.ofString());
 		}
 		void awaitDraining() throws Exception {
-			final GracefulHandler graceful = (GracefulHandler)web.jetty.getHandler();
+			final Handler root = web.jetty.getHandler();
+			final GracefulHandler graceful = (GracefulHandler)(root instanceof HttpMetricsHandler metrics ? metrics.getHandler() : root);
 			final long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
 			while (!graceful.isShutdown() && System.nanoTime() < deadline)
 				Thread.sleep(5);

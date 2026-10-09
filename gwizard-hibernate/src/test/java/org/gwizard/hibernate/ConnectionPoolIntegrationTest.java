@@ -8,6 +8,8 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.google.inject.persist.PersistService;
 import com.zaxxer.hikari.HikariDataSource;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.validation.Validation;
 import org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProvider;
@@ -32,6 +34,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
+import java.util.function.BooleanSupplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,12 +51,14 @@ import static org.mockito.Mockito.when;
 class ConnectionPoolIntegrationTest {
 
 	private Injector injector;
+	private final SimpleMeterRegistry registry = new SimpleMeterRegistry();
 
 	@AfterEach
 	void stop() {
 		if (injector != null)
 			injector.getInstance(PersistService.class).stop();
 		PoolJndiFactory.dataSource = null;
+		registry.close();
 	}
 
 	private static DatabaseConfigProperties jdbcConfig() {
@@ -71,6 +77,102 @@ class ConnectionPoolIntegrationTest {
 	private ConnectionProvider provider() {
 		return injector.getInstance(EntityManagerFactory.class).unwrap(SessionFactoryImplementor.class)
 				.getServiceRegistry().requireService(ConnectionProvider.class);
+	}
+
+	private ConnectionProvider openWithMetrics(final DatabaseConfig config, final HibernateModule module) {
+		injector = Guice.createInjector(module, binder -> {
+			binder.bind(DatabaseConfig.class).toInstance(config);
+			binder.bind(MeterRegistry.class).toInstance(registry);
+		});
+		return provider();
+	}
+
+	@Test
+	void defaultPoolMetricsMeasureAcquisitionContentionTimeoutsAndUsageAndAreRemovedOnClose() throws Exception {
+		final DatabaseConfigProperties config = jdbcConfig();
+		config.getPool().setMaxPoolSize(1);
+		config.getPool().setConnectionTimeoutMillis(500);
+		final ConnectionProvider provider = openWithMetrics(config, new HibernateModule());
+		final HikariDataSource pool = provider.unwrap(HikariDataSource.class);
+		assertThat(pool.getMetricRegistry()).isSameAs(registry);
+		final var borrower = Executors.newSingleThreadExecutor();
+		try (var held = provider.getConnection()) {
+			final var waiting = borrower.submit(() -> {
+				try (var connection = provider.getConnection()) {
+					return (SQLException)null;
+				} catch (SQLException failure) {
+					return failure;
+				}
+			});
+			await(() -> pool.getHikariPoolMXBean().getThreadsAwaitingConnection() == 1);
+			assertThat(registry.get("hikaricp.connections.pending").gauge().value()).isEqualTo(1);
+			assertThat(registry.get("hikaricp.connections.active").gauge().value()).isEqualTo(1);
+			assertThat(registry.get("hikaricp.connections.max").gauge().value()).isEqualTo(1);
+			assertThat((Throwable)waiting.get(5, TimeUnit.SECONDS)).isInstanceOf(SQLTransientConnectionException.class);
+			assertThat(registry.get("hikaricp.connections.timeout").counter().count()).isEqualTo(1);
+			assertThat(registry.get("hikaricp.connections.acquire").timer().count()).isEqualTo(2);
+			assertThat(registry.get("hikaricp.connections.acquire").timer().totalTime(TimeUnit.MILLISECONDS)).isGreaterThan(250);
+		} finally {
+			borrower.shutdownNow();
+		}
+		query(provider);
+		assertThat(registry.get("hikaricp.connections.usage").timer().count()).isEqualTo(2);
+		injector.getInstance(PersistService.class).stop();
+		assertThat(registry.getMeters()).noneMatch(meter -> meter.getId().getName().startsWith("hikaricp."));
+		assertThat(registry.isClosed()).isFalse();
+	}
+
+	@Test
+	void explicitlyConfiguredHibernateHikariPoolGetsMetricsToo() throws Exception {
+		final ConnectionProvider provider = openWithMetrics(new DatabaseConfigProperties(), new HibernateModule("xml-hikari"));
+		assertThat(provider).isExactlyInstanceOf(HikariCPConnectionProvider.class);
+		query(provider);
+		assertThat(registry.get("hikaricp.connections.acquire").timer().count()).isEqualTo(1);
+		assertThat(provider.unwrap(HikariDataSource.class).getMaximumPoolSize()).isEqualTo(3);
+	}
+
+	@Test
+	void suppliedHikariPoolGetsMetricsAndKeepsItsLifecycle() throws Exception {
+		try (var pool = applicationPool()) {
+			injector = Guice.createInjector(new HibernateModule().withDataSource(DataSource.class), binder -> {
+				binder.bind(DataSource.class).toInstance(pool);
+				binder.bind(DatabaseConfig.class).toInstance(new DatabaseConfigProperties());
+				binder.bind(MeterRegistry.class).toInstance(registry);
+			});
+			query(provider());
+			assertThat(pool.getMetricRegistry()).isSameAs(registry);
+			assertThat(registry.get("hikaricp.connections.acquire").timer().count()).isEqualTo(1);
+			injector.getInstance(PersistService.class).stop();
+			assertThat(pool.isClosed()).isFalse();
+			assertThat(registry.find("hikaricp.connections.active").gauge()).isNotNull();
+		}
+		assertThat(registry.find("hikaricp.connections.active").gauge()).isNull();
+	}
+
+	@Test
+	void suppliedPoolsExistingMetricsConfigurationIsPreserved() throws Exception {
+		final var otherRegistry = new SimpleMeterRegistry();
+		try (var pool = applicationPool()) {
+			pool.setMetricRegistry(otherRegistry);
+			injector = Guice.createInjector(new HibernateModule().withDataSource(DataSource.class), binder -> {
+				binder.bind(DataSource.class).toInstance(pool);
+				binder.bind(DatabaseConfig.class).toInstance(new DatabaseConfigProperties());
+				binder.bind(MeterRegistry.class).toInstance(registry);
+			});
+			query(provider());
+			assertThat(pool.getMetricRegistry()).isSameAs(otherRegistry);
+			assertThat(otherRegistry.get("hikaricp.connections.acquire").timer().count()).isPositive();
+			assertThat(registry.getMeters()).noneMatch(meter -> meter.getId().getName().startsWith("hikaricp."));
+		} finally {
+			otherRegistry.close();
+		}
+	}
+
+	private static void await(final BooleanSupplier ready) throws Exception {
+		final long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+		while (!ready.getAsBoolean() && System.nanoTime() < deadline)
+			Thread.sleep(5);
+		assertThat(ready.getAsBoolean()).isTrue();
 	}
 
 	private static void query(final ConnectionProvider provider) throws SQLException {

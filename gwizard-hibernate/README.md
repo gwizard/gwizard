@@ -1,5 +1,11 @@
 # GWizard Hibernate
 
+When an application binds Micrometer's `MeterRegistry`, Hibernate integration automatically
+records transaction attempts, retries, serialization failures, and retry exhaustion.
+Hikari pools also expose acquisition/usage timers, timeouts, and capacity gauges unless
+they already have metrics configured. See [the metrics reference](../gwizard-metrics/README.md#http-and-database-metrics).
+A registry binding is optional; application-supplied pools retain ownership of their lifecycle.
+
 Love it or hate it, you probably have had to use it. `HibernateModule` integrates
 [Guice Persist](https://github.com/google/guice/wiki/GuicePersist) with Hibernate for JPA access to a relational database.
 It supplies database configuration, a default HikariCP connection pool, and automatic transaction retries

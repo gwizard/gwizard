@@ -81,7 +81,7 @@ class LogCallInterceptorTest {
 
 		assertThat(example.echo("hello", null)).isNull();
 		assertThat(appender.list).extracting(ILoggingEvent::getFormattedMessage)
-				.containsExactly("Calling Example.echo(\"hello\", null)", "Returning null");
+				.containsExactly("Calling echo(\"hello\", null)", "Returning null");
 		assertThat(appender.list).extracting(ILoggingEvent::getLoggerName)
 				.containsOnly(Example.class.getName());
 	}
@@ -93,7 +93,7 @@ class LogCallInterceptorTest {
 
 		assertThat(example.hiddenResult()).isSameAs(example.result);
 		assertThat(appender.list).extracting(ILoggingEvent::getFormattedMessage)
-				.containsExactly("Calling Example.hiddenResult()");
+				.containsExactly("Calling hiddenResult()");
 	}
 
 	@Test
@@ -103,7 +103,7 @@ class LogCallInterceptorTest {
 
 		assertThatThrownBy(example::fail).isSameAs(example.failure);
 		assertThat(appender.list).extracting(ILoggingEvent::getFormattedMessage)
-				.containsExactly("Calling Example.fail()", "Threw java.lang.IllegalStateException: failure");
+				.containsExactly("Calling fail()", "Threw java.lang.IllegalStateException: failure");
 	}
 
 	static class ThrowingToString {

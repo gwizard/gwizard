@@ -6,6 +6,8 @@ import com.google.inject.persist.PersistFilter;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.Transactional;
 import com.google.inject.util.Modules;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import jakarta.persistence.EntityManager;
@@ -36,6 +38,7 @@ class TransactionRetryIntegrationTest {
 
 	private Injector injector;
 	private Work work;
+	private final SimpleMeterRegistry registry = new SimpleMeterRegistry();
 
 	@BeforeEach
 	void setUp() {
@@ -45,7 +48,10 @@ class TransactionRetryIntegrationTest {
 		config.getTransactionRetry().setMaxAttempts(3);
 		config.getTransactionRetry().setMaxBackoffMillis(1);
 		config.getProperties().put("hibernate.connection.isolation", "8"); // SERIALIZABLE
-		injector = Guice.createInjector(new HibernateModule(), binder -> binder.bind(DatabaseConfig.class).toInstance(config));
+		injector = Guice.createInjector(new HibernateModule(), binder -> {
+			binder.bind(DatabaseConfig.class).toInstance(config);
+			binder.bind(MeterRegistry.class).toInstance(registry);
+		});
 		work = injector.getInstance(Work.class);
 	}
 
@@ -53,11 +59,13 @@ class TransactionRetryIntegrationTest {
 	void tearDown() {
 		injector.getInstance(JpaPersistService.class).end();
 		injector.getInstance(PersistService.class).stop();
+		registry.close();
 	}
 
 	@Test
 	void methodFailuresRollBackWritesAndReplaceEntityManager() {
 		work.create(2);
+		assertMetrics(3, 2, 2, 0);
 		assertThat(work.attempts).hasSize(3).doesNotHaveDuplicates();
 		assertThat(work.attempts).allMatch(manager -> !manager.isOpen());
 		assertThat(work.count()).isEqualTo(1);
@@ -69,6 +77,7 @@ class TransactionRetryIntegrationTest {
 		final OuterWork outer = injector.getInstance(OuterWork.class);
 		outer.inner = work;
 		outer.create();
+		assertMetrics(3, 2, 2, 0);
 		assertThat(outer.attempts).containsExactlyElementsOf(work.attempts).hasSize(3);
 		assertThat(work.count()).isEqualTo(2); // Both outer and inner writes from just the successful attempt.
 	}
@@ -95,6 +104,7 @@ class TransactionRetryIntegrationTest {
 	@Test
 	void exhaustionUsesConfiguredAttemptCountAndLeavesNoWrites() {
 		final Throwable failure = catchThrowable(() -> work.create(10));
+		assertMetrics(3, 2, 3, 1);
 		assertThat(work.attempts).hasSize(3);
 		assertThat(failure).isSameAs(work.failures.get(2));
 		assertThat(work.count()).isZero();
@@ -104,6 +114,7 @@ class TransactionRetryIntegrationTest {
 	@Test
 	void ordinaryFailuresAreNotRetriedAndRollbackMetadataStillWorks() throws Exception {
 		assertThatThrownBy(work::ordinaryFailure).isInstanceOf(IllegalArgumentException.class);
+		assertMetrics(1, 0, 0, 0);
 		assertThat(work.attempts).hasSize(1);
 		assertThat(work.count()).isZero();
 
@@ -150,6 +161,13 @@ class TransactionRetryIntegrationTest {
 					binder.bind(PersistService.class).toInstance(service);
 				}))).hasMessageContaining("transactionRetry.maxAttempts must be at least 1");
 		verifyNoInteractions(service);
+	}
+
+	private void assertMetrics(final double attempts, final double retries, final double failures, final double exhausted) {
+		assertThat(registry.get("db.transaction.attempts").tag("persistence.unit", "gw-persistence-unit").counter().count()).isEqualTo(attempts);
+		assertThat(registry.get("db.transaction.retries").counter().count()).isEqualTo(retries);
+		assertThat(registry.get("db.transaction.serialization.failures").counter().count()).isEqualTo(failures);
+		assertThat(registry.get("db.transaction.retry.exhausted").counter().count()).isEqualTo(exhausted);
 	}
 
 	private static PersistenceException serializationFailure() {

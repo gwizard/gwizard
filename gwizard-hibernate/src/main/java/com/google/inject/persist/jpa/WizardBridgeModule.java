@@ -8,12 +8,17 @@ import com.google.inject.Singleton;
 import com.google.inject.persist.PersistModule;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.UnitOfWork;
+import com.zaxxer.hikari.HikariDataSource;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.gwizard.hibernate.ConnectionPoolContributor;
 import org.gwizard.hibernate.DatabaseConfig;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -37,6 +42,7 @@ import static org.hibernate.cfg.JdbcSettings.JPA_NON_JTA_DATASOURCE;
  * {@code @Jpa} qualifier. JpaPersistModule constructs its transaction interceptor directly, so
  * we provide the persistence bindings here and let PersistModule install our interceptor.
  */
+@Slf4j
 public class WizardBridgeModule extends PersistModule {
 	@SuppressWarnings("deprecation") // Legacy datasource keys may still appear in application configuration.
 	private static final Set<String> DATA_SOURCE_SETTINGS = Set.of(
@@ -82,6 +88,20 @@ public class WizardBridgeModule extends PersistModule {
 		Initializer(final RetryingTransactionInterceptor transactions, final PersistService service) {
 			// Constructing the interceptor validates retry settings before opening the connection pool.
 			service.start();
+		}
+
+		@com.google.inject.Inject(optional = true)
+		void bindPoolMetrics(final MeterRegistry registry, final EntityManagerFactory factory) {
+			try {
+				final ConnectionProvider provider = factory.unwrap(SessionFactoryImplementor.class)
+						.getServiceRegistry().getService(ConnectionProvider.class);
+				if (provider != null && provider.isUnwrappableAs(DataSource.class)
+						&& provider.unwrap(DataSource.class) instanceof HikariDataSource pool
+						&& pool.getMetricRegistry() == null && pool.getMetricsTrackerFactory() == null)
+					pool.setMetricRegistry(registry);
+			} catch (RuntimeException failure) {
+				log.warn("Unable to bind connection pool metrics", failure);
+			}
 		}
 	}
 

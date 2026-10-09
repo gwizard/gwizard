@@ -1,5 +1,10 @@
 # GWizard Web
 
+When an application binds Micrometer's `MeterRegistry`, the web server automatically
+records HTTP duration/counts by method and status, active requests, and Jetty thread
+usage/queued work. See [the metrics reference](../gwizard-metrics/README.md#http-and-database-metrics)
+for meter names, scope, and histogram configuration. A registry binding is optional.
+
 Provides a Jetty web server so that your application can start up and serve requests. If you're building
 REST services, you probably won't install this module directly - it's installed automatically by
 the `RestModule`. If you just want to `serve()` or `filter()` requests from your Guice ServletModules,

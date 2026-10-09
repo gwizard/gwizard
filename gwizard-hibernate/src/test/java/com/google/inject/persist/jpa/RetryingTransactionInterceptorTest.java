@@ -1,6 +1,9 @@
 package com.google.inject.persist.jpa;
 
 import com.google.inject.persist.Transactional;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Meter;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -32,6 +35,7 @@ class RetryingTransactionInterceptorTest {
 	private MethodInvocation invocation;
 	private RetryingTransactionInterceptor.Sleeper sleeper;
 	private TransactionRetryConfig config;
+	private final SimpleMeterRegistry registry = new SimpleMeterRegistry();
 
 	public static class Work {
 		@Transactional
@@ -59,6 +63,7 @@ class RetryingTransactionInterceptorTest {
 	void tearDown() {
 		Thread.interrupted();
 		persistence.end();
+		registry.close();
 	}
 
 	private static EntityTransaction transaction(final EntityManager manager) {
@@ -73,7 +78,9 @@ class RetryingTransactionInterceptorTest {
 	}
 
 	private RetryingTransactionInterceptor interceptor() {
-		return new RetryingTransactionInterceptor(persistence, config, sleeper);
+		final var interceptor = new RetryingTransactionInterceptor(persistence, config, sleeper);
+		interceptor.bindMetrics(registry, "test");
+		return interceptor;
 	}
 
 	private static PersistenceException serializationFailure() {
@@ -97,6 +104,8 @@ class RetryingTransactionInterceptorTest {
 		verify(secondTransaction).commit();
 		verify(second).close();
 		assertThat(persistence.isWorking()).isFalse();
+		assertThat(registry.get("db.transaction.attempts").counter().count()).isEqualTo(2);
+		assertThat(registry.get("db.transaction.retries").counter().count()).isEqualTo(1);
 	}
 
 	@Test
@@ -145,6 +154,9 @@ class RetryingTransactionInterceptorTest {
 		assertThat(Thread.currentThread().isInterrupted()).isTrue();
 		verify(invocation).proceed();
 		verify(first).close();
+		assertThat(registry.get("db.transaction.attempts").counter().count()).isEqualTo(1);
+		assertThat(registry.get("db.transaction.retries").counter().count()).isZero();
+		assertThat(registry.get("db.transaction.retry.exhausted").counter().count()).isZero();
 	}
 
 	@Test
@@ -176,5 +188,29 @@ class RetryingTransactionInterceptorTest {
 		verify(firstTransaction, never()).rollback();
 		verify(first, never()).close();
 		verifyNoInteractions(sleeper);
+		assertThat(registry.get("db.transaction.attempts").counter().count()).isZero();
+	}
+
+	@Test
+	void metricsFailuresDoNotChangeTheTransactionOrRetryResult() throws Throwable {
+		final SimpleMeterRegistry brokenRegistry = new SimpleMeterRegistry() {
+			@Override protected Counter newCounter(final Meter.Id id) {
+				return new Counter() {
+					@Override public Id getId() { return id; }
+					@Override public void increment(final double amount) { throw new IllegalStateException("metrics unavailable"); }
+					@Override public double count() { return 0; }
+				};
+			}
+		};
+		try {
+			final var interceptor = new RetryingTransactionInterceptor(persistence, config, sleeper);
+			interceptor.bindMetrics(brokenRegistry, "test");
+			doThrow(new RollbackException(serializationFailure())).when(firstTransaction).commit();
+			assertThat(interceptor.invoke(invocation)).isEqualTo("success");
+			verify(invocation, times(2)).proceed();
+			verify(secondTransaction).commit();
+		} finally {
+			brokenRegistry.close();
+		}
 	}
 }

@@ -2,6 +2,7 @@ package org.gwizard.web;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,12 @@ public class WebServer {
 
 	private Server server;
 	private GracefulHandler gracefulHandler;
+	private MeterRegistry meterRegistry;
+
+	@com.google.inject.Inject(optional = true)
+	void setMeterRegistry(final MeterRegistry registry) {
+		this.meterRegistry = registry;
+	}
 
 	@Inject
 	public WebServer(final WebConfig webConfig, final EventListenerScanner eventListenerScanner, final HandlerScanner handlerScanner) {
@@ -70,7 +77,7 @@ public class WebServer {
 		handlerScanner.accept(handlers::addHandler);
 
 		gracefulHandler = new GracefulHandler(handlers);
-		server.setHandler(gracefulHandler);
+		server.setHandler(meterRegistry == null ? gracefulHandler : new HttpMetricsHandler(gracefulHandler, meterRegistry));
 
 		// Start the server
 		try {

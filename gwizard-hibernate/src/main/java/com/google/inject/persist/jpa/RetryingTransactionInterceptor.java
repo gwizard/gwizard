@@ -2,6 +2,8 @@ package com.google.inject.persist.jpa;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.persistence.EntityTransaction;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -26,6 +28,26 @@ final class RetryingTransactionInterceptor implements MethodInterceptor {
 	private final TransactionRetryPolicy policy;
 	private final Sleeper sleeper;
 	private final ThreadLocal<Boolean> executing = new ThreadLocal<>();
+	private Counter attempts;
+	private Counter retries;
+	private Counter serializationFailures;
+	private Counter exhausted;
+
+	@Inject(optional = true)
+	void bindMetrics(final MeterRegistry registry, @Jpa final String persistenceUnit) {
+		try {
+			attempts = Counter.builder("db.transaction.attempts").tag("persistence.unit", persistenceUnit)
+					.description("Transaction attempts started by GWizard, including retries").register(registry);
+			retries = Counter.builder("db.transaction.retries").tag("persistence.unit", persistenceUnit)
+					.description("Additional transaction attempts actually started after SQLSTATE 40001").register(registry);
+			serializationFailures = Counter.builder("db.transaction.serialization.failures").tag("persistence.unit", persistenceUnit)
+					.description("Transaction attempts that failed with SQLSTATE 40001").register(registry);
+			exhausted = Counter.builder("db.transaction.retry.exhausted").tag("persistence.unit", persistenceUnit)
+					.description("Transactions that reached maxAttempts with SQLSTATE 40001").register(registry);
+		} catch (RuntimeException failure) {
+			log.warn("Unable to bind transaction metrics", failure);
+		}
+	}
 
 	@Inject
 	RetryingTransactionInterceptor(final JpaPersistService persistence, final DatabaseConfig config) {
@@ -74,6 +96,9 @@ final class RetryingTransactionInterceptor implements MethodInterceptor {
 
 	private Object retry(final MethodInvocation invocation, final Transactional metadata) throws Throwable {
 		for (int attempt = 1; ; attempt++) {
+			increment(attempts);
+			if (attempt > 1)
+				increment(retries);
 			EntityTransaction transaction = null;
 			try {
 				if (!persistence.isWorking())
@@ -83,7 +108,13 @@ final class RetryingTransactionInterceptor implements MethodInterceptor {
 				return execute(invocation, metadata, transaction);
 			} catch (Throwable failure) {
 				final boolean cleanedUp = rollbackAndClose(transaction, failure);
-				if (!cleanedUp || failure instanceof Error || !isSerializationFailure(failure)
+				final boolean serializationFailure = !(failure instanceof Error) && isSerializationFailure(failure);
+				if (serializationFailure) {
+					increment(serializationFailures);
+					if (attempt >= policy.maxAttempts)
+						increment(exhausted);
+				}
+				if (!cleanedUp || !serializationFailure
 						|| attempt >= policy.maxAttempts || Thread.currentThread().isInterrupted())
 					throw failure;
 
@@ -97,6 +128,16 @@ final class RetryingTransactionInterceptor implements MethodInterceptor {
 					addSuppressed(failure, interrupted);
 					throw failure;
 				}
+			}
+		}
+	}
+
+	private static void increment(final Counter counter) {
+		if (counter != null) {
+			try {
+				counter.increment();
+			} catch (RuntimeException failure) {
+				log.warn("Unable to record transaction metric", failure);
 			}
 		}
 	}
