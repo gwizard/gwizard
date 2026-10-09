@@ -25,10 +25,11 @@ public class Run {
 	private final Provider<ServiceManager> serviceManager;
 
 	/**
-	 * Amount of time to wait for services to finish when a stop happens. Default is 5s.
+	 * Amount of time to wait for services to finish when a stop happens. Default is 40s, allowing
+	 * the web server's default 30s request drain plus time to stop dependencies.
 	 */
 	@Getter @Setter
-	private int stopTimeoutSeconds = 5;
+	private int stopTimeoutSeconds = 40;
 
 	/** */
 	@Inject
@@ -57,7 +58,6 @@ public class Run {
 	public void stop() {
 		try {
 			log.debug("Shutting down services...");
-			// Give the services no more than 5 seconds to stop
 			serviceManager.get().stopAsync().awaitStopped(stopTimeoutSeconds, TimeUnit.SECONDS);
 		} catch (TimeoutException ex) {
 			log.error("Timeout waiting for service shutdown", ex);

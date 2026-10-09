@@ -18,6 +18,7 @@ public class Services {
 
 	/** */
 	private final List<Service> services = new ArrayList<>();
+	private final List<Service> servers = new ArrayList<>();
 
 	/** */
 	private final List<Service.Listener> serviceListeners = new ArrayList<>();
@@ -34,7 +35,17 @@ public class Services {
 	 */
 	public void add(final Service service) {
 		checkNotStarted();
+		Preconditions.checkArgument(!services.contains(service), "Service already registered: %s", service);
 		services.add(service);
+	}
+
+	/**
+	 * Register a service that accepts incoming work. Servers start after all ordinary services are
+	 * running, and must finish draining and stopping before ordinary services are stopped.
+	 */
+	public void addServer(final Service service) {
+		add(service);
+		servers.add(service);
 	}
 
 	/**
@@ -64,9 +75,15 @@ public class Services {
 		Preconditions.checkState(!done, "ServiceManager already created; it should be a singleton");
 		done = true;
 
-		final ServiceManager serviceManager = new ServiceManager(services);
+		for (final Service service : services)
+			Preconditions.checkState(service.state() == Service.State.NEW, "Service already started: %s", service);
 
-		serviceManager.addListener(new ServiceManagerListener(), MoreExecutors.directExecutor());
+		final List<Service> managed = servers.isEmpty() ? services : List.of(new PhasedService(
+				services.stream().filter(service -> !servers.contains(service)).toList(), servers));
+		final ServiceManager serviceManager = new ServiceManager(managed);
+
+		final ServiceManagerListener lifecycleListener = new ServiceManagerListener();
+		serviceManager.addListener(lifecycleListener, MoreExecutors.directExecutor());
 
 		for (final ServiceManager.Listener listener : serviceManagerListeners) {
 			serviceManager.addListener(listener, MoreExecutors.directExecutor());
@@ -74,6 +91,16 @@ public class Services {
 
 		for (final Service service : services) {
 			service.addListener(new LoggingServiceListener(service), MoreExecutors.directExecutor());
+			if (!servers.isEmpty()) {
+				service.addListener(new Service.Listener() {
+					@Override
+					public void failed(final Service.State from, final Throwable cause) {
+						// Preserve fail-fast exit even if cleanup hangs. Run's shutdown hook bounds
+						// the wait for the coordinated lifecycle, which remains stoppable meanwhile.
+						lifecycleListener.failure(service);
+					}
+				}, MoreExecutors.directExecutor());
+			}
 
 			for (final Service.Listener listener : serviceListeners) {
 				service.addListener(listener, MoreExecutors.directExecutor());

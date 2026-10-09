@@ -13,4 +13,10 @@ import lombok.NoArgsConstructor;
 public class WebConfigProperties implements WebConfig {
 	/** */
 	private int port = 8080;
+	private long shutdownTimeoutMillis = 30_000;
+
+	/** Retains the convenient port-only constructor. */
+	public WebConfigProperties(final int port) {
+		this.port = port;
+	}
 }

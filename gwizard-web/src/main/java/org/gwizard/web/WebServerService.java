@@ -16,7 +16,7 @@ public class WebServerService extends AbstractIdleService {
     public WebServerService(Services services, WebServer server) {
         this.server = server;
 
-        services.add(this);
+        services.addServer(this);
     }
 
     @Override

@@ -4,10 +4,15 @@ import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.ee11.servlet.DefaultServlet;
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.GracefulHandler;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Simple Jetty-based embedded web server which configures itself from a bound WebConfig and serves the
@@ -15,6 +20,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
  * EventListener objects found in the injector bindings.
  */
 @Singleton
+@Slf4j
 public class WebServer {
 
 	private final WebConfig webConfig;
@@ -22,6 +28,7 @@ public class WebServer {
 	private final HandlerScanner handlerScanner;
 
 	private Server server;
+	private GracefulHandler gracefulHandler;
 
 	@Inject
 	public WebServer(final WebConfig webConfig, final EventListenerScanner eventListenerScanner, final HandlerScanner handlerScanner) {
@@ -37,9 +44,11 @@ public class WebServer {
 	 */
 	public void start() throws Exception {
 		Preconditions.checkState(server == null, "Server already started");
+		Preconditions.checkArgument(webConfig.getShutdownTimeoutMillis() >= 0, "shutdownTimeoutMillis must not be negative");
 
 		// Create the server.
 		server = createServer(webConfig);
+		server.setStopTimeout(webConfig.getShutdownTimeoutMillis());
 
 		final ServletContextHandler sch = createRootServletContextHandler();
 
@@ -52,18 +61,30 @@ public class WebServer {
 		// that have been bound.
 		eventListenerScanner.accept(sch::addEventListener);
 
-        final ContextHandlerCollection handlers = new ContextHandlerCollection();
+		final ContextHandlerCollection handlers = new ContextHandlerCollection();
 
-		// the sch is currently the server handler, add it to the list
+		// Include both the root servlet context and any additional contexts in the lifecycle.
 		handlers.addHandler(sch);
 
 		// This will add any registered jetty Handlers that have been bound.
 		handlerScanner.accept(handlers::addHandler);
 
-		server.setHandler(sch);
+		gracefulHandler = new GracefulHandler(handlers);
+		server.setHandler(gracefulHandler);
 
 		// Start the server
-		server.start();
+		try {
+			server.start();
+		} catch (Exception | Error failure) {
+			// A failed Guava service is not stopped again, so clean up partial Jetty startup here.
+			server.setStopTimeout(0);
+			try {
+				server.stop();
+			} catch (Exception | Error cleanupFailure) {
+				failure.addSuppressed(cleanupFailure);
+			}
+			throw failure;
+		}
 	}
 
 	/**
@@ -89,6 +110,20 @@ public class WebServer {
 	 */
 	public void stop() throws Exception {
 		Preconditions.checkState(server != null, "Server not started");
-		server.stop();
+		try {
+			// Reject new requests, but keep normal connection timeouts while active requests drain.
+			// Server.stop() would otherwise shorten every connection's idle timeout to one second.
+			if (server.getStopTimeout() > 0)
+				gracefulHandler.shutdown().get(server.getStopTimeout(), TimeUnit.MILLISECONDS);
+		} catch (TimeoutException e) {
+			log.warn("Request drain timed out; closing remaining connections");
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw e;
+		} finally {
+			// Draining is complete (or its budget expired). Close idle connections promptly too.
+			server.setStopTimeout(0);
+			server.stop();
+		}
 	}
 }
