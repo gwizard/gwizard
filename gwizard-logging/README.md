@@ -117,6 +117,10 @@ it leaves the default Logback bootstrap configuration intact. Overrides from the
 
 ## `LogCallInterceptor`
 
+Call, return, and exception messages use the intercepted application's class as the logger name.
+Enable DEBUG for that class or its package to see them. When DEBUG is disabled for that logger,
+the interceptor skips annotation lookup and argument formatting and calls the method directly.
+
 The `LogCall` and `LogCallInterceptor` aspect is often useful for eg logging all JAXRS methods:
 
 ```
