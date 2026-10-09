@@ -96,7 +96,9 @@ To shutdown all services:
 
 `Run` registers a JVM shutdown hook and waits up to **40 seconds** for shutdown by default.
 This allows the web server's default 30-second request drain plus time to stop dependencies.
-Customize the overall wait with `Run.setStopTimeoutSeconds(int)` before shutdown. If you
-increase the web drain timeout, increase this overall budget too; the deployment's process
+Customize the overall wait with `Run.setStopTimeout(Duration)` before shutdown, using
+`io.dropwizard.util.Duration`, for example `run.setStopTimeout(Duration.seconds(60))`.
+The duration must be non-null and nonnegative; zero requests an immediate check without waiting.
+If you increase the web drain timeout, increase this overall budget too; the deployment's process
 termination grace period must also accommodate it. A service that never finishes stopping
 can exhaust this budget; the shutdown hook logs the timeout and returns.

@@ -26,6 +26,15 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.dropwizard</groupId>
+			<artifactId>dropwizard-util</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.gwizard</groupId>
 			<artifactId>gwizard-services</artifactId>
 		</dependency>
@@ -54,6 +63,12 @@
 		</dependency>
 
 		<!-- test deps -->
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-yaml</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>

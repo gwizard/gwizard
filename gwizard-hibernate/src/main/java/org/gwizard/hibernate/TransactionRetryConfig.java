@@ -1,7 +1,12 @@
 package org.gwizard.hibernate;
 
+import io.dropwizard.util.Duration;
+import io.dropwizard.validation.MinDuration;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.concurrent.TimeUnit;
 
 /** Configuration for automatic retries of transactions that fail with SQLSTATE 40001. */
 @Data
@@ -11,7 +16,8 @@ public class TransactionRetryConfig {
 	@Min(1)
 	private int maxAttempts = 5;
 
-	/** Maximum backoff in milliseconds. Backoff always uses exponential growth and full jitter. */
-	@Min(1)
-	private long maxBackoffMillis = 250;
+	/** Maximum backoff. Backoff always uses exponential growth and full jitter. */
+	@NotNull
+	@MinDuration(value = 1, unit = TimeUnit.MILLISECONDS)
+	private Duration maxBackoff = Duration.milliseconds(250);
 }

@@ -8,6 +8,7 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.google.inject.persist.PersistService;
 import com.zaxxer.hikari.HikariDataSource;
+import io.dropwizard.util.Duration;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.persistence.EntityManagerFactory;
@@ -91,7 +92,7 @@ class ConnectionPoolIntegrationTest {
 	void defaultPoolMetricsMeasureAcquisitionContentionTimeoutsAndUsageAndAreRemovedOnClose() throws Exception {
 		final DatabaseConfigProperties config = jdbcConfig();
 		config.getPool().setMaxPoolSize(1);
-		config.getPool().setConnectionTimeoutMillis(500);
+		config.getPool().setConnectionTimeout(Duration.milliseconds(500));
 		final ConnectionProvider provider = openWithMetrics(config, new HibernateModule());
 		final HikariDataSource pool = provider.unwrap(HikariDataSource.class);
 		assertThat(pool.getMetricRegistry()).isSameAs(registry);
@@ -201,7 +202,7 @@ class ConnectionPoolIntegrationTest {
 		final DatabaseConfigProperties config = new ObjectMapper(new YAMLFactory()).readValue("""
 				pool:
 				  maxPoolSize: 1
-				  connectionTimeoutMillis: 250
+				  connectionTimeout: 250 ms
 				""", DatabaseConfigProperties.class);
 		config.setUrl(jdbcConfig().getUrl());
 		final ConnectionProvider provider = open(config, new HibernateModule());
@@ -249,7 +250,7 @@ class ConnectionPoolIntegrationTest {
 	void persistenceXmlHikariPropertiesAreNotReplacedByDefaultPoolSettings() {
 		final DatabaseConfigProperties config = new DatabaseConfigProperties();
 		config.getPool().setMaxPoolSize(9);
-		config.getPool().setConnectionTimeoutMillis(9_000);
+		config.getPool().setConnectionTimeout(Duration.seconds(9));
 		final ConnectionProvider provider = open(config, new HibernateModule("xml-hikari"));
 		assertThat(provider).isExactlyInstanceOf(HikariCPConnectionProvider.class);
 		final HikariDataSource pool = provider.unwrap(HikariDataSource.class);
@@ -336,8 +337,8 @@ class ConnectionPoolIntegrationTest {
 		config.getPool().setMaxPoolSize(0);
 		assertThatThrownBy(() -> open(config, new HibernateModule())).hasStackTraceContaining("pool.maxPoolSize");
 		config.getPool().setMaxPoolSize(1);
-		config.getPool().setConnectionTimeoutMillis(249);
-		assertThatThrownBy(() -> open(config, new HibernateModule())).hasStackTraceContaining("pool.connectionTimeoutMillis");
+		config.getPool().setConnectionTimeout(Duration.milliseconds(249));
+		assertThatThrownBy(() -> open(config, new HibernateModule())).hasStackTraceContaining("pool.connectionTimeout");
 	}
 
 	@Test

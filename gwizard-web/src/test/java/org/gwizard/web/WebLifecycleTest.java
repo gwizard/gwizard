@@ -6,6 +6,7 @@ import com.google.common.util.concurrent.ServiceManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.ServletModule;
+import io.dropwizard.util.Duration;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -137,20 +138,20 @@ class WebLifecycleTest {
 		final ServiceManager manager;
 		final ObservedWebServer web;
 		final HttpClient client = HttpClient.newHttpClient();
-		Fixture(final boolean asynchronous, final long drainMillis) {
-			this(asynchronous, drainMillis, 0);
+		Fixture(final boolean asynchronous, final Duration drainTimeout) {
+			this(asynchronous, drainTimeout, 0);
 		}
-		Fixture(final boolean asynchronous, final long drainMillis, final int port) {
-			this(asynchronous, drainMillis, port, null);
+		Fixture(final boolean asynchronous, final Duration drainTimeout, final int port) {
+			this(asynchronous, drainTimeout, port, null);
 		}
-		Fixture(final boolean asynchronous, final long drainMillis, final int port, final MeterRegistry registry) {
+		Fixture(final boolean asynchronous, final Duration drainTimeout, final int port, final MeterRegistry registry) {
 			servlet = new WorkServlet(dependency, asynchronous);
 			final ContextHandler context = new ContextHandler(extra, "/extra");
 			final Injector injector = Guice.createInjector(new WebModule(), new ServletModule() {
 				@Override protected void configureServlets() {
 					if (registry != null)
 						bind(MeterRegistry.class).toInstance(registry);
-					bind(WebConfig.class).toInstance(new WebConfigProperties(port, drainMillis));
+					bind(WebConfig.class).toInstance(new WebConfigProperties(port, drainTimeout));
 					bind(WebServer.class).to(ObservedWebServer.class);
 					bind(Handler.class).toInstance(context);
 					bind(WorkServlet.class).toInstance(servlet);
@@ -195,7 +196,7 @@ class WebLifecycleTest {
 
 	@Test
 	void drainsServletAndAdditionalContextBeforeStoppingDependencies() throws Exception {
-		try (Fixture fixture = new Fixture(false, 5_000)) {
+		try (Fixture fixture = new Fixture(false, Duration.seconds(5))) {
 			fixture.start();
 			final var request = fixture.get("/work");
 			final var extraRequest = fixture.get("/extra/");
@@ -222,7 +223,7 @@ class WebLifecycleTest {
 
 	@Test
 	void asyncRequestCanUseMoreThanJettysOneSecondShutdownIdleTimeout() throws Exception {
-		try (Fixture fixture = new Fixture(true, 5_000)) {
+		try (Fixture fixture = new Fixture(true, Duration.seconds(5))) {
 			fixture.start();
 			final var request = fixture.get("/work");
 			assertThat(fixture.servlet.entered.await(5, TimeUnit.SECONDS)).isTrue();
@@ -238,7 +239,7 @@ class WebLifecycleTest {
 
 	@Test
 	void drainTimeoutClosesHungRequestAndStillStopsDependencies() throws Exception {
-		try (Fixture fixture = new Fixture(true, 100)) {
+		try (Fixture fixture = new Fixture(true, Duration.milliseconds(100))) {
 			fixture.start();
 			fixture.get("/work");
 			assertThat(fixture.servlet.entered.await(5, TimeUnit.SECONDS)).isTrue();
@@ -250,7 +251,7 @@ class WebLifecycleTest {
 
 	@Test
 	void stoppingDuringStartupNeverOpensWebListener() throws Exception {
-		try (Fixture fixture = new Fixture(false, 5_000)) {
+		try (Fixture fixture = new Fixture(false, Duration.seconds(5))) {
 			fixture.manager.startAsync();
 			fixture.manager.stopAsync().awaitStopped(5, TimeUnit.SECONDS);
 			assertThat(fixture.web.jetty).isNull();
@@ -261,7 +262,7 @@ class WebLifecycleTest {
 	@Test
 	void failedJettyStartupCleansUpStartedContexts() throws Exception {
 		try (ServerSocket occupied = new ServerSocket(0, 1, InetAddress.getByName("127.0.0.1"));
-			 Fixture fixture = new Fixture(false, 5_000, occupied.getLocalPort())) {
+			 Fixture fixture = new Fixture(false, Duration.seconds(5), occupied.getLocalPort())) {
 			// Exercise WebServer directly so this expected failure does not invoke process exit.
 			assertThatThrownBy(fixture.web::start).isInstanceOf(IOException.class);
 			assertThat(fixture.web.jetty.isStopped()).isTrue();

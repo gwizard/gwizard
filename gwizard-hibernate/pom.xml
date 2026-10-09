@@ -25,6 +25,15 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>io.dropwizard</groupId>
+			<artifactId>dropwizard-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.dropwizard</groupId>
+			<artifactId>dropwizard-validation</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
 			<artifactId>guice-persist</artifactId>
 		</dependency>

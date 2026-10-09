@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,7 +72,8 @@ public class ServicesModuleTests {
 	@Test
 	public void serviceManagerListenerWasCalledOnce() {
 		mgr.startAsync().awaitHealthy();
-		verify(mockMgrListener, times(1)).healthy();
+		// awaitHealthy() can return before the listener callback is dispatched.
+		verify(mockMgrListener, timeout(5_000).times(1)).healthy();
 	}
 
 	@Test

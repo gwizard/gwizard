@@ -1,5 +1,6 @@
 package org.gwizard.web;
 
+import io.dropwizard.util.Duration;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.config.MeterFilter;
@@ -18,7 +19,7 @@ class HttpMetricsTest {
 	void recordsStatusesAndAsyncCompletionWithoutRawUrlTagsAndRemovesMetersOnStop() throws Exception {
 		final var registry = new SimpleMeterRegistry();
 		try {
-			try (var fixture = new WebLifecycleTest.Fixture(true, 5_000, 0, registry)) {
+			try (var fixture = new WebLifecycleTest.Fixture(true, Duration.seconds(5), 0, registry)) {
 				fixture.start();
 				assertThat(registry.get("jetty.threads.jobs").gauge().value()).isNotNegative();
 				assertThat(registry.get("jetty.threads.config.max").gauge().value()).isPositive();
@@ -53,7 +54,7 @@ class HttpMetricsTest {
 	@Test
 	void coversAdditionalContextsAndShutdownRejections() throws Exception {
 		final var registry = new SimpleMeterRegistry();
-		try (var fixture = new WebLifecycleTest.Fixture(true, 5_000, 0, registry)) {
+		try (var fixture = new WebLifecycleTest.Fixture(true, Duration.seconds(5), 0, registry)) {
 			fixture.start();
 			final var request = fixture.get("/extra/");
 			assertThat(fixture.extra.entered.await(5, TimeUnit.SECONDS)).isTrue();
@@ -82,7 +83,7 @@ class HttpMetricsTest {
 					return id;
 				}
 			});
-			try (var fixture = new WebLifecycleTest.Fixture(true, 5_000, 0, registry)) {
+			try (var fixture = new WebLifecycleTest.Fixture(true, Duration.seconds(5), 0, registry)) {
 				fixture.start();
 				final var request = fixture.get("/work");
 				assertThat(fixture.servlet.entered.await(5, TimeUnit.SECONDS)).isTrue();

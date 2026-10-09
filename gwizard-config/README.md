@@ -32,6 +32,27 @@ The config object should be a simple POJO with getters and setters. Jackson's YA
 load the data; the ObjectMapper will be drawn from the injector so you can customize it with a provider if
 you wish.
 
+### Durations
+
+GWizard duration settings use `io.dropwizard.util.Duration`. YAML values contain an integer and a unit,
+such as `250 ms`, `30 seconds`, or `2 minutes`. Compact forms such as `250ms` and `30s` also work.
+Use `Duration.milliseconds(250)` or `Duration.seconds(30)` in Java. Jackson reads and writes these
+values without an additional module.
+
+```yaml
+web:
+  shutdownTimeout: 30 seconds
+database:
+  pool:
+    connectionTimeout: 1 second
+  transactionRetry:
+    maxBackoff: 250 ms
+```
+
+System-property overrides use the same format, for example
+`"-Dgw.database.pool.connectionTimeout=2 seconds"`. Native Hibernate/Hikari entries under
+`database.properties` retain their original property names and formats.
+
 ### Overrides
 
 Values can be overridden by setting system properties. Since GWizard uses the dropwizard-configuration

@@ -21,8 +21,9 @@ final class DefaultHikariConnectionProvider extends HikariCPConnectionProvider {
 		final Map<String, Object> defaults = new HashMap<>(settings);
 		if (!defaults.containsKey(POOL_SIZE))
 			defaults.put("hibernate.hikari.maximumPoolSize", config.getMaxPoolSize());
-		defaults.put("hibernate.hikari.connectionTimeout", config.getConnectionTimeoutMillis());
-		defaults.put("hibernate.hikari.validationTimeout", Math.max(250, Math.min(5_000, config.getConnectionTimeoutMillis() / 2)));
+		final long connectionTimeoutMillis = config.getConnectionTimeout().toMilliseconds();
+		defaults.put("hibernate.hikari.connectionTimeout", connectionTimeoutMillis);
+		defaults.put("hibernate.hikari.validationTimeout", Math.max(250, Math.min(5_000, connectionTimeoutMillis / 2)));
 		super.configure(defaults);
 	}
 }

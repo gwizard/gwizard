@@ -66,11 +66,12 @@ database:
   password: your-password
   pool:
     maxPoolSize: 20
-    connectionTimeoutMillis: 1000
+    connectionTimeout: 1 second
 ```
 
 These are the pool defaults. The JDBC driver can normally be discovered from the URL; specify
-`driverClass` if needed. `maxPoolSize` must be at least 1 and `connectionTimeoutMillis` at least 250.
+`driverClass` if needed. `maxPoolSize` must be at least 1 and `connectionTimeout` at least `250 ms`.
+Duration settings use `io.dropwizard.util.Duration`, with YAML values such as `1 second` or `250 ms`.
 The timeout bounds waiting for an available connection; it is not a query or transaction timeout.
 Exhaustion raises a JDBC exception after the wait. Validation timeout is derived from the acquisition
 timeout; the other Hikari settings retain their defaults, including a fixed-size pool.
@@ -139,15 +140,15 @@ the following YAML section alongside the connection settings; these are the defa
 database:
   transactionRetry:
     maxAttempts: 5
-    maxBackoffMillis: 250
+    maxBackoff: 250 ms
 ```
 
-`maxAttempts` includes the first execution; `1` disables retries. `maxBackoffMillis` caps the delay
-between attempts, not the total transaction duration. Both settings must be at least `1` and are
-validated when the injector is created.
+`maxAttempts` includes the first execution; `1` disables retries. `maxBackoff` caps the delay
+between attempts, not the total transaction duration. `maxAttempts` must be at least `1`, and
+`maxBackoff` at least `1 ms`. Both are validated when the injector is created.
 
 Backoff always uses full jitter: each delay is chosen uniformly between zero and the current ceiling.
-The ceiling starts at one-sixteenth of `maxBackoffMillis`, doubles with each retry, and stops growing
+The ceiling starts at one-sixteenth of `maxBackoff`, doubles with each retry, and stops growing
 at the cap. Fractional milliseconds are rounded down, with a minimum ceiling of 1 ms. With the default
 cap, retry ceilings are 15, 31, 62, 125, and then 250 ms. The schedule is independent of `maxAttempts`.
 No transaction or entity manager is held during backoff. Interrupting the thread stops retries and

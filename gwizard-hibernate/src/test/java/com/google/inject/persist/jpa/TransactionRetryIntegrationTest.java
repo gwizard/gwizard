@@ -6,6 +6,7 @@ import com.google.inject.persist.PersistFilter;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.Transactional;
 import com.google.inject.util.Modules;
+import io.dropwizard.util.Duration;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.inject.Inject;
@@ -46,7 +47,7 @@ class TransactionRetryIntegrationTest {
 				"org.h2.Driver", "jdbc:h2:mem:" + UUID.randomUUID(), "sa", "");
 		config.getProperties().put(HBM2DDL_AUTO, "create-drop");
 		config.getTransactionRetry().setMaxAttempts(3);
-		config.getTransactionRetry().setMaxBackoffMillis(1);
+		config.getTransactionRetry().setMaxBackoff(Duration.milliseconds(1));
 		config.getProperties().put("hibernate.connection.isolation", "8"); // SERIALIZABLE
 		injector = Guice.createInjector(new HibernateModule(), binder -> {
 			binder.bind(DatabaseConfig.class).toInstance(config);

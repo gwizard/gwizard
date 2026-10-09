@@ -19,10 +19,10 @@ final class TransactionRetryPolicy {
 			throw new IllegalArgumentException("transactionRetry must not be null");
 		if (config.getMaxAttempts() < 1)
 			throw new IllegalArgumentException("transactionRetry.maxAttempts must be at least 1");
-		if (config.getMaxBackoffMillis() < 1)
-			throw new IllegalArgumentException("transactionRetry.maxBackoffMillis must be at least 1");
+		if (config.getMaxBackoff() == null || config.getMaxBackoff().toMilliseconds() < 1)
+			throw new IllegalArgumentException("transactionRetry.maxBackoff must be at least 1 ms");
 		maxAttempts = config.getMaxAttempts();
-		maxBackoffMillis = config.getMaxBackoffMillis();
+		maxBackoffMillis = config.getMaxBackoff().toMilliseconds();
 	}
 
 	/** The first retry uses 1/16 of the cap; the fifth and later retries use the cap. */

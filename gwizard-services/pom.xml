@@ -25,6 +25,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>io.dropwizard</groupId>
+			<artifactId>dropwizard-util</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>

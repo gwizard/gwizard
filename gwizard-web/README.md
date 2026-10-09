@@ -61,13 +61,20 @@ active requests finish before stopping servlet filters, listeners, and other ser
 also covers asynchronous servlet requests and additional Jetty contexts registered in Guice.
 Idle connections are closed once active requests have drained.
 
-`WebConfig.getShutdownTimeoutMillis()` defaults to **30,000 milliseconds**. The corresponding
-`WebConfigProperties` property is `shutdownTimeoutMillis`; zero disables the drain wait, and
-negative values are rejected. When the deadline expires, remaining connections are closed and
-shutdown continues. This is a drain deadline, not a timeout imposed on ordinary requests.
+`WebConfig.getShutdownTimeout()` returns `io.dropwizard.util.Duration` and defaults to **30 seconds**.
+The corresponding `WebConfigProperties` property is `shutdownTimeout`, for example:
+
+```yaml
+web:
+  shutdownTimeout: 30 seconds
+```
+
+`0 ms` disables the drain wait. Positive values must be at least `1 ms`; null and negative values
+are rejected. Jetty uses whole milliseconds, so finer precision is rounded down. When the deadline
+expires, remaining connections are closed and shutdown continues. This is a drain deadline, not a timeout imposed on ordinary requests.
 
 `Run` waits up to 40 seconds for the complete shutdown by default. If you increase the drain
-timeout, also increase `Run.setStopTimeoutSeconds(...)` to allow time to stop dependencies.
+timeout, also increase `Run.setStopTimeout(Duration.seconds(...))` to allow time to stop dependencies.
 Configure your deployment's termination grace period to cover the overall shutdown budget.
 Calling the injected `ServiceManager` directly preserves the same ordering, but you supply its
 wait timeout and shutdown hook yourself.

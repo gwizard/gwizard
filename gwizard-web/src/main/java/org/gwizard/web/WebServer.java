@@ -2,6 +2,7 @@ package org.gwizard.web;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.servlet.GuiceFilter;
+import io.dropwizard.util.Duration;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -51,11 +52,15 @@ public class WebServer {
 	 */
 	public void start() throws Exception {
 		Preconditions.checkState(server == null, "Server already started");
-		Preconditions.checkArgument(webConfig.getShutdownTimeoutMillis() >= 0, "shutdownTimeoutMillis must not be negative");
+		final Duration shutdownTimeout = webConfig.getShutdownTimeout();
+		Preconditions.checkArgument(shutdownTimeout != null && shutdownTimeout.getQuantity() >= 0,
+				"shutdownTimeout must not be null or negative");
+		Preconditions.checkArgument(shutdownTimeout.getQuantity() == 0 || shutdownTimeout.toMilliseconds() >= 1,
+				"shutdownTimeout must be zero or at least 1 ms");
 
 		// Create the server.
 		server = createServer(webConfig);
-		server.setStopTimeout(webConfig.getShutdownTimeoutMillis());
+		server.setStopTimeout(shutdownTimeout.toMilliseconds());
 
 		final ServletContextHandler sch = createRootServletContextHandler();
 
