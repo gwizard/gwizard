@@ -29,8 +29,17 @@ public class ThrowableMapper implements ExceptionMapper<Throwable> {
 	public Response toResponse(Throwable exception) {
 		if (exception instanceof WebApplicationException) {
 			return ((WebApplicationException)exception).getResponse();
-		} else if (exception instanceof Failure) {
-			return ((Failure)exception).getResponse();
+		} else if (exception instanceof Failure failure) {
+			final Response response = failure.getResponse();
+			if (response != null)
+				return response;
+
+			// Failure may contain only a status code. Returning null would turn it into HTTP 204.
+			final int status = failure.getErrorCode();
+			// Validate explicitly: RESTEasy treats -1 as an unspecified status and would also produce 204.
+			if (status < 100 || status > 599)
+				throw new IllegalArgumentException("Invalid HTTP status code in RESTEasy Failure: " + status, failure);
+			return Response.status(status).build();
 		} else {
 			log.error("Exception hit the top level handler", exception);
 
