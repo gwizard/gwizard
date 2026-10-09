@@ -1,5 +1,6 @@
 package org.gwizard.hibernate;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,10 @@ public class DatabaseConfigProperties implements DatabaseConfig {
 	private String user = null;
 
 	private String password = "";
+
+	@Valid
+	@NotNull
+	private TransactionRetryConfig transactionRetry = new TransactionRetryConfig();
 
 	@NotNull
 	private Map<String, String> properties = new HashMap<>();

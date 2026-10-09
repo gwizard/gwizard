@@ -17,6 +17,10 @@ public interface DatabaseConfig {
 
 	default String getPassword() { return null; }
 
+	default TransactionRetryConfig getTransactionRetry() {
+		return new TransactionRetryConfig();
+	}
+
 	default Map<String, String> getProperties() {
 		return Collections.emptyMap();
 	}

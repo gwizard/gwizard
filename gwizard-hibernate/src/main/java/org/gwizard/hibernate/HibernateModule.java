@@ -1,19 +1,14 @@
 package org.gwizard.hibernate;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.persist.PersistService;
-import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.persist.jpa.WizardBridgeModule;
-import com.google.inject.util.Modules;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
-import jakarta.inject.Inject;
-
 /**
  * <p>This module provides a little bit of glue between guice-persist and the rest of gwizard.
- * The main benefit is the ability to configure JPA through a guice-friendly config mechanism.
- * Just provide a DatabaseConfig object.</p>
+ * It configures JPA through a guice-friendly config mechanism and retries serialization failures
+ * at the transaction boundary. Just provide a DatabaseConfig object.</p>
  *
  * <p>Unfortunately there is no way around requiring your app to have a META-INF/persistence.xml
  * file in the same jar that has your entity classes. However, this can be a minimal skeleton
@@ -31,19 +26,9 @@ public class HibernateModule extends AbstractModule {
 		this("gw-persistence-unit");
 	}
 
-	private static class Initializer {
-		@Inject
-		public Initializer(final PersistService service) {
-			service.start();
-		}
-	}
-
 	@Override
 	protected void configure() {
-		install(Modules.override(new JpaPersistModule(persistenceUnitName)).with(new WizardBridgeModule()));
-
-		bind(Initializer.class).asEagerSingleton();
-
+		install(new WizardBridgeModule(persistenceUnitName));
 		requestStaticInjection(EM.class);
 	}
 }

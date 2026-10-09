@@ -1,8 +1,8 @@
 # GWizard Hibernate
 
-Love it or hate it, you probably have had to use it. `HibernateModule` is a very thin bit of glue helping
-[Guice Persist](https://github.com/google/guice/wiki/GuicePersist) give you JPA access to a relational database.
-All we do is help manage the configuration; Guice Persist (and of course Hibernate) handles all the heavy lifting.
+Love it or hate it, you probably have had to use it. `HibernateModule` integrates
+[Guice Persist](https://github.com/google/guice/wiki/GuicePersist) with Hibernate for JPA access to a relational database.
+It supplies database configuration and automatic transaction retries while retaining Guice Persist's request scope.
 
 ## Maven
 
@@ -45,6 +45,46 @@ absolutely requires it. Fortunately, it need not contain anything other than thi
 * Read the documentation for [Guice Persist](https://github.com/google/guice/wiki/GuicePersist)! The most important
 bits are understanding `@Transactional`, and if you choose to install it, `PersistFilter`. Speaking of which, you can
 install that like any other filter if you are using the `WebModule` or `RestModule`.
+
+## Transaction retries
+
+Every Guice Persist `@Transactional` method or class automatically retries transactions that fail with
+SQLSTATE `40001` (serialization failure), including errors raised during flush or commit. Each retry
+rolls back the failed transaction, closes its entity manager, and reruns the complete method in a fresh
+transaction and entity manager. Nested transactional methods join the outer transaction and share its
+retry budget. Transactions started manually remain the caller's responsibility.
+
+Configure retries through `DatabaseConfig.getTransactionRetry()`. `DatabaseConfigProperties` supports
+the following YAML section alongside the connection settings; these are the defaults:
+
+```yaml
+database:
+  transactionRetry:
+    maxAttempts: 5
+    maxBackoffMillis: 250
+```
+
+`maxAttempts` includes the first execution; `1` disables retries. `maxBackoffMillis` caps the delay
+between attempts, not the total transaction duration. Both settings must be at least `1` and are
+validated when the injector is created.
+
+Backoff always uses full jitter: each delay is chosen uniformly between zero and the current ceiling.
+The ceiling starts at one-sixteenth of `maxBackoffMillis`, doubles with each retry, and stops growing
+at the cap. Fractional milliseconds are rounded down, with a minimum ceiling of 1 ms. With the default
+cap, retry ceilings are 15, 31, 62, 125, and then 250 ms. The schedule is independent of `maxAttempts`.
+No transaction or entity manager is held during backoff. Interrupting the thread stops retries and
+preserves its interrupt status. Exhaustion propagates the final transaction failure. Cleanup failures
+also stop retries and are attached to that failure as suppressed exceptions.
+
+`PersistFilter` and static `EM.em()` access continue to work. Within a request, retries replace the
+current entity manager, and the successful attempt's entity manager stays open until the filter ends
+the request. Use `EM.em()` or an injected `Provider<EntityManager>` to resolve the current instance.
+As with any retried transaction, load entities inside the transactional method and keep external
+side effects outside the work that may execute again.
+
+Existing `@Transactional(rollbackOn = ..., ignore = ...)` behavior is preserved for application
+exceptions. Serialization failures always roll back regardless of those annotations. Other SQLSTATEs
+are not retried.
 
 ## `EM` and scope
 
