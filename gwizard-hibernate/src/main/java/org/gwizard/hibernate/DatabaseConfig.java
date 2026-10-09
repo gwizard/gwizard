@@ -9,13 +9,17 @@ import java.util.Map;
  */
 public interface DatabaseConfig {
 
-	String getDriverClass();
+	default String getDriverClass() { return null; }
 
-	String getUrl();
+	default String getUrl() { return null; }
 
 	default String getUser() { return null; }
 
 	default String getPassword() { return null; }
+
+	default ConnectionPoolConfig getPool() {
+		return new ConnectionPoolConfig();
+	}
 
 	default TransactionRetryConfig getTransactionRetry() {
 		return new TransactionRetryConfig();

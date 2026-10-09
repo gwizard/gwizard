@@ -12,4 +12,28 @@
 	<persistence-unit name="gw-persistence-unit" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 	</persistence-unit>
+	<persistence-unit name="xml-provider" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<properties>
+			<property name="hibernate.connection.provider_class" value="org.gwizard.hibernate.ConnectionPoolIntegrationTest$TrackingConnectionProvider"/>
+			<property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:xml-provider"/>
+			<property name="jakarta.persistence.jdbc.user" value="xmluser"/>
+			<property name="jakarta.persistence.jdbc.password" value="secret"/>
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="xml-hikari" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<properties>
+			<property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:xml-hikari"/>
+			<property name="hibernate.hikari.maximumPoolSize" value="3"/>
+			<property name="hibernate.hikari.connectionTimeout" value="750"/>
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="xml-datasource" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<non-jta-data-source>java:comp/env/jdbc/application</non-jta-data-source>
+		<properties>
+			<property name="hibernate.jndi.class" value="org.gwizard.hibernate.ConnectionPoolIntegrationTest$PoolJndiFactory"/>
+		</properties>
+	</persistence-unit>
 </persistence>

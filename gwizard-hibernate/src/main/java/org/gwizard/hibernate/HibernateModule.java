@@ -1,9 +1,12 @@
 package org.gwizard.hibernate;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.persist.jpa.WizardBridgeModule;
 import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
+
+import javax.sql.DataSource;
+import java.util.Objects;
 
 /**
  * <p>This module provides a little bit of glue between guice-persist and the rest of gwizard.
@@ -15,20 +18,39 @@ import lombok.RequiredArgsConstructor;
  * file which contains only the &lt;provider&gt; definition of org.hibernate.jpa.HibernatePersistenceProvider.
  * See the gwizard-example application for a demonstration.</p>
  */
-@RequiredArgsConstructor
-@EqualsAndHashCode(callSuper=false, of={})	// makes installation of this module idempotent
+@EqualsAndHashCode(callSuper=false, of={"persistenceUnitName", "dataSourceKey"})
 public class HibernateModule extends AbstractModule {
 
 	private final String persistenceUnitName;
+	private final Key<? extends DataSource> dataSourceKey;
 
 	/** Assume a default persistence unit name of "gw-persistence-unit" */
 	public HibernateModule() {
 		this("gw-persistence-unit");
 	}
 
+	public HibernateModule(final String persistenceUnitName) {
+		this(persistenceUnitName, null);
+	}
+
+	private HibernateModule(final String persistenceUnitName, final Key<? extends DataSource> dataSourceKey) {
+		this.persistenceUnitName = persistenceUnitName;
+		this.dataSourceKey = dataSourceKey;
+	}
+
+	/** Return a module using this application's datasource binding. The application owns its lifecycle. */
+	public HibernateModule withDataSource(final Key<? extends DataSource> key) {
+		return new HibernateModule(persistenceUnitName, Objects.requireNonNull(key, "dataSourceKey"));
+	}
+
+	/** Convenience overload for an unqualified datasource binding. */
+	public HibernateModule withDataSource(final Class<? extends DataSource> type) {
+		return withDataSource(Key.get(type));
+	}
+
 	@Override
 	protected void configure() {
-		install(new WizardBridgeModule(persistenceUnitName));
+		install(new WizardBridgeModule(persistenceUnitName, dataSourceKey));
 		requestStaticInjection(EM.class);
 	}
 }

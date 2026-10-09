@@ -2,7 +2,8 @@
 
 Love it or hate it, you probably have had to use it. `HibernateModule` integrates
 [Guice Persist](https://github.com/google/guice/wiki/GuicePersist) with Hibernate for JPA access to a relational database.
-It supplies database configuration and automatic transaction retries while retaining Guice Persist's request scope.
+It supplies database configuration, a default HikariCP connection pool, and automatic transaction retries
+while retaining Guice Persist's request scope.
 
 ## Maven
 
@@ -24,8 +25,9 @@ better yet the [full GWizard example](https://github.com/gwizard/gwizard-example
 
 What you need to know:
 
-* Database configuration is drawn from a bound `DatabaseConfig` object. There are no defaults, you must provide it.
-You can configure all database and hibernate properties here.
+* Database configuration is drawn from a bound `DatabaseConfig` object. Supply JDBC connection settings,
+an application-owned datasource, or explicit Hibernate connection configuration. Pool and retry settings
+have defaults. You can configure additional Hibernate properties here.
 
 * You must create a `persistence.xml` file and package it in your jar's `META-INF` directory. We hate this, but JPA
 absolutely requires it. Fortunately, it need not contain anything other than this boilerplate:
@@ -45,6 +47,76 @@ absolutely requires it. Fortunately, it need not contain anything other than thi
 * Read the documentation for [Guice Persist](https://github.com/google/guice/wiki/GuicePersist)! The most important
 bits are understanding `@Transactional`, and if you choose to install it, `PersistFilter`. Speaking of which, you can
 install that like any other filter if you are using the `WebModule` or `RestModule`.
+
+## Connection pooling
+
+With ordinary JDBC URL/credential configuration, GWizard uses HikariCP. Configure the default pool
+through `DatabaseConfig.getPool()` or the `pool` section of `DatabaseConfigProperties`:
+
+```yaml
+database:
+  url: jdbc:postgresql://localhost/app
+  user: app
+  password: your-password
+  pool:
+    maxPoolSize: 20
+    connectionTimeoutMillis: 1000
+```
+
+These are the pool defaults. The JDBC driver can normally be discovered from the URL; specify
+`driverClass` if needed. `maxPoolSize` must be at least 1 and `connectionTimeoutMillis` at least 250.
+The timeout bounds waiting for an available connection; it is not a query or transaction timeout.
+Exhaustion raises a JDBC exception after the wait. Validation timeout is derived from the acquisition
+timeout; the other Hikari settings retain their defaults, including a fixed-size pool.
+
+Pool selection happens after Hibernate merges GWizard configuration with `persistence.xml`:
+
+* An explicit `HibernateModule.withDataSource(...)` binding takes precedence and is used directly.
+* Explicit Hibernate connection providers, datasource/JNDI settings, and pool-specific configuration
+  are honored. Invalid provider selections fail startup rather than silently falling back to Hikari.
+* Custom provider auto-registration and multi-tenant connection management remain available.
+* Otherwise, the default Hikari pool uses the settings above. The existing
+  `hibernate.connection.pool_size` property overrides `pool.maxPoolSize`.
+
+For direct Hikari configuration, use `hibernate.hikari.*` properties (for example,
+`hibernate.hikari.maximumPoolSize` and `hibernate.hikari.connectionTimeout`). This is an explicit
+Hibernate pool configuration: the `pool` defaults above no longer apply. Likewise, an explicit
+`hibernate.connection.provider_class` retains that provider's configuration and lifecycle.
+
+### Supplying your own pool
+
+Select the Guice binding for an application-owned `javax.sql.DataSource`:
+
+```java
+install(new HibernateModule().withDataSource(DataSource.class));
+bind(DataSource.class).toProvider(ApplicationPoolProvider.class).in(Singleton.class);
+```
+
+For a qualified binding, use a key:
+
+```java
+install(new HibernateModule().withDataSource(
+    Key.get(DataSource.class, Names.named("mainDatabase"))));
+```
+
+`withDataSource()` returns a new module; use that returned module when installing it. The selected
+binding is resolved once during Hibernate bootstrap, so the datasource must be usable then. Bind
+`DatabaseConfig` as usual for retry and Hibernate settings, but JDBC URL, driver, user, and password
+are optional; `new DatabaseConfigProperties()` is sufficient when supplying a datasource. With this
+hook, any JDBC connection fields are ignored, including credentials: the datasource owns them.
+GWizard does not wrap the datasource in another pool or change its pool size/acquisition timeout.
+
+### Pool ownership and shutdown
+
+Hibernate owns the default pool and closes it when the persistence unit closes. `PersistFilter`
+stops persistence when the web context is destroyed, after GWizard's request drain. In an application
+without `PersistFilter`, call `PersistService.stop()` (or close the `EntityManagerFactory`) during
+shutdown, as before.
+
+An application-supplied datasource remains application-owned: GWizard/Hibernate releases its reference
+without closing the pool, including when Hibernate bootstrap fails. The application must close it
+after persistence has stopped. JNDI datasources likewise retain their existing external ownership.
+An explicitly configured Hibernate provider manages its resources according to that provider's contract.
 
 ## Transaction retries
 

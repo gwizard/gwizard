@@ -15,16 +15,17 @@ import java.util.Map;
 @NoArgsConstructor
 public class DatabaseConfigProperties implements DatabaseConfig {
 
-	@NotNull
 	private String driverClass;
 
-	@NotNull
 	private String url = null;
 
-	@NotNull
 	private String user = null;
 
-	private String password = "";
+	private String password;
+
+	@Valid
+	@NotNull
+	private ConnectionPoolConfig pool = new ConnectionPoolConfig();
 
 	@Valid
 	@NotNull
