@@ -1,5 +1,16 @@
 # GWizard Release Notes
 
+# 1.4.0
+2026-10-09
+* Big overhaul focused on hardening the system for production
+* More graceful shutdown of services, especially the web service
+* Automatically retry database serialization failures
+* Provide a Hikari connection pool if one is not already provided
+* Make it easier to supply an external DataSource
+* Automatically publishes metrics for the web and database
+* ThrowableMapper handles the edge case of a Failure with no Response better
+* LogCallInterceptor produces better logging messages
+
 # 1.3.0
 2026-09-20
 * `gwizard-metrics` now uses Micrometer instead of Dropwizard Metrics and metrics-guice.
