@@ -36,10 +36,14 @@ class LogCallInterceptorTest {
 		appender.setContext(logger.getLoggerContext());
 		appender.start();
 		logger.addAppender(appender);
-		example = Guice.createInjector(new AbstractModule() {
+		example = interceptedExample(new LogCallInterceptor());
+	}
+
+	private Example interceptedExample(final LogCallInterceptor interceptor) {
+		return Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
-				bindInterceptor(Matchers.any(), Matchers.annotatedWith(LogCall.class), new LogCallInterceptor());
+				bindInterceptor(Matchers.any(), Matchers.annotatedWith(LogCall.class), interceptor);
 			}
 		}).getInstance(Example.class);
 	}
@@ -84,6 +88,7 @@ class LogCallInterceptorTest {
 				.containsExactly("Calling echo(\"hello\", null)", "Returning null");
 		assertThat(appender.list).extracting(ILoggingEvent::getLoggerName)
 				.containsOnly(Example.class.getName());
+		assertThat(appender.list).extracting(ILoggingEvent::getLevel).containsOnly(Level.DEBUG);
 	}
 
 	@Test
@@ -104,6 +109,41 @@ class LogCallInterceptorTest {
 		assertThatThrownBy(example::fail).isSameAs(example.failure);
 		assertThat(appender.list).extracting(ILoggingEvent::getFormattedMessage)
 				.containsExactly("Calling fail()", "Threw java.lang.IllegalStateException: failure");
+	}
+
+	@Test
+	void configuredLevelAppliesToCallsReturnsAndExceptions() {
+		for (org.slf4j.event.Level level : org.slf4j.event.Level.values()) {
+			final Level logbackLevel = Level.toLevel(level.name());
+			logger.setLevel(logbackLevel);
+			appender.list.clear();
+			final Example configured = interceptedExample(new LogCallInterceptor(level));
+			assertThat(configured.echo("hello", null)).isNull();
+			configured.result = new ThrowingToString();
+			assertThat(configured.hiddenResult()).isSameAs(configured.result);
+			configured.failure = new IllegalStateException("failure");
+			assertThatThrownBy(configured::fail).isSameAs(configured.failure);
+
+			assertThat(appender.list).extracting(ILoggingEvent::getFormattedMessage)
+					.containsExactly("Calling echo(\"hello\", null)", "Returning null", "Calling hiddenResult()",
+							"Calling fail()", "Threw java.lang.IllegalStateException: failure");
+			assertThat(appender.list).extracting(ILoggingEvent::getLevel).containsOnly(logbackLevel);
+			assertThat(appender.list).extracting(ILoggingEvent::getLoggerName).containsOnly(Example.class.getName());
+		}
+	}
+
+	@Test
+	void disabledConfiguredLevelSkipsFormattingEvenWhenDebugIsEnabled() {
+		logger.setLevel(Level.DEBUG);
+		final Example configured = interceptedExample(new LogCallInterceptor(org.slf4j.event.Level.TRACE));
+		final Object result = new ThrowingToString();
+		assertThat(configured.echo(new ThrowingToString(), result)).isSameAs(result);
+		assertThat(configured.calls).isEqualTo(1);
+		configured.failure = new RuntimeException() {
+			@Override public String toString() { throw new AssertionError("Exception must not be formatted"); }
+		};
+		assertThatThrownBy(configured::fail).isSameAs(configured.failure);
+		assertThat(appender.list).isEmpty();
 	}
 
 	static class ThrowingToString {
