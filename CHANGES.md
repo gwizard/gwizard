@@ -1,5 +1,9 @@
 # GWizard Release Notes
 
+# 1.4.1
+2026-10-29
+* You can configure LogCallInterceptor with a specific level.
+
 # 1.4.0
 2026-10-09
 * Big overhaul focused on hardening the system for production
